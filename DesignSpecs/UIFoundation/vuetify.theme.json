@@ -1,0 +1,526 @@
+{
+  "$generated": "生成物,禁手改;來源 UIFoundation/tokens.json,重生成用 UI_KIT/checks/gen_vuetify_theme.py",
+  "$version": "0.3.1",
+  "defaultTheme": "light",
+  "themes": {
+    "light": {
+      "dark": false,
+      "colors": {
+        "primary": "#176466",
+        "primary-emphasis": "#0a3738",
+        "primary-soft": "#d9efef",
+        "primary-container": "#eef4f3",
+        "secondary": "#fc890c",
+        "secondary-emphasis": "#6b4823",
+        "secondary-soft": "#ffecd8",
+        "secondary-container": "#fff8eb",
+        "tertiary": "#554677",
+        "tertiary-emphasis": "#2e2545",
+        "tertiary-soft": "#e6e1f0",
+        "tertiary-container": "#f1eef7",
+        "on-primary": "#ffffff",
+        "on-secondary": "#212b2b",
+        "on-tertiary": "#ffffff",
+        "on-primary-container": "#212b2b",
+        "on-secondary-container": "#212b2b",
+        "on-tertiary-container": "#212b2b",
+        "text": "#212b2b",
+        "subtitle": "#4c5858",
+        "placeholder": "#757575",
+        "background": "#ffffff",
+        "surface": "#fbfdfb",
+        "surface-variant": "#f3f7fa",
+        "primary-bright": "#39959b",
+        "hero-bg": "#12403f",
+        "hero-bg-deep": "#0a2b2a",
+        "hero-text": "#f2f9f8",
+        "hero-muted": "#9cc5c1",
+        "band-soft": "#eef6f5",
+        "divider": "#bfc8c6",
+        "stroke": "#8e9190",
+        "disabled": "#d8d8d8",
+        "red1": "#cd3033",
+        "red1-container": "#fff9f9",
+        "green1": "#138251",
+        "green1-container": "#f8fffc",
+        "blue1": "#0168ee",
+        "blue1-container": "#f3f8ff",
+        "orange1": "#b45309",
+        "orange1-container": "#fff4e5",
+        "on-error": "#ffffff",
+        "on-success": "#ffffff",
+        "on-info": "#ffffff",
+        "on-warning": "#ffffff",
+        "on-error-container": "#212b2b",
+        "on-success-container": "#212b2b",
+        "on-info-container": "#212b2b",
+        "on-warning-container": "#212b2b",
+        "text-heading": "#212b2b",
+        "text-body": "#212b2b",
+        "error": "#cd3033",
+        "error-container": "#fff9f9",
+        "success": "#138251",
+        "success-container": "#f8fffc",
+        "info": "#0168ee",
+        "info-container": "#f3f8ff",
+        "warning": "#b45309",
+        "warning-container": "#fff4e5"
+      }
+    },
+    "dark_mode": {
+      "dark": true,
+      "colors": {
+        "primary": "#57cbcf",
+        "primary-emphasis": "#0a3738",
+        "primary-soft": "#d9efef",
+        "primary-container": "#131315",
+        "secondary": "#fc890c",
+        "secondary-emphasis": "#ffecd8",
+        "secondary-soft": "#6b4823",
+        "secondary-container": "#fff8eb",
+        "tertiary": "#554677",
+        "tertiary-emphasis": "#2e2545",
+        "tertiary-soft": "#e6e1f0",
+        "tertiary-container": "#f1eef7",
+        "on-primary": "#0a3738",
+        "on-secondary": "#212b2b",
+        "on-tertiary": "#ffffff",
+        "on-primary-container": "#ffffff",
+        "on-secondary-container": "#212b2b",
+        "on-tertiary-container": "#212b2b",
+        "text": "#ffffff",
+        "subtitle": "#ffffff",
+        "placeholder": "#757575",
+        "background": "#2f2e31",
+        "surface": "#2f2e31",
+        "surface-variant": "#1a1a1a",
+        "primary-bright": "#39959b",
+        "hero-bg": "#12403f",
+        "hero-bg-deep": "#0a2b2a",
+        "hero-text": "#f2f9f8",
+        "hero-muted": "#9cc5c1",
+        "band-soft": "#16302f",
+        "divider": "#bfc8c6",
+        "stroke": "#8e9190",
+        "disabled": "#3f3f3f",
+        "red1": "#f96063",
+        "red1-container": "#fff9f9",
+        "green1": "#54c594",
+        "green1-container": "#f8fffc",
+        "blue1": "#0168ee",
+        "blue1-container": "#f3f8ff",
+        "orange1": "#ffaf54",
+        "orange1-container": "#fff4e5",
+        "on-error": "#212b2b",
+        "on-success": "#212b2b",
+        "on-info": "#ffffff",
+        "on-warning": "#212b2b",
+        "on-error-container": "#212b2b",
+        "on-success-container": "#212b2b",
+        "on-info-container": "#212b2b",
+        "on-warning-container": "#212b2b",
+        "text-heading": "#ffffff",
+        "text-body": "#ffffff",
+        "error": "#f96063",
+        "error-container": "#fff9f9",
+        "success": "#54c594",
+        "success-container": "#f8fffc",
+        "info": "#0168ee",
+        "info-container": "#f3f8ff",
+        "warning": "#ffaf54",
+        "warning-container": "#fff4e5"
+      }
+    }
+  },
+  "$mapping": [
+    {
+      "token": "color.primary",
+      "vuetify_key": "primary",
+      "type": "built-in",
+      "light": "#176466",
+      "dark": "#57cbcf"
+    },
+    {
+      "token": "color.primary-emphasis",
+      "vuetify_key": "primary-emphasis",
+      "type": "custom",
+      "light": "#0a3738"
+    },
+    {
+      "token": "color.primary-soft",
+      "vuetify_key": "primary-soft",
+      "type": "custom",
+      "light": "#d9efef"
+    },
+    {
+      "token": "color.primary-container",
+      "vuetify_key": "primary-container",
+      "type": "custom",
+      "light": "#eef4f3",
+      "dark": "#131315"
+    },
+    {
+      "token": "color.secondary",
+      "vuetify_key": "secondary",
+      "type": "built-in",
+      "light": "#fc890c"
+    },
+    {
+      "token": "color.secondary-emphasis",
+      "vuetify_key": "secondary-emphasis",
+      "type": "custom",
+      "light": "#6b4823",
+      "dark": "#ffecd8"
+    },
+    {
+      "token": "color.secondary-soft",
+      "vuetify_key": "secondary-soft",
+      "type": "custom",
+      "light": "#ffecd8",
+      "dark": "#6b4823"
+    },
+    {
+      "token": "color.secondary-container",
+      "vuetify_key": "secondary-container",
+      "type": "custom",
+      "light": "#fff8eb"
+    },
+    {
+      "token": "color.tertiary",
+      "vuetify_key": "tertiary",
+      "type": "custom",
+      "light": "#554677"
+    },
+    {
+      "token": "color.tertiary-emphasis",
+      "vuetify_key": "tertiary-emphasis",
+      "type": "custom",
+      "light": "#2e2545"
+    },
+    {
+      "token": "color.tertiary-soft",
+      "vuetify_key": "tertiary-soft",
+      "type": "custom",
+      "light": "#e6e1f0"
+    },
+    {
+      "token": "color.tertiary-container",
+      "vuetify_key": "tertiary-container",
+      "type": "custom",
+      "light": "#f1eef7"
+    },
+    {
+      "token": "color.on-primary",
+      "vuetify_key": "on-primary",
+      "type": "built-in",
+      "light": "#ffffff",
+      "dark": "#0a3738"
+    },
+    {
+      "token": "color.on-secondary",
+      "vuetify_key": "on-secondary",
+      "type": "built-in",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.on-tertiary",
+      "vuetify_key": "on-tertiary",
+      "type": "custom",
+      "light": "#ffffff"
+    },
+    {
+      "token": "color.on-primary-container",
+      "vuetify_key": "on-primary-container",
+      "type": "custom",
+      "light": "#212b2b",
+      "dark": "#ffffff"
+    },
+    {
+      "token": "color.on-secondary-container",
+      "vuetify_key": "on-secondary-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.on-tertiary-container",
+      "vuetify_key": "on-tertiary-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.text",
+      "vuetify_key": "text",
+      "type": "custom",
+      "light": "#212b2b",
+      "dark": "#ffffff"
+    },
+    {
+      "token": "color.subtitle",
+      "vuetify_key": "subtitle",
+      "type": "custom",
+      "light": "#4c5858",
+      "dark": "#ffffff"
+    },
+    {
+      "token": "color.placeholder",
+      "vuetify_key": "placeholder",
+      "type": "custom",
+      "light": "#757575"
+    },
+    {
+      "token": "color.background",
+      "vuetify_key": "background",
+      "type": "built-in",
+      "light": "#ffffff",
+      "dark": "#2f2e31"
+    },
+    {
+      "token": "color.surface",
+      "vuetify_key": "surface",
+      "type": "built-in",
+      "light": "#fbfdfb",
+      "dark": "#2f2e31"
+    },
+    {
+      "token": "color.surface-variant",
+      "vuetify_key": "surface-variant",
+      "type": "built-in",
+      "light": "#f3f7fa",
+      "dark": "#1a1a1a"
+    },
+    {
+      "token": "color.primary-bright",
+      "vuetify_key": "primary-bright",
+      "type": "custom",
+      "light": "#39959b"
+    },
+    {
+      "token": "color.hero-bg",
+      "vuetify_key": "hero-bg",
+      "type": "custom",
+      "light": "#12403f"
+    },
+    {
+      "token": "color.hero-bg-deep",
+      "vuetify_key": "hero-bg-deep",
+      "type": "custom",
+      "light": "#0a2b2a"
+    },
+    {
+      "token": "color.hero-text",
+      "vuetify_key": "hero-text",
+      "type": "custom",
+      "light": "#f2f9f8"
+    },
+    {
+      "token": "color.hero-muted",
+      "vuetify_key": "hero-muted",
+      "type": "custom",
+      "light": "#9cc5c1"
+    },
+    {
+      "token": "color.band-soft",
+      "vuetify_key": "band-soft",
+      "type": "custom",
+      "light": "#eef6f5",
+      "dark": "#16302f"
+    },
+    {
+      "token": "color.divider",
+      "vuetify_key": "divider",
+      "type": "custom",
+      "light": "#bfc8c6"
+    },
+    {
+      "token": "color.stroke",
+      "vuetify_key": "stroke",
+      "type": "custom",
+      "light": "#8e9190"
+    },
+    {
+      "token": "color.disabled",
+      "vuetify_key": "disabled",
+      "type": "custom",
+      "light": "#d8d8d8",
+      "dark": "#3f3f3f"
+    },
+    {
+      "token": "color.red1",
+      "vuetify_key": "red1",
+      "type": "custom",
+      "light": "#cd3033",
+      "dark": "#f96063"
+    },
+    {
+      "token": "color.red1-container",
+      "vuetify_key": "red1-container",
+      "type": "custom",
+      "light": "#fff9f9"
+    },
+    {
+      "token": "color.green1",
+      "vuetify_key": "green1",
+      "type": "custom",
+      "light": "#138251",
+      "dark": "#54c594"
+    },
+    {
+      "token": "color.green1-container",
+      "vuetify_key": "green1-container",
+      "type": "custom",
+      "light": "#f8fffc"
+    },
+    {
+      "token": "color.blue1",
+      "vuetify_key": "blue1",
+      "type": "custom",
+      "light": "#0168ee"
+    },
+    {
+      "token": "color.blue1-container",
+      "vuetify_key": "blue1-container",
+      "type": "custom",
+      "light": "#f3f8ff"
+    },
+    {
+      "token": "color.orange1",
+      "vuetify_key": "orange1",
+      "type": "custom",
+      "light": "#b45309",
+      "dark": "#ffaf54"
+    },
+    {
+      "token": "color.orange1-container",
+      "vuetify_key": "orange1-container",
+      "type": "custom",
+      "light": "#fff4e5"
+    },
+    {
+      "token": "color.on-error",
+      "vuetify_key": "on-error",
+      "type": "built-in",
+      "light": "#ffffff",
+      "dark": "#212b2b"
+    },
+    {
+      "token": "color.on-success",
+      "vuetify_key": "on-success",
+      "type": "built-in",
+      "light": "#ffffff",
+      "dark": "#212b2b"
+    },
+    {
+      "token": "color.on-info",
+      "vuetify_key": "on-info",
+      "type": "built-in",
+      "light": "#ffffff"
+    },
+    {
+      "token": "color.on-warning",
+      "vuetify_key": "on-warning",
+      "type": "built-in",
+      "light": "#ffffff",
+      "dark": "#212b2b"
+    },
+    {
+      "token": "color.on-error-container",
+      "vuetify_key": "on-error-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.on-success-container",
+      "vuetify_key": "on-success-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.on-info-container",
+      "vuetify_key": "on-info-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.on-warning-container",
+      "vuetify_key": "on-warning-container",
+      "type": "custom",
+      "light": "#212b2b"
+    },
+    {
+      "token": "color.text-heading",
+      "vuetify_key": "text-heading",
+      "type": "custom",
+      "light": "#212b2b",
+      "alias_of": "text"
+    },
+    {
+      "token": "color.text-body",
+      "vuetify_key": "text-body",
+      "type": "custom",
+      "light": "#212b2b",
+      "alias_of": "text"
+    },
+    {
+      "token": "color.error",
+      "vuetify_key": "error",
+      "type": "built-in",
+      "light": "#cd3033",
+      "alias_of": "red1"
+    },
+    {
+      "token": "color.error-container",
+      "vuetify_key": "error-container",
+      "type": "custom",
+      "light": "#fff9f9",
+      "alias_of": "red1-container"
+    },
+    {
+      "token": "color.success",
+      "vuetify_key": "success",
+      "type": "built-in",
+      "light": "#138251",
+      "alias_of": "green1"
+    },
+    {
+      "token": "color.success-container",
+      "vuetify_key": "success-container",
+      "type": "custom",
+      "light": "#f8fffc",
+      "alias_of": "green1-container"
+    },
+    {
+      "token": "color.info",
+      "vuetify_key": "info",
+      "type": "built-in",
+      "light": "#0168ee",
+      "alias_of": "blue1"
+    },
+    {
+      "token": "color.info-container",
+      "vuetify_key": "info-container",
+      "type": "custom",
+      "light": "#f3f8ff",
+      "alias_of": "blue1-container"
+    },
+    {
+      "token": "color.warning",
+      "vuetify_key": "warning",
+      "type": "built-in",
+      "light": "#b45309",
+      "alias_of": "orange1"
+    },
+    {
+      "token": "color.warning-container",
+      "vuetify_key": "warning-container",
+      "type": "custom",
+      "light": "#fff4e5",
+      "alias_of": "orange1-container"
+    }
+  ],
+  "$notes": {
+    "dual_track": "tokens.css(--color-*) 與 Vuetify(--v-theme-*) 雙軌共存,同值同源。DS 規範以 --color-* 為正規引用名",
+    "emphasis_not_darken": "使用 color=\"primary-emphasis\" 而非 Vuetify 自動生成的 primary-darken-1(F-5 裁決:darken/lighten→emphasis/soft)",
+    "semantic_only": "元件應引用 semantic tier(error/success/info),不直接引用 primitive(red1/green1/blue1)(F-2 裁決)",
+    "usage": "import theme from './vuetify.theme.json';\ncreateVuetify({ theme: { defaultTheme: theme.defaultTheme, themes: theme.themes } })"
+  }
+}

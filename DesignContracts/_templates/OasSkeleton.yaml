@@ -1,0 +1,37 @@
+# OAS起手骨架——components.schemas為生成段(字典經DbApiConvRule投影,段首標來源hash);paths為SD撰寫段
+openapi: 3.0.3
+info:
+  title: <專案名> API
+  version: 1.0.0
+servers:
+  - url: https://<host>/api/v1   # 依08_EnvBaseline.md各環境填列
+security:
+  - bearerAuth: []               # R-API-A01;禁token入query(R-API-A02)
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ErrorEnvelope:               # R-API-E01統一錯誤結構
+      type: object
+      required: [code, message, traceId]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              issue: { type: string }
+        traceId: { type: string }
+    PageMeta:                    # R-API-P01分頁meta
+      type: object
+      properties:
+        total: { type: integer }
+        limit: { type: integer }
+        offset: { type: integer }
+    # === GENERATED SCHEMAS BELOW(字典投影,禁手編)===
+paths: {}

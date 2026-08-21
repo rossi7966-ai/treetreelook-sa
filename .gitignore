@@ -1,0 +1,13 @@
+# Python 快取(啟動文件分析工具產生,可重建)
+__pycache__/
+*.py[cod]
+
+# OS 產物
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# 編輯器
+.vscode/
+.idea/
+*.swp

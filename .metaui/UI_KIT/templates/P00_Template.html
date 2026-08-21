@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ══ 機器可讀旗標(UIV 檢核依據)══ -->
+<meta name="pageid" content="P00">
+<meta name="stage" content="wire">
+<meta name="primary-action" content="⟪此頁主行動字面,對齊 10_UIFlow 登記表⟫">
+<title>P00_⟪頁面名⟫(wire)</title>
+<style>
+/* ── wire 階段結構樣式:灰階/框線/系統字。禁品牌色、圓角、陰影、動畫、web font。 ──
+   styled 階段:stage 改 styled、link tokens.css、本區塊改為 var(--token) 引用。 */
+:root{--w-ink:#333;--w-mid:#777;--w-soft:#ccc;--w-zone:#f2f2f2;--w-bg:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--w-bg);color:var(--w-ink);line-height:1.6;padding:16px;max-width:1100px;margin:0 auto}
+.wire-meta{border:2px solid var(--w-ink);padding:10px 14px;font-size:13px;margin-bottom:20px;background:var(--w-zone)}
+.wire-meta b{margin-right:12px}
+.wire-box{border:1px solid var(--w-mid);padding:14px;margin:10px 0;background:var(--w-bg)}
+.wire-zone{border:1px dashed var(--w-mid);padding:14px;margin:10px 0;background:var(--w-zone)}
+.wire-img{border:1px solid var(--w-mid);background:repeating-linear-gradient(135deg,#eee,#eee 10px,#fff 10px,#fff 20px);min-height:120px;display:flex;align-items:center;justify-content:center;color:var(--w-mid);font-size:12px}
+nav.wire-nav{display:flex;gap:10px;flex-wrap:wrap;border:1px solid var(--w-mid);padding:10px;margin:10px 0}
+nav.wire-nav a{border:1px solid var(--w-mid);padding:6px 12px;color:var(--w-ink);text-decoration:none;font-size:14px}
+/* 連接點徽章:審查視圖顯示頁間連接點(→P##/↗外部),供審查肉眼對讀頁面串接;prototype 不帶此規則(45_PrototypeView) */
+a[data-nav^="P"]:not([aria-current])::after{content:" →" attr(data-nav);font-size:11px;color:var(--w-mid);font-weight:700}
+a[data-nav^="external"]::after{content:" ↗外部";font-size:11px;color:var(--w-mid);font-weight:700}
+button,a.btn{font:inherit;border:1px solid var(--w-ink);background:var(--w-bg);padding:8px 18px;cursor:pointer;color:var(--w-ink);text-decoration:none;display:inline-block}
+/* 主行動:粗外框+粗體——讓「誰是主角」在無風格下仍可被感受(拍板者看截圖用) */
+[data-action="primary"]{outline:3px solid var(--w-ink);font-weight:700}
+/* TBD 佔位:斜紋+虛線框+自動顯示 TBD 編號——線框圖同時是決策收集器 */
+[data-tbd]{background:repeating-linear-gradient(45deg,#eee,#eee 8px,#fafafa 8px,#fafafa 16px);border:1px dashed var(--w-mid);padding:10px;position:relative}
+[data-tbd]::before{content:"⟪待決 " attr(data-tbd) "⟫";display:block;font-size:11px;color:var(--w-mid);font-weight:700;margin-bottom:4px}
+/* 五態區塊框架 */
+section[data-state],section[data-state-na]{border-top:4px solid var(--w-ink);margin:28px 0;padding:14px 0}
+section[data-state]::before{content:"◧ 狀態:" attr(data-state);display:block;font-size:12px;font-weight:700;color:var(--w-mid);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+section[data-state-na]::before{content:"◧ 狀態:" attr(data-state-na) "(N/A:" attr(data-reason) ")";display:block;font-size:12px;font-weight:700;color:var(--w-mid);margin-bottom:10px}
+footer.wire-foot{margin-top:32px;border-top:1px solid var(--w-mid);padding-top:10px;font-size:12px;color:var(--w-mid)}
+</style>
+</head>
+<body>
+
+<!-- 頁首資訊條:此頁的規格身分證(不是頁面內容,截圖時保留供對讀) -->
+<div class="wire-meta">
+  <b>P00｜⟪頁面名⟫</b> stage: wire｜
+  承載節點:<span data-w="M00-F00-W00">M00-F00-W00</span>｜
+  主任務:⟪對齊登記表,來源 EP00⟫
+</div>
+
+<!-- ══════════ 理想狀態 ══════════ -->
+<section data-state="ideal">
+  <nav class="wire-nav" aria-label="頁內導覽示例">
+    <!-- 連結型別化:data-nav 必填(P## / external:名稱 / W99),裸 href="#" 會被 UIV-02 擋下 -->
+    <a href="./P00_另一頁.html" data-nav="P00">⟪導覽項⟫</a>
+    <a href="https://example.gov.tw" data-nav="external:既有系統名">⟪外部導流⟫</a>
+    <a href="#" data-nav="W99">⟪暫緩入口(W99 承接)⟫</a>
+  </nav>
+
+  <div class="wire-box">
+    <h1>⟪頁面主標——用擬真文案,不用 lorem⟫</h1>
+    <p>⟪支撐主任務的關鍵內容。與 00_Glossary 對齊的術語加 data-term:⟫
+       <span data-term="⟪術語⟫">⟪術語⟫</span></p>
+    <!-- 每個狀態區塊內恰一個 primary(UIV-08) -->
+    <button data-action="primary">⟪主行動,對齊 meta primary-action⟫</button>
+    <a class="btn" href="./P00_次要.html" data-nav="P00">⟪次要行動⟫</a>
+  </div>
+
+  <!-- 未決內容:佔位+data-tbd,嚴禁虛構具體內容(UIV-09) -->
+  <div data-tbd="TBD-W00-01">⟪此區內容依賴未決事項,佔位呈現;TBD 編號對齊節點 🟥 區⟫</div>
+
+  <div class="wire-img" data-w="M00-F00-W00">⟪圖示/圖表佔位⟫</div>
+</section>
+
+<!-- ══════════ 空白狀態 ══════════ -->
+<section data-state="blank">
+  <div class="wire-zone">
+    <p>⟪無資料/首次進入:引導文案⟫</p>
+    <button data-action="primary">⟪空狀態下的引導行動⟫</button>
+  </div>
+</section>
+
+<!-- ══════════ 載入狀態 ══════════ -->
+<section data-state="loading">
+  <div class="wire-zone">
+    <div class="wire-img">⟪skeleton 佔位⟫</div>
+    <p>⟪載入指示:進度條/骨架載入(Skeleton)說明⟫</p>
+  </div>
+  <!-- 載入中通常無可用主行動:仍須恰一個 primary(如可見但 disabled 的主行動)以維持版面穩定 -->
+  <button data-action="primary" disabled>⟪主行動(載入中鎖定)⟫</button>
+</section>
+
+<!-- ══════════ 部分資料狀態 ══════════ -->
+<section data-state="partial">
+  <div class="wire-box">
+    <p>⟪極少筆數/圖片未載/長文截斷時的版面示意⟫</p>
+    <button data-action="primary">⟪主行動⟫</button>
+  </div>
+</section>
+
+<!-- ══════════ 錯誤狀態 ══════════ -->
+<section data-state="error">
+  <div class="wire-zone">
+    <p><b>⟪錯誤訊息:說人話,講明發生什麼⟫</b></p>
+    <p>⟪復原引導:使用者現在能做什麼⟫</p>
+    <button data-action="primary">⟪復原行動(重試/返回)⟫</button>
+  </div>
+</section>
+
+<!-- 不適用的狀態改用 data-state-na 並附理由(擇一,勿與同名 data-state 並存):
+<section data-state-na="loading" data-reason="靜態說明頁,無非同步載入"></section>
+-->
+
+<footer class="wire-foot">
+  P00 · wire · 登記於 ../10_UIFlow.md · 產出依 UI_KIT/20_FlowPages.md
+</footer>
+
+</body>
+</html>

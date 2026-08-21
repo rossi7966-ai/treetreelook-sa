@@ -1,0 +1,14 @@
+{
+  "$schema": "metaui-tokens-v0",
+  "project": "⟪專案名⟫",
+  "source_kit": "⟪Figma UI Kit 連結或 manual⟫",
+  "tokens": [
+    { "name": "color-primary",    "category": "color",      "value": "#1F5E4F", "source": "figma:⟪node-id⟫" },
+    { "name": "color-surface",    "category": "color",      "value": "#FFFFFF", "source": "figma:⟪node-id⟫" },
+    { "name": "color-danger",     "category": "color",      "value": "#C24A33", "source": "figma:⟪node-id⟫" },
+    { "name": "font-size-body",   "category": "typography", "value": "16px",    "source": "figma:⟪node-id⟫" },
+    { "name": "font-size-h1",     "category": "typography", "value": "32px",    "source": "figma:⟪node-id⟫" },
+    { "name": "space-2",          "category": "spacing",    "value": "8px",     "source": "figma:⟪node-id⟫" },
+    { "name": "space-4",          "category": "spacing",    "value": "16px",    "source": "manual:拍板者 2026-07-05" }
+  ]
+}

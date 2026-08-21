@@ -1,0 +1,20 @@
+# 作業設定檔schema範本(與JOB00_Template.md同名配對)
+# 鐵律:禁字面憑證——一律env變數名
+job_id: JOB00_Template
+job_type: etl            # etl | batch | report | notify
+dialect: mssql           # mssql | postgresql(連線層依此選driver)
+connection:
+  server_env: DB_SERVER      # 讀環境變數,不寫值
+  database_env: DB_NAME
+  username_env: DB_USER
+  password_env: DB_PASSWORD
+source:
+  file_pattern: "input_*.csv"   # etl型:來源檔pattern
+target_table: TBL00_TEMPLATE    # 引用字典表名
+column_map: from_dictionary     # 固定值:rename map由字典source_column生成
+write_mode: staging_merge       # staging表+交易+merge
+batch_size: 5000
+schedule: null                  # batch/report型:cron字面
+log:
+  format: jsonl
+  path: logs/JOB00_Template.jsonl
