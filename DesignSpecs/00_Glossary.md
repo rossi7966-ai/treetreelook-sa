@@ -2,9 +2,9 @@
 file: DesignSpecs/00_Glossary.md
 role: domain_glossary
 status: ACTIVE
-version: v0.2 (2026-08-22)
+version: v0.3 (2026-08-22)
 last_updated: 2026-08-22
-summary: 全域字典與領域知識庫,兩區塊:顆粒度字典 + 領域背景與已確認決策。(v0.2:R1 階段 SA 裁示 DEC-001 ~ DEC-004 落檔)
+summary: 全域字典與領域知識庫,兩區塊:顆粒度字典 + 領域背景與已確認決策。(v0.3:追加 DEC-005 場域二層命名、DEC-006 SYS01 下切 SS 層)(v0.2:R1 階段 SA 裁示 DEC-001 ~ DEC-004 落檔)
 ---
 # 全域字典與領域知識庫
 
@@ -91,3 +91,55 @@ summary: 全域字典與領域知識庫,兩區塊:顆粒度字典 + 領域背景
 | DEC-ID | 決策內容 | 理由摘要 | 影響的檔案 | 確認日期 |
 |--------|---------|---------|-----------|---------|
 | DEC-001 | <!-- 待填入 --> | <!-- 待填入 --> | <!-- 待填入 --> | YYYY-MM-DD |
+
+
+### DEC-005 場域二層結構:`E_LocationList` = 案場,`E_ProjectList` = 分區
+
+**決策**:場域為兩層結構。上層「**案場**」對應 `E_LocationList`,下層「**分區**」對應 `E_ProjectList`。
+
+⚠️ **此命名與英文表名的直覺相反**,任何規格、API、UI 文案引用時一律以本決策為準,不得依表名望文生義。
+
+**支撐證據**(六條,互相咬合):
+
+| # | 證據 | 推得 |
+|---|---|---|
+| 1 | `E_ProjectList.LID` → `E_LocationList.SID` | Project 隸屬 Location,故 Location 為上層 |
+| 2 | `E_LocationList.OID` | 案場掛在組織(母帳號)下 |
+| 3 | `E_ProjectList.GroupID` → `D_Group.SID` | 分區才指派廠商群組;對應 xmind 3-1「分區管理→基本資料→團隊」 |
+| 4 | `E_ProjectList.X_84` / `Y_84` 中心點坐標(`E_LocationList` 無此欄位) | 對應 xmind「分區管理→中心點坐標」 |
+| 5 | `E_GeoData.PID` → `E_ProjectList.SID`,存 `Geom` 範圍多邊形 | 對應 xmind「分區設定→圖台工具 / 範圍名稱」 |
+| 6 | `E_ProjectTrees.PID`(分區)↔ `TID`(植栽);`系統管理設計v6` p46「樹木資料綁在分區」 | 植栽掛分區,不掛案場 |
+
+**衍生業務規則**:
+- 植栽歸屬鏈為 `組織 OID → 案場 → 分區 → 植栽`,植栽不可直掛案場。
+- 廠商群組(GID)的權限邊界落在**分區**層,非案場層。
+- `系統管理設計v6` p46:「系統管理員才能新增案場與分區」;試用帳號需具備此能力,但轉為協力廠商後不得新增案場。
+
+**術語對照表**(供 UI 文案與 API 命名統一):
+
+| 業務用語 | 資料表 | 英文建議用語 |
+|---|---|---|
+| 案場 | `E_LocationList` | Location(**不是** Site/Project) |
+| 分區 | `E_ProjectList` | Project(**不是** Zone/Area) |
+| 分區範圍 | `E_GeoData` | GeoData |
+
+- 裁示人:SA｜日期:2026-08-22｜來源:R1 矛盾浮現 C03
+
+### DEC-006 SYS01 下切 SubSystem:完整版與調查版分屬 SS01 / SS02
+
+**決策**:樹碳集主系統(SYS01)下切兩個 SubSystem——
+- **SS01 完整版**:Web 管理端,根路由
+- **SS02 調查版**:外業行動端,`/mobile/` 路由根目錄
+
+**理由**:SA 裁示依據為「不同 URL」。此符合 `AI_Rules.md` §4 的 SubSystem 技術觸發條件之一——**獨立前端 App 或路由根目錄**。
+
+**證據**:`樹碳集_任務派工系統v12.2.pptx` 內任務通知信的調查版連結格式為
+`/mobile/MissionList.SID`、`/mobile/MissionList.SID/L_DailyReport.SID`,
+`/mobile/` 於素材中出現 7 次,確為獨立路由根目錄。
+另 `樹碳集_調查版_任務管理v3.1.pptx` 為調查版專屬設計文件,
+`任務派工v12.2` p56 / p67 均有「完整版 / 調查版」逐功能對照表,兩版功能集合不同。
+
+**衍生**:功能歸屬須逐項判定屬 SS01 / SS02 / 兩者共用。已知對照來源為
+`任務派工v12.2` p56(十狀態的完整版 / 調查版可用性)與 p67(角色 × 功能的版本歸屬)。
+
+- 裁示人:SA｜日期:2026-08-22｜來源:R1 矛盾浮現 C06

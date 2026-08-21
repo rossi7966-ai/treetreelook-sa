@@ -2,10 +2,10 @@
 file: DesignSpecs/05_SourceAudit.md
 role: source_material_audit
 status: ACTIVE
-version: v0.3 (2026-08-22)
+version: v0.4 (2026-08-22)
 last_updated: 2026-08-22
 changed_by: Runner
-summary: 素材完整度盤點——啟動文件(36 pptx)、DB_schema0730.csv(58 表)、功能架構0816.xmind 三方交叉比對結果。R1 矛盾浮現的證據底本。(v0.3:SA 裁示 DEC-001~004 落檔)(v0.2:R1 定向精讀,撤銷 O01,改寫 C01,新增 C08~C11)
+summary: 素材完整度盤點——啟動文件(36 pptx)、DB_schema0730.csv(58 表)、功能架構0816.xmind 三方交叉比對結果。R1 矛盾浮現的證據底本。(v0.4:SA 裁示 DEC-005~006,新增 C06-b)(v0.3:SA 裁示 DEC-001~004 落檔)(v0.2:R1 定向精讀,撤銷 O01,改寫 C01,新增 C08~C11)
 ---
 # 素材完整度盤點
 
@@ -102,9 +102,14 @@ summary: 素材完整度盤點——啟動文件(36 pptx)、DB_schema0730.csv(58
 ### C02 兩套權限機制並存 🔴
 硬編碼數值判斷(`Role<4` 可看所有資料、`Role>3` 依 GID 決定可視內容)vs `A_Function` / `A_Right` 資料驅動矩陣。兩者何為 SSOT 未定。
 
-### C03 Location / Project 語意倒置 🔴
+### C03 Location / Project 語意倒置 ✅ 已裁示 → `00_Glossary.md` DEC-005
 `E_ProjectList.LID` → `E_LocationList`,且 `E_ProjectList` 帶 `City` / `Town` / 中心點坐標,`E_GeoData.PID` → `E_ProjectList` 存範圍多邊形。
-推論:**Location = 案場,Project = 分區**。與 xmind「場域 / 案場」對「分區」的命名直覺相反。`00_Glossary.md` 必須定義,否則全域追溯錯位。
+推論:**Location = 案場,Project = 分區**。與 xmind「場域 / 案場」對「分區」的命名直覺相反。
+
+**2026-08-22 SA 裁示:推論正確,確認採用。**
+
+裁示後回查再得四條佐證(合計六條):`E_LocationList.OID`(案場掛組織)、`E_ProjectList.GroupID`→`D_Group`(分區才指派廠商群組)、`E_LocationList` **無**中心點坐標欄位(僅分區有)、`E_ProjectTrees.PID` 綁分區 + `系統管理設計v6` p46「樹木資料綁在分區」。
+歸屬鏈定為 `組織 OID → 案場 → 分區 → 植栽`。術語對照表見 DEC-005。
 
 ### C04 as-is 與 to-be 未分離 🔴
 - `2025Tpark初驗結果.pptx`:既有上線系統的初驗缺失(學名須斜體、通知信須帶系統名稱)→ **as-is 修正**
@@ -116,12 +121,29 @@ summary: 素材完整度盤點——啟動文件(36 pptx)、DB_schema0730.csv(58
 ### C05 上架範圍未定 🟡
 xmind 自行標註「儀錶板(不上架,預留版面)」「(預設四個角色,未來可能可以調整,現階段不上架)」,但 `樹碳集_首頁儀表板for業主.pptx` 有完整設計。上架界線不劃則 W## 節點範圍無法收斂。
 
-### C06 完整版 / 調查版分版策略 🟡
+### C06 完整版 / 調查版分版策略 ✅ 已裁示 → `00_Glossary.md` DEC-006
 `樹碳集_任務派工系統v12.2.pptx` p4900 有「完整版 / 調查版」逐功能對照表,xmind 有獨立「調查版」分支,DB 無版本旗標欄位。此為 M 層或 SS 層切分的關鍵依據。
+
+**2026-08-22 SA 裁示:切在 SS 層**,依據為兩版 URL 不同。
+符合 `AI_Rules.md` §4 SubSystem 觸發條件「獨立前端 App 或路由根目錄」——素材中調查版連結為 `/mobile/MissionList.SID`,`/mobile/` 出現 7 次。
+定為 SS01 完整版(根路由)/ SS02 調查版(`/mobile/`)。詳見 DEC-006。
 
 ### C07 Landing Page 歸屬 🟡
 `Landing Page調整.pptx` 10 頁(含 PageSpeed 效能指標、SEO、合作洽談表單),xmind 完全無此分支。
 **2026-08-22 SA 決議:納入本次 SA 範圍。**
+
+### C06-b 業務管理後台有兩套登入機制,歸屬未定 🟡(R1 新增)
+
+xmind「業務管理後台」下掛兩個子項,但兩者的登入與權限邊界不同:
+
+| 子項 | 登入機制 | 使用者 | DB 依據 |
+|---|---|---|---|
+| 崧旭業務管理後台 | 帳號密碼 | 崧旭內部人員 | `M_AdminList`(Name / Account / Password / Status) |
+| 組織管理者後台(= 訂閱平台) | `UserKey` Token / SSO,以 OID 身分操作,可無 UID | 客戶端組織管理者 | `D_OriginAccount.UserKey`;`訂閱平台v1.pptx` p6 |
+
+兩者權限邊界獨立,依 `AI_Rules.md` §4 觸發條件(獨立權限邊界 / 獨立登入)各自都夠格成 SS。
+**待 SA 拍板**:SYS02 是否再下切 SS01 崧旭後台 / SS02 組織管理者後台?
+`[!TBD-LAYER-02]` 🔒 解鎖條件:SA 拍板。🌊 下游影響:阻塞 SYS02 的 20_Setup 目錄結構。
 
 ### C08 ~~任務狀態機引用了 DB 不存在的欄位~~ ❌ 已排除 → `00_Glossary.md` DEC-002
 
@@ -167,7 +189,7 @@ DB 中 `G_SurveyRecord.MID`(判斷由哪個 Mission 所做)可為空,測量路�
 
 | 階段 | 狀態 |
 |---|---|
-| R1 矛盾浮現 | 進行中(2026-08-22);四項 🔴 已裁示(DEC-001~004),餘 C01-b / C02~C06 / C09 / O02 待回應 |
+| R1 矛盾浮現 | 進行中(2026-08-22);六項已裁示(DEC-001~006),餘 C01-b / C02 / C04 / C05 / C09 / C06-b / O02 待回應 |
 | R2 交接包 | 未執行 |
 | 20_Setup 環境初始化 | 未執行(`DesignSpecs/` 無 SYS## / M## / F## 實體目錄) |
 | D1 / D1.5 / D2 | 未執行 |
@@ -177,5 +199,6 @@ DB 中 `G_SurveyRecord.MID`(判斷由哪個 Mission 所做)可為空,測量路�
 | 日期 | 版次 | 摘要 |
 |---|---|---|
 | 2026-08-22 | v0.1 | 初版。三方交叉比對產出 12 項 DB 缺口、7 項架構圖缺口、2 項孤兒、7 項矛盾。 |
+| 2026-08-22 | v0.4 | SA 裁示 C03(DEC-005 場域二層,追加四條佐證)、C06(DEC-006 下切 SS 層)。新增 C06-b:SYS02 兩套登入機制歸屬待定。 |
 | 2026-08-22 | v0.3 | SA 裁示落檔:C01 解決(DEC-001,追加 6/17 結論證據)、C08 排除(DEC-002)、C11 降級(DEC-003,G04 改判非缺口)、C10 確認為未實作(DEC-004)。C01 殘留項改列 C01-b。 |
 | 2026-08-22 | v0.2 | R1 定向精讀修正:O01 撤銷(「測量檢測員」實為「測量檢驗員」錯字);C01 改寫(權威七級模型已辨識,列四處衝突);新增 C08 任務狀態機欄位缺口、C09 系統管理員 GID 衝突、C10 維養雙路徑、C11 生物量待確認。 |
