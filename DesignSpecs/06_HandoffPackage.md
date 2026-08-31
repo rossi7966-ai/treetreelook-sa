@@ -5,6 +5,7 @@ status: ACTIVE
 version: v0.1 (2026-08-22)
 last_updated: 2026-08-22
 changed_by: Runner
+dispatch_status: "§1 §2 §5 已於 2026-08-31(階段 0)分派至 01_Strategy.md / 02_Scope.md;§4 待階段 2 由 21_AddModule.md 消費;§3 §6 §7 待工程端取回 E1 ~ E11 後處理。本檔尚未退役。"
 summary: R2 交接包 Part 1——設計邊界、角色動機、SYS/SS/M/F 架構分解、EP 清單、工程前置決策點。Part 2(Epic 業務流程映射表 + W## 節點卡片)待 SA 指定焦點模組後產出。
 ---
 # R2 交接包(Part 1)

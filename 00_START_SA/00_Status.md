@@ -2,10 +2,10 @@
 file: 00_START_SA/00_Status.md
 role: project_status_dashboard
 status: ACTIVE
-version: v0.9 (2026-08-22)
-last_updated: 2026-08-22
+version: v0.10 (2026-08-31)
+last_updated: 2026-08-31
 changed_by: Runner
-summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 樹碳集專案開案,流程進入 R1。
+summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並完成 R1 / R2 Part 1;2026-08-31 完成建置階段 0(全域設定檔內容落位)。
 ---
 # 專案執行狀態駕駛艙
 
@@ -13,17 +13,34 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 樹碳集
 > 維護:Coach 每次推進流程後同步更新。
 
 ## 當前位置
-- 流程階段:**R2**(交接包產出,Part 1 完成)
+- 流程階段:**R2 Part 1 完成 → 建置階段 0 完成**(01_Strategy / 02_Scope 內容落位)
 - 焦點模組:**待 SA 指定**(R2 Part 2 產 W## 節點卡片用)。架構已收斂為 3 SYS / 2 SS / 10 M / 35 F,見 `DesignSpecs/06_HandoffPackage.md` §4。
-- 上次更新:2026-08-22
+- 上次更新:2026-08-31
 
 ## 下一步動作
 
-1. **指定 R2 Part 2 的焦點模組** —— Part 1(邊界 / 角色 / 架構 / Epic / 工程前置決策點)已完成並落於 `DesignSpecs/06_HandoffPackage.md`。Part 2 產 Epic 業務流程映射表與 W## 節點卡片,須逐模組進行。
-   - Coach 建議首批:`SYS01-M04-F01 維養紀錄`(DEC-004 確認未實作,不受 E4 影響,素材密度最高)
-   - 替代:`SYS01-M01-F01 登入與工作區切換`(EP02 為所有 Epic 前置,但受 E5/E6 影響大)
-2. 向工程端取回 E1 ~ E11(見 `06_HandoffPackage.md` §6)。**E4 未取回則全域優先級維持 `[!TBD]`**。
-3. 剩餘 5 項待釐清(C02 / C09 / C06-b / C01-b / O02)均為模組級,可於展開對應模組時拍板。
+> Roadmap 分五階段。階段 0 已完成,當前位於**階段 1(決策清倉與外部發包)**。
+
+**階段 1 —— 決策清倉與外部發包(現在)**
+
+1. **SA 拍板 C06-b 與 C01-b**。兩項皆為純邊界 / 命名決策,不需工程端資料。**C06-b 必須在階段 2 建 SYS02 目錄之前拍板**,否則須走 `90_Restructure.md` 重構搬移。
+2. 向工程端取回 E1 ~ E11(見 `06_HandoffPackage.md` §6),整為可勾稽清單。**E4 為關鍵路徑單點**,未取回則全域優先級維持 `[!TBD]`,硬跑 D1 會把已上線功能誤列為待開發。
+3. 新增待取回項:三系統的**部署型態**(`[!TBD-DEPLOY-01]`,見 `01_Strategy.md`),不在既有 E1 ~ E11 內,建議併入 E 系列。
+
+**階段 2 —— 建實體結構(35 F)**
+
+執行 `21_AddModule.md`,分三批:SYS01(26 F)→ SYS03(3 F)→ SYS02(6 F,待 C06-b)。本階段負責填 `03_Structure.md` 與 `04_FuncMap.md`,並複查 M03 拆分閾值(現 5 F,已達警示邊緣)。
+⚠️ `21_AddModule.md` 複製路徑寫 `_templates/F00_template/`(小寫),repo 實際為 `F00_Template/`(大寫);Windows 下可過,Linux / CI 會 fail。
+
+**階段 3 —— R2 Part 2 + D1(分批)**
+
+首批 `SYS01-M04-F01 維養紀錄`(DEC-004 確認未實作,不受 E4 影響,素材密度最高)。替代 `SYS01-M01-F01 登入與工作區切換`(EP02 為所有 Epic 前置,但受 E5 / E6 影響大)。E4 取回後依真實優先級鋪開;未取回則續做確定未實作者(`M06-F02 碳匯儀錶板`)與 SYS03。
+
+**階段 4 —— D1.5 審閱 → D2 收斂**
+
+逐 F 閉環(`S1_DRAFT → S2_ITERATING → S3_READY_SYNC → S4_SYNC_DONE`),D2 執行四維編碼核對。
+
+> 剩餘 3 項待釐清(C02 / C09 / O02)為模組級,可於展開對應模組時拍板。
 
 ## 待 SA 回應問題
 
@@ -63,7 +80,10 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 樹碳集
 
 ## 階段完成度
 
-尚未進入 D1,`03_Structure.md` 無節點登記。`DesignSpecs/` 尚無 SYS 實體目錄(`20_Setup` 未執行)。
+尚未進入 D1。`03_Structure.md` 無節點登記、`04_FuncMap.md` 功能樹未生成 —— 兩者維護權屬 `21_AddModule.md`(階段 2),階段 0 依職責邊界未動。`DesignSpecs/` 尚無 SYS 實體目錄。
+
+**階段 0 產出(2026-08-31)**:`01_Strategy.md` 與 `02_Scope.md` 由 `TEMPLATE_EMPTY` 轉 `ACTIVE`(9 個利害關係人 / 8 項業務驅動因素 / 3 系統清單 / 15 EP / 9 RBAC 角色 / 14 條硬限制);補建 `DesignSpecs/shared/`(`20_Setup.md` §2 遺漏)。`06_HandoffPackage.md` frontmatter 加註分派狀態,**尚未退役**(§3 §4 §6 §7 未消費)。
+未執行 `DesignSpecs/AI_Rules.md` 空白占位(`20_Setup.md` v2.9 要求)—— 與 `AI_Rules.md` v2.11 §5 條 12 交付剝離原則衝突,SA 裁示不建,套件矛盾待走 AGENT_TASK。
 
 **R2 Part 1 產出**:3 SYS / 2 SS / 10 M / 35 F / 15 EP / 14 條素材硬限制 / 9 個角色 / 11 項工程前置決策點。
 
@@ -98,7 +118,7 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 樹碳集
 - **當前焦點 SYS**:未定(SYS01 / SYS02 / SYS03 並行待展開)
 - **當前焦點 M**:未定
 - **當前焦點 F**:未定
-- **當前流程階段**:R2 Part 1 完成,待指定焦點模組
+- **當前流程階段**:建置階段 0 完成,位於階段 1(決策清倉與外部發包)
 - **Coach 第 N 代**:1
 - **最近一次穩定狀態 commit**:`31acba4` 初始基線(2026-08-22 建 git,遠端 https://github.com/rossi7966-ai/treetreelook-sa)
 
@@ -126,4 +146,4 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 樹碳集
 - 已 `git init` 並接上私有遠端 `rossi7966-ai/treetreelook-sa`。
 - commit `31acba4` 初始基線 = SA 工作開始前的原樣,即**還原錨**。
 - commit `913a8a9` 段1+段2 = 開案登記與 R1 矛盾浮現。
-- ⚠️ 首推尚未完成(CLI push 被環境權限層擋下),待由 GitHub Desktop 或使用者手動推送。
+- ✅ 首推已完成。2026-08-31 核對:`origin/main` 與本地同步於 `e64c370`。(原「首推尚未完成」註記已過時,予以更正。)
