@@ -2,10 +2,10 @@
 file: DesignSpecs/02_Scope.md
 role: ux_l4_scope
 status: ACTIVE
-version: v0.1 (2026-08-31)
+version: v0.2 (2026-08-31)
 last_updated: 2026-08-31
 changed_by: Runner
-summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out-of-Scope、限制與假設(14)。內容源自 06_HandoffPackage.md §1 §2 §5(R2 Part 1),階段 0 分派落位。
+summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out-of-Scope、限制與假設(14)。內容源自 06_HandoffPackage.md §1 §2 §5(R2 Part 1),階段 0 分派落位。(v0.2:DEC-009 / DEC-010 落檔,SYS02 下切 SS03 / SS04,[!TBD-ROLE-04] 改寫為邀請預設角色待取回)
 ---
 # 範疇層(L4)
 
@@ -63,9 +63,10 @@ summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out
 🔒 **解鎖條件**:C09 拍板 / 取回 E6。
 🌊 **下游影響**:阻塞 SYS01-M05 任務可視範圍。
 
-`[!TBD-ROLE-04]` 訂閱平台 `Role=5 受邀成員` 撞 `D_C_Role 5=廠商組長` —— SYS02 是否為獨立 Role 命名空間?
-🔒 **解鎖條件**:C01-b 拍板 / 取回 E10。
-🌊 **下游影響**:阻塞 SYS02 角色定義與 EP13 成員管理。
+`[!TBD-ROLE-04]` 被邀請成員進入 OID 後的**預設 Role 與 Group 指派規則**未定。
+依 DEC-009,SYS02 **不擁有獨立 Role 命名空間**,與 SYS01 共用 `D_C_Role` 單一值域;`訂閱平台v1.pptx` p2 路徑四的「自動加入 OID 為 Role=5」已判為**失效引用**予以排除(該值撞 `5=廠商組長`,且無 Group 而 Role>3 違反 L3)。惟正確的預設值為真實未知。
+🔒 **解鎖條件**:取回 E12。
+🌊 **下游影響**:阻塞 EP13 成員管理的 AC。取回前不得照抄路徑四。
 
 ## In-Scope
 
@@ -73,10 +74,11 @@ summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out
 |---|---|---|---|
 | SYS01 樹碳集 | SS01 完整版(Web 管理端,根路由) | xmind 1~8 主模組 | 功能架構0816.xmind |
 | SYS01 樹碳集 | SS02 調查版(外業行動端,`/mobile/`) | xmind 調查版分支 | DEC-006 |
-| SYS02 訂閱管理平台 | `[!TBD-LAYER-02]` 見 `01_Strategy.md` | 訂閱平台v1 + xmind 業務管理後台 / 組織管理者後台 | SA 拍板納入 |
+| SYS02 訂閱管理平台 | SS03 崧旭業務後台(`M_AdminList` 帳密) | xmind 崧旭業務管理後台 | DEC-010 |
+| SYS02 訂閱管理平台 | SS04 組織管理者後台(`UserKey` Token / 自 SYS01 跳轉) | 訂閱平台v1 + xmind 組織管理者後台 | DEC-010 |
 | SYS03 官網 Landing Page | — | Landing Page調整.pptx | SA 拍板納入 |
 
-**合計**:3 SYS、2 SS、10 M、35 F、15 EP。
+**合計**:3 SYS、**4 SS**、10 M、35 F、15 EP。SS 編號全域唯一(DEC-010);SS 不進節點 ID,節點恆為 `M##-F##-W##`。
 
 > ⚠️ **「不上架」不是 Out-of-Scope**。依 DEC-008,xmind 標「不上架」者(碳匯儀錶板、角色自訂)語意為「尚未開發完成」,列 In-Scope,節點狀態 `PLANNED`。
 

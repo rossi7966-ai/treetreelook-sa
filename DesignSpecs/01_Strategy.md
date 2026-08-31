@@ -3,10 +3,10 @@ file: DesignSpecs/01_Strategy.md
 role: ux_l5_strategy
 owner: rossi7966-ai(SA)
 status: ACTIVE
-version: v0.1 (2026-08-31)
+version: v0.2 (2026-08-31)
 last_updated: 2026-08-31
 changed_by: Runner
-summary: UX L5 策略層——專案目標、利害關係人、業務驅動因素、系統清單。內容源自 06_HandoffPackage.md §1 §2(R2 Part 1),階段 0 分派落位。
+summary: UX L5 策略層——專案目標、利害關係人、業務驅動因素、系統清單。內容源自 06_HandoffPackage.md §1 §2(R2 Part 1),階段 0 分派落位。(v0.2:DEC-010 落檔,SYS02 下切 SS03 / SS04,解除 [!TBD-LAYER-02])
 ---
 # 專案策略層(L5)
 
@@ -57,11 +57,16 @@ summary: UX L5 策略層——專案目標、利害關係人、業務驅動因�
 | SYS02 | 訂閱管理平台 | 待確認 |
 | SYS03 | 官網 Landing Page | 待確認 |
 
-> SubSystem 不入本表:SYS01 下切 SS01 完整版(Web 管理端,根路由)與 SS02 調查版(外業行動端,`/mobile/`),依 DEC-006,記於 `SYS01_overview.md`(階段 2 由 `21_AddModule.md` 產出)。
+> SubSystem 不入本表,記於各 `SYS##_overview.md`(階段 2 由 `21_AddModule.md` 產出)。SS 編號**全域唯一**(DEC-010):
 >
-> `[!TBD-LAYER-02]` SYS02 是否再下切 SS?崧旭業務管理後台(`M_AdminList` 帳密登入)與組織管理者後台(`UserKey` Token / SSO,以 OID 身分)權限邊界獨立,各自都夠格成 SS。
-> 🔒 **解鎖條件**:C06-b 拍板。
-> 🌊 **下游影響**:阻塞 SYS02 的實體目錄結構(階段 2)。
+> | SS | 名稱 | 歸屬 | 邊界依據 |
+> |---|---|---|---|
+> | SS01 | 完整版(Web 管理端,根路由) | SYS01 | 獨立路由根目錄(DEC-006) |
+> | SS02 | 調查版(外業行動端,`/mobile/`) | SYS01 | 獨立路由根目錄(DEC-006) |
+> | SS03 | 崧旭業務後台 | SYS02 | 獨立登入:`M_AdminList` 帳密(DEC-010) |
+> | SS04 | 組織管理者後台 | SYS02 | 獨立登入:`D_OriginAccount.UserKey` Token / 自 SYS01 跳轉(DEC-010) |
+>
+> ~~`[!TBD-LAYER-02]`~~ 已解除:SYS02 確認下切 SS03 / SS04(DEC-010)。
 >
 > `[!TBD-DEPLOY-01]` 三個系統的部署型態(獨立部署 / 共用部署)未定 —— 素材未載明實際部署拓樸。
 > 🔒 **解鎖條件**:向工程端取回現行部署拓樸(不在既有 E1 ~ E11 清單內,建議併入 E 系列)。

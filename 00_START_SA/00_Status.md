@@ -2,10 +2,10 @@
 file: 00_START_SA/00_Status.md
 role: project_status_dashboard
 status: ACTIVE
-version: v0.10 (2026-08-31)
+version: v0.11 (2026-08-31)
 last_updated: 2026-08-31
 changed_by: Runner
-summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並完成 R1 / R2 Part 1;2026-08-31 完成建置階段 0(全域設定檔內容落位)。
+summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並完成 R1 / R2 Part 1;2026-08-31 完成建置階段 0,並裁示 DEC-009(角色命名空間)/ DEC-010(SYS02 下切 SS03 / SS04)。
 ---
 # 專案執行狀態駕駛艙
 
@@ -14,7 +14,7 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 
 ## 當前位置
 - 流程階段:**R2 Part 1 完成 → 建置階段 0 完成**(01_Strategy / 02_Scope 內容落位)
-- 焦點模組:**待 SA 指定**(R2 Part 2 產 W## 節點卡片用)。架構已收斂為 3 SYS / 2 SS / 10 M / 35 F,見 `DesignSpecs/06_HandoffPackage.md` §4。
+- 焦點模組:**待 SA 指定**(R2 Part 2 產 W## 節點卡片用)。架構已收斂為 3 SYS / **4 SS** / 10 M / 35 F,見 `DesignSpecs/06_HandoffPackage.md` §4。
 - 上次更新:2026-08-31
 
 ## 下一步動作
@@ -29,7 +29,7 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 
 **階段 2 —— 建實體結構(35 F)**
 
-執行 `21_AddModule.md`,分三批:SYS01(26 F)→ SYS03(3 F)→ SYS02(6 F,待 C06-b)。本階段負責填 `03_Structure.md` 與 `04_FuncMap.md`,並複查 M03 拆分閾值(現 5 F,已達警示邊緣)。
+執行 `21_AddModule.md`,分三批:SYS01(26 F)→ SYS03(3 F)→ SYS02(6 F)。SYS02 的 SS 切分已由 DEC-010 拍定,無阻塞。本階段負責填 `03_Structure.md` 與 `04_FuncMap.md`,並複查 M03 拆分閾值(現 5 F,已達警示邊緣)。
 ⚠️ `21_AddModule.md` 複製路徑寫 `_templates/F00_template/`(小寫),repo 實際為 `F00_Template/`(大寫);Windows 下可過,Linux / CI 會 fail。
 
 **階段 3 —— R2 Part 2 + D1(分批)**
@@ -40,7 +40,7 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 
 逐 F 閉環(`S1_DRAFT → S2_ITERATING → S3_READY_SYNC → S4_SYNC_DONE`),D2 執行四維編碼核對。
 
-> 剩餘 3 項待釐清(C02 / C09 / O02)為模組級,可於展開對應模組時拍板。
+> 剩餘 3 項待釐清(C02 / C09 / O02)為模組級,可於展開對應模組時拍板。C06-b / C01-b 已於 2026-08-31 結案(DEC-010 / DEC-009)。
 
 ## 待 SA 回應問題
 
@@ -48,9 +48,14 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 |---|---|---|
 | C02 | 權限判斷以硬編碼 `Role<4` 為準,還是 `A_Function` + `A_Right` 資料驅動矩陣?(DEC-001 只定了 Role 存哪裡,沒定怎麼判) | 6-1 帳號管理、全域可視性 |
 | C09 | 系統管理員是否綁 GID?(任務派工 p58 說綁,系統管理設計v6 p47 說 Null 全視域) | 任務可視範圍 |
-| **C06-b** | SYS02 是否再下切 SS?崧旭業務管理後台(`M_AdminList` 帳密登入)與組織管理者後台(`UserKey` Token / SSO,以 OID 身分)權限邊界獨立,各自都夠格成 SS | SYS02 的 20_Setup 目錄結構 |
-| C01-b | 訂閱平台 `Role=5 受邀成員` 撞 `D_C_Role 5=廠商組長` —— SYS02 是否為獨立 Role 命名空間? | SYS02 展開時 |
 | O02 | 「離線包下載管理」僅見於 xmind,「離線」在 36 份文件 0 次出現,且調查版定義為 `/mobile/` 線上路由 —— 確有離線需求? | 調查版技術架構 |
+
+### 已裁示(2026-08-31)
+
+| ID | 裁示 | 落點 |
+|---|---|---|
+| C01-b | SYS02 **不擁有獨立 Role 命名空間**,與 SYS01 共用 `D_C_Role` 單一值域。`訂閱平台v1.pptx` p2 路徑四「自動加入 OID 為 Role=5」判為失效引用予以排除(撞 5=廠商組長;無 Group 而 Role>3 違反 L3;p11 UI 稿不認該值)。邀請預設 Role 與 Group 指派規則轉列 **E12**。 | DEC-009 |
+| C06-b | SYS02 **下切兩個 SS**:SS03 崧旭業務後台(`M_AdminList` 帳密)/ SS04 組織管理者後台(`UserKey` Token / 自 SYS01 跳轉)。SS 編號採**全域唯一**。 | DEC-010 |
 
 ### 已裁示(2026-08-22)
 
@@ -73,6 +78,7 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 | E2 | 任務十狀態的實際判斷邏輯 | 任務管理 AC(DEC-002) |
 | E3 | 固碳量計算式 + 樹種係數掛載位置 + 生物量取得方式 | 碳匯全部 AC(DEC-003) |
 | **E4** | xmind 節點的「已實作 / 未實作」對照 | **R2 全部 P1/P2/P3 優先級**(DEC-007)。現行系統已上線,不取回會把已上線功能誤列為待開發 |
+| **E12** | 被邀請成員進入 OID 後的預設 Role 與 Group 指派規則 | EP13 成員管理全部 AC(DEC-009)。p2 路徑四被排除後無替代來源 |
 
 > 取回前,對應規格一律標 `[!TBD]`,不得照抄已失效文件。
 
@@ -85,9 +91,9 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 **階段 0 產出(2026-08-31)**:`01_Strategy.md` 與 `02_Scope.md` 由 `TEMPLATE_EMPTY` 轉 `ACTIVE`(9 個利害關係人 / 8 項業務驅動因素 / 3 系統清單 / 15 EP / 9 RBAC 角色 / 14 條硬限制);補建 `DesignSpecs/shared/`(`20_Setup.md` §2 遺漏)。`06_HandoffPackage.md` frontmatter 加註分派狀態,**尚未退役**(§3 §4 §6 §7 未消費)。
 未執行 `DesignSpecs/AI_Rules.md` 空白占位(`20_Setup.md` v2.9 要求)—— 與 `AI_Rules.md` v2.11 §5 條 12 交付剝離原則衝突,SA 裁示不建,套件矛盾待走 AGENT_TASK。
 
-**R2 Part 1 產出**:3 SYS / 2 SS / 10 M / 35 F / 15 EP / 14 條素材硬限制 / 9 個角色 / 11 項工程前置決策點。
+**R2 Part 1 產出**:3 SYS / **4 SS**(DEC-010 後由 2 增為 4)/ 10 M / 35 F / 15 EP / 14 條素材硬限制 / 9 個角色 / 11 項工程前置決策點(E10 由 DEC-009 結案、新增 E12)。
 
-### SYS / SS 層(2026-08-22 SA 拍板)
+### SYS / SS 層(2026-08-22 / 2026-08-31 SA 拍板)
 
 | 層級 | 名稱 | 依據 | 狀態 |
 |---|---|---|---|
@@ -95,12 +101,15 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 | ├ SS01 | 完整版(Web 管理端,根路由) | DEC-006 | 待 R2 展開 |
 | └ SS02 | 調查版(外業行動端,`/mobile/`) | DEC-006;`/mobile/` 素材出現 7 次 | 待 R2 展開 |
 | **SYS02** | 訂閱管理平台 | `訂閱平台v1.pptx` + xmind 業務管理後台 / 組織管理者後台 | 待 R2 展開 |
+| ├ SS03 | 崧旭業務後台(`M_AdminList` 帳密) | DEC-010;獨立憑證表 | 待 R2 展開 |
+| └ SS04 | 組織管理者後台(`UserKey` Token / 自 SYS01 跳轉) | DEC-010;`D_OriginAccount.UserKey` =「母帳號登入用Key」 | 待 R2 展開 |
 | **SYS03** | 官網 Landing Page | `Landing Page調整.pptx` | 待 R2 展開 |
 
 > ~~`[!TBD-LAYER-01]`~~ 已解除:SYS01 確認下切 SS01 / SS02(DEC-006)。
 >
-> `[!TBD-LAYER-02]` SYS02 是否再下切 SS(崧旭業務管理後台 / 組織管理者後台)?
-> 🔒 解鎖條件:C06-b 拍板。🌊 下游影響:阻塞 SYS02 的 20_Setup 目錄結構。
+> ~~`[!TBD-LAYER-02]`~~ 已解除:SYS02 確認下切 SS03 / SS04(DEC-010)。
+>
+> SS 編號**全域唯一**(DEC-010)。SS 不建獨立目錄、不進節點 ID,節點恆為 `M##-F##-W##`;M 層目錄直接住在 `SYS##/` 下,加 SS 不影響實體路徑。
 
 ### 場域歸屬鏈(DEC-005)
 
@@ -118,13 +127,35 @@ summary: SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並
 - **當前焦點 SYS**:未定(SYS01 / SYS02 / SYS03 並行待展開)
 - **當前焦點 M**:未定
 - **當前焦點 F**:未定
-- **當前流程階段**:建置階段 0 完成,位於階段 1(決策清倉與外部發包)
+- **當前流程階段**:建置階段 0 完成 + C06-b / C01-b 已結案;階段 1 僅餘「E 系列取回清單發包」
 - **Coach 第 N 代**:1
 - **最近一次穩定狀態 commit**:`31acba4` 初始基線(2026-08-22 建 git,遠端 https://github.com/rossi7966-ai/treetreelook-sa)
 
 ## Coach 交接日誌
 
 > 歷代累積,最新在上。
+
+### 2026-08-31 · 階段 0 + C06-b / C01-b 裁示
+
+**盤點與 Roadmap**
+- 盤點 `DesignSpecs/` 七本骨幹:僅 00 / 05 / 06 為 ACTIVE,01 / 02 / 03 / 04 為 TEMPLATE_EMPTY。內容全積壓於 `06_HandoffPackage.md` 中繼檔。
+- 訂出五階段 Roadmap(階段 0 骨幹落位 → 1 決策清倉與發包 → 2 建實體結構 → 3 R2 Part 2 + D1 → 4 D1.5 / D2)。
+
+**階段 0 完成**(commit `fdb0fde`)
+- `01_Strategy.md` / `02_Scope.md` 由 TEMPLATE_EMPTY 轉 ACTIVE。
+- 補建 `DesignSpecs/shared/`;不建 `DesignSpecs/AI_Rules.md`(與交付剝離原則衝突)。
+- 職責邊界:`03_Structure.md` / `04_FuncMap.md` 未動,維護權屬 `21_AddModule.md` 與 `30_DraftSync.md`。
+
+**SA 拍板兩項(DEC-009 / DEC-010)**
+- 定向回查 `訂閱平台v1.pptx` 原始抽取與 p8~p12 畫面轉譯、DB 58 表角色欄位全掃。
+- **新證據 1**:p11 成員管理 UI 稿角色標籤只有「管理員 `Role=1`」與「一般成員」,全份未出現「5」→ 推翻 R1 的「獨立命名空間」研判。
+- **新證據 2**:p9~p12 組織後台導覽固定四項,崧旭後台功能不在其中,兩者無共用畫面 → 佐證 SS 切分。
+- **自我修正**:先前稱「C06-b 晚拍板須走 `90_Restructure.md` 重構搬移」高估代價。SS 不建獨立目錄、M 層直接住 `SYS##/` 下、SS 不進節點 ID,實際僅四處中繼資料變更,無實體檔案搬移。
+
+**衍生取回項**
+- E10 由 DEC-009 結案(無須取回)。
+- 新增 **E12** 邀請成員預設 Role 與 Group 指派規則。
+- `[!TBD-DEPLOY-01]` 三系統部署型態仍待 SA 決定是否編為 E 系列(建議 E13)。
 
 ### 2026-08-22 · 開案 + R1 裁示
 
