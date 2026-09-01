@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """UIV-10 原型:Figma Variables 讀回 JSON ↔ tokens.json 漂移偵測。
 
-具名依賴:輸入之 Figma 讀回 JSON 由 MCP(use_figma Plugin API 全量讀回)產出,
-本腳本不自行連線 Figma——故不入 run_checks 閘門子集,手動或維護流程調用。
+具名依賴:輸入之 Figma 讀回 JSON 由 MCP(use_figma Plugin API 全量讀回)產出，
+本腳本不自行連線 Figma——故不入 run_checks 閘門子集，手動或維護流程調用。
 
 用法:
     python uiv10_figma_diff.py --figma <readback.json> --tokens <tokens.json>
 
 比對四面:名(terminal name 雙向)/值(light)/alias 指向/mode 值(dark_mode)。
 範圍:color/color-dark/typography.font-size/font-weight/spacing/radius;
-shadow/z-index/breakpoint/layout/transition/focus 屬 repo 側,不要求 Figma 持有。
-宣告例外:subtitle 之 dark 值待設計師定,Figma 暫留 light 值 → allowed-exception。
+shadow/z-index/breakpoint/layout/transition/focus 屬 repo 側，不要求 Figma 持有。
+宣告例外:subtitle 之 dark 值待設計師定，Figma 暫留 light 值 → allowed-exception。
 
 dark mode=optional(宣告制):tokens.json 頂層 `$modes` 宣告(如 ["light"]);
 未宣告時依 color-dark 群組有無推斷。未含 "dark" → dark 相關比對全數不適用。
 集合名可配置:tokens.json `$extensions.metaui.figma_collections`
-{"color"/"typography"/"spacing": "<集合名>"},未設=MetaUI Color/Typography/Spacing。
+{"color"/"typography"/"spacing": "<集合名>"}，未設=MetaUI Color/Typography/Spacing。
 font-weight 型別容錯:Figma 端 STRING 字重名(Bold/Medium…)映射為數值後比對。
 exit code:0=無 fail,1=有 fail,2=輸入解析失敗。
 """
@@ -25,7 +25,7 @@ import json
 import sys
 
 DECLARED_EXCEPTIONS = {
-    ("subtitle", "dark_mode"): "dark 弱化值待設計師定,Figma 暫留 light 值",
+    ("subtitle", "dark_mode"): "dark 弱化值待設計師定，Figma 暫留 light 值",
 }
 
 FONT_WEIGHT_NAMES = {
@@ -37,7 +37,7 @@ FONT_WEIGHT_NAMES = {
 
 
 def weight_num(v):
-    """字重值→數值;STRING 字重名映射,無法解析回 None。"""
+    """字重值→數值;STRING 字重名映射，無法解析回 None。"""
     try:
         return float(v)
     except (TypeError, ValueError):

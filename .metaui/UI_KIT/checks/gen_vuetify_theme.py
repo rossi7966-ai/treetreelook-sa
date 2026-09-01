@@ -4,15 +4,15 @@
 tokens.json → vuetify.theme.json(Vuetify 3 createVuetify({ theme }) 設定樣張)
 
 雙軌共存設計:
-  tokens.css    → --color-*     (DS 正規名,gen_tokens.py 生成)
-  Vuetify theme → --v-theme-*   (Vuetify 慣例,本檔生成)
-兩軌同值同源(tokens.json),工程師可用任一命名空間;
+  tokens.css    → --color-*     (DS 正規名，gen_tokens.py 生成)
+  Vuetify theme → --v-theme-*   (Vuetify 慣例，本檔生成)
+兩軌同值同源(tokens.json)，工程師可用任一命名空間;
 DS 規範以 tokens.css 的 --color-* 為正規引用名。
 
 Vuetify built-in color keys(primary/secondary/error/success/info/
 background/surface/surface-variant)直接對映。
 非 built-in 的 token(如 primary-emphasis/subtitle/stroke)
-註冊為 Vuetify custom colors,工程師可在元件上 color="primary-emphasis"。
+註冊為 Vuetify custom colors，工程師可在元件上 color="primary-emphasis"。
 
 Usage:
     python gen_vuetify_theme.py --project <專案根>
@@ -24,7 +24,7 @@ import os
 import sys
 
 HEADER = (
-    "生成物,禁手改;來源 UIFoundation/tokens.json,"
+    "生成物，禁手改;來源 UIFoundation/tokens.json，"
     "重生成用 UI_KIT/checks/gen_vuetify_theme.py"
 )
 
@@ -128,7 +128,7 @@ def build_vuetify_theme(data):
         "$mapping": mapping,
         "$notes": {
             "dual_track": (
-                "tokens.css(--color-*) 與 Vuetify(--v-theme-*) 雙軌共存,同值同源。"
+                "tokens.css(--color-*) 與 Vuetify(--v-theme-*) 雙軌共存，同值同源。"
                 "DS 規範以 --color-* 為正規引用名"
             ),
             "emphasis_not_darken": (
@@ -136,7 +136,7 @@ def build_vuetify_theme(data):
                 "primary-darken-1(F-5 裁決:darken/lighten→emphasis/soft)"
             ),
             "semantic_only": (
-                "元件應引用 semantic tier(error/success/info),"
+                "元件應引用 semantic tier(error/success/info)，"
                 "不直接引用 primitive(red1/green1/blue1)(F-2 裁決)"
             ),
             "usage": (

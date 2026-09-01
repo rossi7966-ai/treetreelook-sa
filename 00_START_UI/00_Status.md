@@ -31,4 +31,4 @@ summary: UI 駕駛艙(對位 SA_DEPLOY 同名檔,檔名對稱=UI 2026-07-05 Q1 �
 |------|------|------|
 | YYYY-MM-DD | <!-- 例:F01 通過 G1(R02) --> | |
 
-部署來源:metaos-v0.12.0/UI_DEPLOY@v1.2(來源1f2d24c)
+部署來源:metaos-v0.19.0/UI_DEPLOY@v1.5(來源0698a59)

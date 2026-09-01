@@ -22,6 +22,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_copy
 import gen_design_md
+import gen_digest
 import gen_tokens
 import gen_vuetify_theme
 import uiv_checks
@@ -40,6 +41,10 @@ def expect(name, cond):
 
 def fails_of(rep, pattern_id=None):
     return [f for f in rep.findings if f["classification"] == "fail" and (pattern_id is None or f["pattern_id"] == pattern_id)]
+
+
+def css_has(hits, needle):
+    return any(needle in h for h in hits)
 
 
 def reviews_of(rep, pattern_id):
@@ -62,6 +67,29 @@ POC_PAGE = """<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
 </body></html>"""
 
 EXTRA_CSS = ".c { color: #123456; padding: 37px; background: rgb(1,2,3); }  /* 繞過面3 */"
+
+# ── UIV-05 樣本(UIX-007/UIX-008，案源 moa-weather R02_G2:首個 styled 頁踩出) ──
+# 同一頁同時放:合法斷點、非 token 斷點、條件式 rem 繞道、宣告區 rem 盲區、
+# 官方載體與非官方外掛表。未修版=768px 也擋(斷點路全死)且 rem 完全不報。
+V5_PAGE = """<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="pageid" content="P97"><meta name="stage" content="styled">
+<meta name="primary-action" content="測試主行動">
+<link rel="stylesheet" href="../../../UIFoundation/tokens.css">
+<link rel="stylesheet" href="../../../UIFoundation/placeholder.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  @media (max-width: 768px) { .a { gap: var(--spacing-3); } }   /* 合法:等於 breakpoint token */
+  @media (max-width: 820px) { .b { gap: var(--spacing-3); } }   /* 非 token 值 */
+  @media (max-width: 48rem) { .c { gap: var(--spacing-3); } }   /* 無 rem 斷點 token 可用 */
+  .d { grid-template-columns: repeat(auto-fit, minmax(min(100%,14rem), 1fr)); }  /* rem 盲區 */
+</style></head><body>
+<div data-state="ideal"><h1>斷點測試頁</h1>
+<a href="P97_media.html" data-nav="P97" data-action="primary">下一頁</a></div>
+</body></html>"""
+
+V5_FOUNDATION_CSS = """.ph-slot { gap: var(--spacing-3);
+  border: 1px dashed var(--color-divider); min-height: var(--imagery-ph-min-h); }
+"""
 
 CLEAN_CSS_SAMPLE = """
   .ok { color: var(--color-text); background: transparent; white-space: nowrap;
@@ -87,6 +115,71 @@ T10_FIGMA_LIGHT = {"collections": [
         {"name": "1", "values": {"light": 4}},
         {"name": "sm", "values": {"light": 4}}]},
 ]}
+
+
+# ── gen_digest 樣本(UIX-003/UIX-004，案源 moa-weather R00_G0) ──
+# 一個 F 模組裡同時放:句中引用、已解鎖(刪除線)宣告、廢除節點之 TBD、
+# 相鄰兩條 TBD 只有後者有預設假設。未修版會把這些全當未決項列出。
+DG_STRUCTURE = """# 結構
+
+##### F01_digest
+| 節點ID | 名稱 | 狀態 | 層級 | 實體檔案路徑 |
+|--------|------|------|------|-------------|
+| M09-F01-W01 | 活躍節點 | S4_SYNC_DONE | 業務流程 | nodes/M09-F01-W01_活躍節點.md |
+| M09-F01-W02 | 已廢除節點 | **DEPRECATED** | 業務流程 | nodes/M09-F01-W02_已廢除節點.md |
+| M09-F01-W03 | 未展開節點 | PLANNED | - | 尚未建立 |
+| M09-F01-W99 | Out-of-Scope佔位符 | RESERVED | - | nodes/M09-F01-W99_OutOfScope.md |
+""" + "".join("| M09-F01-W%02d | 未展開節點%d | PLANNED | - | 尚未建立 |\n" % (i, i)
+              for i in range(4, 20))
+
+DG_SCOPE = """# 範疇
+
+## Epic 清單
+
+| EP## | Epic 名稱 | 對應 M-F | 業務目標 |
+|------|----------|---------|---------|
+| EP01 | 活躍 Epic | M09-F01 | 對應節點仍在展開中。 |
+| ~~EP02~~ | ~~已廢除 Epic~~ ⛔已廢除 | ~~M09-F01~~ | 節點已併入他處。 |
+| EP03 | 未展開 Epic | M09-F01 | 對應節點全為 PLANNED。 |
+| ~~EP04~~ | ~~另一個已廢除 Epic~~ ⛔已廢除 | ~~M09-F01~~ | 併入 EP01。 |
+"""
+
+DG_NODE_W01 = """---
+node_id: M09-F01-W01
+epic: EP01_活躍 Epic
+status: S4_SYNC_DONE
+---
+# 規格節點
+
+## 業務規則
+- 規則一:實際網址字串見 `[!TBD-W01-01]`(實作層，不影響版面與行為設計)。
+
+## 開放問題與決策紀錄
+- `[!TBD-W01-01]` 甲項未定。
+  > 🔒 **解鎖條件**:待外部單位回覆。
+- `[!TBD-W01-02]` 乙項未定。
+  > 💡 **預設假設**:假設乙。
+- ~~`[!TBD-W01-03]`~~ **已解鎖**:丙項已於 DEC 拍板。
+"""
+
+DG_NODE_W02 = """---
+node_id: M09-F01-W02
+epic: EP02_已廢除 Epic
+status: DEPRECATED
+---
+# 規格節點
+
+## 開放問題與決策紀錄
+- `[!TBD-W02-01]` 丁項未定。
+  > 💡 **預設假設**:假設丁。
+"""
+
+DG_NODE_W99 = """---
+node_id: M09-F01-W99
+status: RESERVED
+---
+# Out-of-Scope佔位符
+"""
 
 
 def run_uiv10(tmp, tokens, figma):
@@ -204,6 +297,35 @@ def main():
         expect("T07-4 缺席報告 R99_Missing 仍 fail(咬合不鬆)",
                any("R99_Missing" in f["detail"] for f in f7))
 
+        # ── UIV-07 掃描面固定全 repo + 佔位跨分隔符(2026-08-20 案源:moa PR#84/#85、NP UIX-015) ──
+        f98 = os.path.join(tmp, "DesignSpecs", "F98_other")
+        os.makedirs(os.path.join(f98, "ui", "reviews"))
+        open(os.path.join(f98, "ui", "reviews", "R01_G1.md"), "w", encoding="utf-8").write(
+            "# 他模組獨有報告\n")
+        open(os.path.join(foundation, "90_IssueLedger.md"), "w", encoding="utf-8").write(
+            "# 議題帳\n\n| UIX | 來源報告 | 狀態 |\n|-----|---------|------|\n"
+            "| UIX-903 | R01_G1 | open |\n"
+            "| UIX-904 | ⟪RWD/A11y 規則補建輪次·未立 R 報告⟫ | open |\n")
+        rep7b = Reporter("selftest")
+        uiv_checks.uiv07(rep7b, tmp, [f99])          # 故意只給 f99，報告卻在 f98
+        f7b = fails_of(rep7b, "UIV-07")
+        expect("T07-5 帳上他模組獨有報告(R01_G1)，以單模組 scope 呼叫不誤報",
+               not any("R01_G1" in f["detail"] for f in f7b))
+        expect("T07-6 佔位含分隔符(⟪RWD/A11y…⟫)不被拆成假報告名",
+               not any("A11y" in f["detail"] for f in f7b))
+
+        # ── UIV-12:尚未開工(無 ui/)之 F 模組不報 G0 缺席(NP 14 筆誤報案源) ──
+        f97 = os.path.join(tmp, "DesignSpecs", "F97_notstarted")
+        os.makedirs(f97)
+        rep12 = Reporter("selftest")
+        uiv_checks.uiv12(rep12, tmp, [f97])
+        expect("T12-1 無 ui/ 之 F 模組=不適用，不報 G0 缺席",
+               not fails_of(rep12, "UIV-12"))
+        rep12b = Reporter("selftest")
+        uiv_checks.uiv12(rep12b, tmp, [f98])          # 有 ui/ 但無 R##_G0
+        expect("T12-2 有 ui/ 但缺 G0 報告=仍 fail(咬合不鬆)",
+               any("G0 報告" in f["detail"] for f in fails_of(rep12b, "UIV-12")))
+
         # ── scan_hardcoded 煙霧樣本(brownfield 導入輔助工具;不入閘門仍自證) ──
         scanner = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scan_hardcoded.py")
         sroot = os.path.join(tmp, "scan_fixture")
@@ -257,6 +379,82 @@ def main():
     del TG_infer["$modes"]
     expect("TG-5 未宣告+有 color-dark:推斷產 dark(向後相容)",
            "dark_mode" in gen_tokens.build(TG_infer)["tokens.css"])
+
+    # ── UIV-05:@media 條件式與官方載體(UIX-007/UIX-008) ──
+    v5tmp = tempfile.mkdtemp(prefix="metaui_selftest_uiv05_")
+    try:
+        v5f = os.path.join(v5tmp, "DesignSpecs", "UIFoundation")
+        v5p = os.path.join(v5tmp, "DesignSpecs", "F97_v5", "ui", "pages")
+        os.makedirs(v5f)
+        os.makedirs(v5p)
+        with open(os.path.join(v5f, "tokens.json"), "w", encoding="utf-8") as f:
+            json.dump({"breakpoint": {"tablet": {"$value": "768px"}}}, f)
+        open(os.path.join(v5f, "tokens.css"), "w", encoding="utf-8").write(":root { --spacing-3: 12px; }\n")
+        open(os.path.join(v5f, "placeholder.css"), "w", encoding="utf-8").write(V5_FOUNDATION_CSS)
+        open(os.path.join(v5p, "site.css"), "w", encoding="utf-8").write(V5_FOUNDATION_CSS)
+        open(os.path.join(v5p, "P97_media.html"), "w", encoding="utf-8").write(V5_PAGE)
+
+        rep5 = Reporter("selftest")
+        uiv_checks.uiv05(rep5, v5tmp, [os.path.join(v5tmp, "DesignSpecs", "F97_v5")])
+        f5 = " ".join(f["detail"] for f in fails_of(rep5, "UIV-05"))
+        r5 = " ".join(f["detail"] for f in reviews_of(rep5, "UIV-05"))
+
+        expect("V5-1 條件式 px 等於 breakpoint token=不擋", "768px" not in f5)
+        expect("V5-2 條件式 px 非 token 值=fail", "820px(條件式" in f5)
+        expect("V5-2b em 與 rem 都算相對長度",
+               uiv_checks.css_rem_literals("@media (max-width:40em){.a{width:2rem}}") == ["40em", "2rem"])
+        expect("V5-3 條件式 rem=needs-review 不擋閘(無 rem 斷點 token 可用)",
+               "48rem" in r5 and "48rem" not in f5)
+        expect("V5-4 宣告區 rem=needs-review 非 fail",
+               "相對長度單位" in r5 and "14rem" in r5 and "14rem" not in f5)
+        expect("V5-5 UIFoundation 官方載體不報白名單外", "placeholder.css" not in r5)
+        expect("V5-6 非官方外掛表照報白名單外", "site.css(非 UIFoundation" in r5)
+
+        # 純函數層:白名單來源與盲區邊界
+        bps = uiv_checks.breakpoint_values(v5tmp)
+        expect("V5-7 白名單取自 tokens.json breakpoint", bps == {"768"})
+        expect("V5-8 專案無 breakpoint token=條件式維持零容忍",
+               any("768px(條件式" in h for h in uiv_checks.css_hardcodes("@media (max-width:768px){.a{gap:0}}", set())))
+        expect("V5-9 條件式豁免不外溢到宣告區",
+               any(h == "768px" for h in uiv_checks.css_hardcodes(".a { padding: 768px; }", {"768"})))
+        expect("V5-10 官方載體夾 hardcode 一樣 fail(白名單非免死金牌)",
+               css_has(uiv_checks.css_hardcodes(".x{color:#123456}", {"768"}), "#123456"))
+    finally:
+        shutil.rmtree(v5tmp, ignore_errors=True)
+
+    # ── gen_digest:TBD 宣告位與閥值活躍面(UIX-003/UIX-004) ──
+    dtmp = tempfile.mkdtemp(prefix="metaui_selftest_digest_")
+    try:
+        f_dir = os.path.join(dtmp, "DesignSpecs", "M09_x", "F01_digest")
+        os.makedirs(os.path.join(f_dir, "nodes"))
+        specs = os.path.join(dtmp, "DesignSpecs")
+        for rel, body in [("03_Structure.md", DG_STRUCTURE), ("02_Scope.md", DG_SCOPE)]:
+            open(os.path.join(specs, rel), "w", encoding="utf-8").write(body)
+        for rel, body in [("M09-F01-W01_活躍節點.md", DG_NODE_W01),
+                          ("M09-F01-W02_已廢除節點.md", DG_NODE_W02),
+                          ("M09-F01-W99_OutOfScope.md", DG_NODE_W99)]:
+            open(os.path.join(f_dir, "nodes", rel), "w", encoding="utf-8").write(body)
+
+        names = gen_digest.node_names(dtmp, "M09-F01")
+        metas = gen_digest.node_meta(f_dir)
+        tbds = gen_digest.tbd_inventory(f_dir, names, metas)
+        ids = [x[0] for x in tbds]
+        al = " ".join(gen_digest.alarms(dtmp, f_dir, "M09-F01", names, metas))
+
+        expect("DG-1 宣告位:句中引用不重複計入", ids == ["TBD-W01-01", "TBD-W01-02"])
+        expect("DG-2 已解鎖(刪除線)宣告不列為未決", "TBD-W01-03" not in ids)
+        expect("DG-3 已廢除節點之 TBD 不列", "TBD-W02-01" not in ids)
+        expect("DG-4 描述取宣告位而非句中殘字", tbds and tbds[0][1] == "甲項未定")
+        expect("DG-5 預設假設不跨列串味", tbds and tbds[0][2] == "" and "假設乙" in tbds[1][2])
+        expect("DG-6 閥值只數活躍 Epic(廢除/無活躍節點者不計)",
+               "Epic 活躍 1／登記 4" in al and "EP02(已廢除)" in al
+               and "EP04(已廢除)" in al and "EP03(無活躍節點)" in al)
+        expect("DG-7 閥值只數活躍節點(DEPRECATED/PLANNED/W99 不計)",
+               "業務節點 活躍 1／登記 19" in al and "DEPRECATED:W02" in al and "PLANNED:W03/W04" in al)
+        expect("DG-8 長清單收斂但總數不藏", "等 17 個" in al)
+        expect("DG-9 死項撐不起閥值:登記 4 Epic／19 節點但活躍面不觸發", "建議評估" not in al)
+    finally:
+        shutil.rmtree(dtmp, ignore_errors=True)
 
     print("-" * 50)
     if FAILED:

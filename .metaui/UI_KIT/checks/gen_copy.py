@@ -9,10 +9,10 @@
 去 AI 感(30_UXWriting §十一;AntiAIFlavor v0.1 蒸餾快照 2026-07-12):
 散文層=非 action/heading/placeholder 之可見文字(分層計算);
 AF-01/02 句式、AF-04 擴充詞、段首「隨著」入 AI-R 佇列;核心 fail 項歸 UIV-11;
-AF-07 三聯句(散文層+標題層)入佇列——AF-R4 含 (d) 問,通過仍優先非三聯改寫(v0.4.2)。
+AF-07 三聯句(散文層+標題層)入佇列——AF-R4 含 (d) 問，通過仍優先非三聯改寫(v0.4.2)。
 
-生成物,禁手改;頁面一改重跑即同步(與 gen_tokens 同哲學)。
-內容確定性:不含時戳,供 UIV-11 以重生成比對驗新鮮度。
+生成物，禁手改;頁面一改重跑即同步(與 gen_tokens 同哲學)。
+內容確定性:不含時戳，供 UIV-11 以重生成比對驗新鮮度。
 
 Usage:
     python gen_copy.py --scope <F 模組目錄>
@@ -35,7 +35,7 @@ BARE_ACTIONS = {"確定", "OK", "Ok", "ok", "好", "刪除", "移除", "清除",
 PLACEHOLDER_IMPERATIVE = ("請輸入", "請填寫", "在此")
 
 # ── 去 AI 感(30_UXWriting §十一;AntiAIFlavor v0.1 蒸餾快照 2026-07-12)──
-# 核心詞【U】=UIV-11 全層 fail;擴充詞(draft,含「一站」變體)=AI-R 佇列。
+# 核心詞【U】=UIV-11 全層 fail;擴充詞(draft，含「一站」變體)=AI-R 佇列。
 AF04_CORE_WORDS = ("無縫", "極致", "卓越", "深信", "致力於", "前瞻性", "全方位")
 AF04_HINT_RE = re.compile(r"賦能|抓手|閉環|頂層設計|助力|智慧化|(?<!下)一站")
 # 大時代開場:時代/浪潮/背景 開頭與「為迎合/迎接」變體=fail;段首「隨著」=佇列(氣象因果句合法)。
@@ -45,7 +45,7 @@ AF05_SUIZHE_RE = re.compile(r"^隨著")
 AF09_RHETORIC_RE = re.compile(r"^(什麼是.{1,20}[??]|你是否)")
 AF11_FAKE_RE = re.compile(r"你可能會問|讓我們一起")
 # 三聯句(AF-07 判讀式;v0.4.2 生成期降位):子句計數法(regex 於中文無詞界環境
-# 可被回溯繞過——首掃實證兩型漏抓/誤列,改程式判斷)。
+# 可被回溯繞過——首掃實證兩型漏抓/誤列，改程式判斷)。
 AF07_CLAUSE_SPLIT_RE = re.compile(r"[,,。;::!?!?\n]|——")
 AF07_LAST_OPEN_RE = re.compile(r"[與及或等]")
 
@@ -77,8 +77,8 @@ AF02_ESCALATE_RE = re.compile(r"不僅[^。!?\n]{1,30}(更|還|也)")
 PAREN_RE = re.compile(r"[(（][^)）]*[)）]")
 SKIP_CLASSES = {"wire-meta", "wire-foot"}
 HEADING_TAGS = {"h1", "h2", "h3", "h4", "h5", "h6"}
-HEADER_NOTE = "生成物,禁手改;重生成:python .metaui/UI_KIT/checks/gen_copy.py --scope <F 模組>"
-AUTHORITY = "authority: generated-summary——與頁面原文衝突以頁面為準,不得單獨作 pass/fail 依據"
+HEADER_NOTE = "生成物，禁手改;重生成:python .metaui/UI_KIT/checks/gen_copy.py --scope <F 模組>"
+AUTHORITY = "authority: generated-summary——與頁面原文衝突以頁面為準，不得單獨作 pass/fail 依據"
 
 
 def _clean(s):
@@ -86,7 +86,7 @@ def _clean(s):
 
 
 class CopyParser(HTMLParser):
-    """收集可見文案:行動元素/標題逐則,其餘文字按狀態歸桶(片段以換行分隔)。"""
+    """收集可見文案:行動元素/標題逐則，其餘文字按狀態歸桶(片段以換行分隔)。"""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -239,7 +239,7 @@ def build_sheet(f_dir):
         for act in d["actions"]:
             if DESTRUCTIVE_RE.match(act["text"]) and act["text"] not in BARE_ACTIONS:
                 queue.append("[%s] 破壞性行動後果重述判讀:「%s」" % (base, act["text"]))
-        # 去 AI 感佇列(30_UXWriting §十一;V 層不可判,過 AF-R1 三問/機制搭配判斷)
+        # 去 AI 感佇列(30_UXWriting §十一;V 層不可判，過 AF-R1 三問/機制搭配判斷)
         for pr in d["prose"]:
             frag = pr["text"]
             if any(rx.search(frag) for rx in AF01_CONTRAST_RES):
@@ -250,7 +250,7 @@ def build_sheet(f_dir):
                 queue.append("[%s/%s] AF-05 段首「隨著…」判讀(氣象因果句合法/大時代開場改寫):「%s」" % (base, pr["state"], frag[:60]))
             tri = af07_triad(frag)
             if tri:
-                queue.append("[%s/%s] AF-07 三聯句判讀(AF-R4 含(d)問,通過仍優先非三聯改寫):「%s」" % (base, pr["state"], tri[:60]))
+                queue.append("[%s/%s] AF-07 三聯句判讀(AF-R4 含(d)問，通過仍優先非三聯改寫):「%s」" % (base, pr["state"], tri[:60]))
         for h in d["headings"]:
             tri = af07_triad(h["text"])
             if tri:
@@ -263,7 +263,7 @@ def build_sheet(f_dir):
             af04_seen.append(w)
             ctx = d["all_text"][max(0, m.start() - 8):m.end() + 8].replace("\n", "␤")
             queue.append("[%s] AF-04 擴充詞「%s」判讀(無具體機制搭配即改寫):「…%s…」" % (base, w, ctx))
-    lines += ["## AI-R 檢核佇列(V 層不可判項,G2-R 逐條判讀)", ""]
+    lines += ["## AI-R 檢核佇列(V 層不可判項，G2-R 逐條判讀)", ""]
     lines += ["- " + q for q in queue] if queue else ["- (本輪無)"]
     lines += ["", "## 人工覆核提示", "",
               "- AI-R 佇列判讀結果:🔴🟡 入 90_IssueLedger 待 UI 拍板者裁決;🟢 逕改後重跑。", ""]

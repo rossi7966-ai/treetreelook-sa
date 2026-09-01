@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""MetaUI token 生成器(PREP-UI-2 升級,info_level: Candidate)
+"""MetaUI token 生成器(PREP-UI-2 升級，info_level: Candidate)
 
-tokens.json(DTCG 2025.10 巢狀格式,單一 SSOT)→ 生成 tokens.css + 00_TokenSheet.md。
+tokens.json(DTCG 2025.10 巢狀格式，單一 SSOT)→ 生成 tokens.css + 00_TokenSheet.md。
 生成物禁手改;新鮮度由 UIV-06 驗(重生成零 diff)。
 
 支援:
 - DTCG 巢狀群組(自動展平為 --群組-名)
 - $type 群組繼承
-- alias 引用({path.to.token} 語法,解析為實際值)
+- alias 引用({path.to.token} 語法，解析為實際值)
 - color-dark 群組 → [data-theme=dark_mode] 選擇器
 
 向下相容:偵測到 "tokens" 陣列時走舊格式路徑。
 
 Usage:
     python gen_tokens.py --project <專案根>          # 生成/覆寫
-    python gen_tokens.py --project <專案根> --check  # 只比對,不寫入
+    python gen_tokens.py --project <專案根> --check  # 只比對，不寫入
 """
 import argparse
 import json
@@ -22,7 +22,7 @@ import os
 import re
 import sys
 
-HEADER = "生成物,禁手改;來源 UIFoundation/tokens.json,重生成用 UI_KIT/checks/gen_tokens.py"
+HEADER = "生成物，禁手改;來源 UIFoundation/tokens.json，重生成用 UI_KIT/checks/gen_tokens.py"
 
 
 def load_tokens(foundation):
@@ -187,7 +187,7 @@ def build_legacy(data):
 
 
 def build(data):
-    """UIV-06 入口:接受已解析的 tokens.json dict,回傳 {filename: content}。"""
+    """UIV-06 入口:接受已解析的 tokens.json dict，回傳 {filename: content}。"""
     if "tokens" in data:
         return build_legacy(data)
     return build_dtcg(data)

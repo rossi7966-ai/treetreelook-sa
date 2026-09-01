@@ -1,4 +1,4 @@
-/* 生成物,禁手改;來源 UIFoundation/tokens.json,重生成用 UI_KIT/checks/gen_tokens.py */
+/* 生成物，禁手改;來源 UIFoundation/tokens.json，重生成用 UI_KIT/checks/gen_tokens.py */
 :root {
   --color-primary: #176466;
   --color-primary-emphasis: #0a3738;
@@ -59,6 +59,25 @@
   --color-on-success-container: #212b2b;
   --color-on-info-container: #212b2b;
   --color-on-warning-container: #212b2b;
+  --color-rain-1: #eff3ff;
+  --color-rain-2: #c6dbef;
+  --color-rain-3: #9ecae1;
+  --color-rain-4: #6baed6;
+  --color-rain-5: #3182bd;
+  --color-rain-6: #08519c;
+  --color-temp-cold-3: #2166ac;
+  --color-temp-cold-2: #67a9cf;
+  --color-temp-cold-1: #d1e5f0;
+  --color-temp-mid: #f7f7f7;
+  --color-temp-warm-1: #fddbc7;
+  --color-temp-warm-2: #ef8a62;
+  --color-temp-warm-3: #b2182b;
+  --color-alert-advisory: #e6a700;
+  --color-alert-warning: #b45309;
+  --color-alert-severe: #cd3033;
+  --color-gis-halo: #ffffff;
+  --color-gis-station: #176466;
+  --color-gis-station-active: #fc890c;
   --typography-font-family-sans: roboto, Noto Sans TC, sans-serif;
   --typography-font-size-display1: 2.75rem;
   --typography-font-size-display2: 2rem;
@@ -110,6 +129,16 @@
   --layout-header-height: 60px;
   --layout-backstage-header-height: 56px;
   --layout-content-width: 1120px;
+  --icon-size-s: 16px;
+  --icon-size-m: 20px;
+  --icon-size-l: 24px;
+  --icon-size-xl: 32px;
+  --imagery-ratio-hero: 21 / 9;
+  --imagery-ratio-card: 16 / 9;
+  --imagery-ratio-media: 4 / 3;
+  --imagery-ratio-square: 1 / 1;
+  --imagery-empty-max-h: 240px;
+  --imagery-ph-min-h: 160px;
   --transition-fast: all 0.2s ease-in-out;
   --transition-slow: all 0.5s ease-in-out;
   --focus-visible: 4px dashed var(--color-secondary);

@@ -2,19 +2,22 @@
 """MetaUI UIV-01~09 檢核實作(PREP-UI-1,info_level: Candidate)
 
 各檢核的檢查對象/方法/預期/失敗處置見 checks/README.md 清冊。
-誠實邊界:語意判斷不假機械化,拋 needs-review(VerifyReportSchema §六)。
+誠實邊界:語意判斷不假機械化，拋 needs-review(VerifyReportSchema §六)。
 """
 import os
 import re
 
 from uiv_common import (
-    read_text, parse_md_tables, col_index, cell, parse_page,
+    read_text, parse_md_tables, col_index, cell, parse_page, find_all_f_dirs,
 )
 
 P_RE = re.compile(r"\bP\d{2,}\b")
 NODE_RE = re.compile(r"\b(M\d+-F\d+-W\d+)\b")
 TBD_RE = re.compile(r"\[!(TBD-[^\]\s]+)\]")
 PLACEHOLDER = "⟪"
+# 佔位整段(含閉合)。佔位內若含分隔符，逐段拆解會使後半段失去 ⟪ 而誤判為真報告名
+# (2026-08-20 案源:NP UIX-015 來源欄 ⟪RWD/A11y 規則補建輪次·未立 R 報告⟫)。
+PLACEHOLDER_SPAN_RE = re.compile(r"⟪[^⟫]*⟫")
 
 
 # ── 資料收集 ──────────────────────────────────────────────
@@ -31,7 +34,7 @@ def pages_of(f_dir):
 
 
 def proto_pages_of(f_dir):
-    """產品視圖(45_PrototypeView):ui/pages/proto/*.html;納 01/02/04/05/08/09/11,五態 03 不適用。"""
+    """產品視圖(45_PrototypeView):ui/pages/proto/*.html;納 01/02/04/05/08/09/11，五態 03 不適用。"""
     d = os.path.join(f_dir, "ui", "pages", "proto")
     if not os.path.isdir(d):
         return []
@@ -65,7 +68,7 @@ def page_id_of(path, parsed):
 
 
 def structure_nodes(project):
-    """03_Structure.md → (登記節點 id 集, 路徑欄清單 [(id, path, status)]);檔缺回 (None, None)。"""
+    """03_Structure.md → (登記節點 id 集， 路徑欄清單 [(id, path, status)]);檔缺回 (None, None)。"""
     p = os.path.join(project, "DesignSpecs", "03_Structure.md")
     if not os.path.isfile(p):
         return None, None
@@ -98,7 +101,7 @@ def glossary_terms(project):
 
 
 def open_tbds(f_dir):
-    """F 模組 nodes/*.md 與 *REVIEW*.md 內仍存在的 TBD 標記。回 (全集, 節點→TBD 映射)。"""
+    """F 模組 nodes/*.md 與 *REVIEW*.md 內仍存在的 TBD 標記。回 (全集， 節點→TBD 映射)。"""
     ids, by_node = set(), {}
     nodes_dir = os.path.join(f_dir, "nodes")
     if os.path.isdir(nodes_dir):
@@ -106,7 +109,7 @@ def open_tbds(f_dir):
             if x.endswith(".md"):
                 found = set(TBD_RE.findall(read_text(os.path.join(nodes_dir, x))))
                 if found:
-                    # 檔名如 M01-F01-W01_名稱.md:W01 後接底線,\b 會失效,改錨定於行首
+                    # 檔名如 M01-F01-W01_名稱.md:W01 後接底線，\b 會失效，改錨定於行首
                     m = re.match(r"(M\d+-F\d+-W\d+)", x)
                     if m:
                         by_node[m.group(1)] = found
@@ -133,7 +136,7 @@ def uiv01(rep, project, f_dirs):
         if not os.path.isfile(fp):
             if pages:
                 for pg in pages:
-                    rep.fail(P, rel(project, pg), "頁面存在但無 10_UIFlow.md 登記表(私建,違先登記後產檔)")
+                    rep.fail(P, rel(project, pg), "頁面存在但無 10_UIFlow.md 登記表(私建，違先登記後產檔)")
             continue
         rows = registry_rows(read_text(fp))
         if rows is None:
@@ -189,7 +192,7 @@ def uiv02(rep, project, f_dirs):
     P = "UIV-02"
     node_ids, node_rows = structure_nodes(project)
     if node_ids is None:
-        rep.perror(P, "DesignSpecs/03_Structure.md", "檔案缺席,錨定無從驗證(殘缺部署?)")
+        rep.perror(P, "DesignSpecs/03_Structure.md", "檔案缺席，錨定無從驗證(殘缺部署?)")
         return
     # G0 面:03_Structure 路徑欄實體存在性(對齊 VP-01 索引對齊精神)
     for nid, npath, status in node_rows or []:
@@ -230,7 +233,7 @@ def uiv02(rep, project, f_dirs):
                         if not os.path.isfile(t):
                             rep.fail(P, rel(project, pg), "data-nav=%s 目標檔不存在: %s" % (nav, href))
                     else:
-                        rep.review(P, rel(project, pg), "data-nav=%s 而 href=%s 非 .html——宣告與連結脫鉤,是否合法(如錨點佔位)屬 R 層(外稽 20260712 B4)" % (nav, href or "(空)"))
+                        rep.review(P, rel(project, pg), "data-nav=%s 而 href=%s 非 .html——宣告與連結脫鉤，是否合法(如錨點佔位)屬 R 層(外稽 20260712 B4)" % (nav, href or "(空)"))
                 elif nav.startswith("external:") or nav == "W99":
                     pass
                 else:
@@ -273,7 +276,7 @@ def uiv04(rep, project, f_dirs):
     P = "UIV-04"
     terms = glossary_terms(project)
     if terms is None:
-        rep.perror(P, "DesignSpecs/00_Glossary.md", "檔案缺席,術語無從比對(殘缺部署?)")
+        rep.perror(P, "DesignSpecs/00_Glossary.md", "檔案缺席，術語無從比對(殘缺部署?)")
         return
     used = 0
     for f in f_dirs:
@@ -302,13 +305,64 @@ CSS_NAMED_COLORS = {
     "darkgreen", "darkgray", "darkgrey", "lightgray", "lightgrey", "lightblue",
     "lightgreen", "skyblue", "steelblue", "rebeccapurple",
 }
-# transparent/currentColor/inherit=合法關鍵字非色值,不入表(誤殺防護)
+# transparent/currentColor/inherit=合法關鍵字非色值，不入表(誤殺防護)
 NAMED_IN_VALUE_RE = re.compile(r"(?<![-\w])([a-zA-Z]{3,})(?![-\w(])")
+# @media/@container 條件式:CSS 規範不允許條件式消費 var()，零容忍會讓 --breakpoint-*
+# 變成無法使用的資產(案源=moa UIX-007)。故條件式另案處理——只認等於某個
+# --breakpoint-* token 值的 px，語意仍受 token 控管。
+AT_COND_RE = re.compile(r"@(?:media|container)[^{;]*", re.I)
+COND_PX_RE = re.compile(r"\b(\d+(?:\.\d+)?)px\b")
+# 相對長度單位字面(rem/em)=掃描盲區(同案源):治理意義同 px 硬寫值，但目前無對應
+# token 分類可替代——宣告區沒有「欄位最小寬度」類 token，條件式也沒有 rem 斷點
+# token。缺替代路徑就判 fail 等於再造一個 UIX-007，故一律列 needs-review 交 R 層
+# (候選登記見 checks/README 成長迴路;實證需求=eco-pay 7 頁 48rem/64rem 斷點)。
+REM_RE = re.compile(r"\b(\d+(?:\.\d+)?)(r?em)\b")
+# UIFoundation 底下的 .css=DS 層官方載體(tokens.css 生成物、placeholder.css 佔位契約),
+# 不報「白名單外」;內容照掃，官方載體一樣不准夾 hardcode(案源=moa UIX-008)。
+FOUNDATION_REL = os.path.join("DesignSpecs", "UIFoundation")
 
 
-def css_hardcodes(css_raw):
-    """回傳 hardcode 值清單:hex/顏色函數/px(白名單外)/命名色;var() fallback 段先掃再剝。"""
+def breakpoint_values(project):
+    """tokens.json 的 --breakpoint-* 值集合(純數字字串)，供 @media 條件式白名單。
+
+    專案沒定義 breakpoint token 時回空集合=條件式維持零容忍——沒有 token 就沒有
+    可控語意，不能因為「反正 var() 用不了」就把 px 全放行。
+    """
+    src = os.path.join(project, FOUNDATION_REL, "tokens.json")
+    if not os.path.isfile(src):
+        return set()
+    try:
+        import json as _json
+        data = _json.loads(read_text(src))
+    except Exception:
+        return set()
+    out = set()
+    for v in (data.get("breakpoint") or {}).values():
+        if isinstance(v, dict) and "$value" in v:
+            m = PX_RE.search(str(v["$value"]))
+            if m:
+                out.add(m.group(1))
+    return out
+
+
+def css_rem_literals(css_raw):
+    """回傳相對長度單位字面(rem/em)，宣告區與 @media 條件式一併計。"""
+    return ["%s%s" % t for t in REM_RE.findall(VAR_RE.sub("var()", css_raw))]
+
+
+def css_hardcodes(css_raw, breakpoints=None):
+    """回傳 hardcode 值清單:hex/顏色函數/px(白名單外)/命名色;var() fallback 段先掃再剝。
+
+    @media/@container 條件式另案:只認等於 --breakpoint-* token 值的 px(見 AT_COND_RE 註);
+    條件式內的 rem/em 不在此列，走 css_rem_literals 的 needs-review 面。
+    """
     hits = []
+    allowed = set(breakpoints or ())
+    for m in AT_COND_RE.finditer(css_raw):
+        for val in COND_PX_RE.findall(m.group(0)):
+            if val not in allowed and val not in PX_WHITELIST:
+                hits.append("%spx(條件式須用 --breakpoint-* 的值)" % val)
+    css_raw = AT_COND_RE.sub("@media ", css_raw)
     for m in VAR_FALLBACK_RE.finditer(css_raw):
         fb = m.group(1)
         hits += HEX_RE.findall(fb) + [x + "(" for x in FUNC_RE.findall(fb)]
@@ -322,8 +376,15 @@ def css_hardcodes(css_raw):
     return hits
 
 
+def is_foundation_css(project, path):
+    """DS 層官方載體判定:落在 DesignSpecs/UIFoundation/ 底下的樣式表。"""
+    base = os.path.normpath(os.path.join(project, FOUNDATION_REL)) + os.sep
+    return os.path.normpath(path).startswith(base)
+
+
 def uiv05(rep, project, f_dirs):
     P = "UIV-05"
+    bps = breakpoint_values(project)
     styled = 0
     proto = 0
     for f in f_dirs:
@@ -338,23 +399,32 @@ def uiv05(rep, project, f_dirs):
                 styled += 1
             if not any("tokens.css" in s for s in parsed.stylesheets):
                 rep.fail(P, rel(project, pg), "styled 頁未連結 tokens.css")
+            rem_hits = []
             for s in parsed.stylesheets:
                 t = os.path.normpath(os.path.join(os.path.dirname(pg), s))
                 if not os.path.isfile(t):
                     rep.fail(P, rel(project, pg), "stylesheet 連結不可解析: %s" % s)
-                elif "tokens.css" not in s:
-                    # 外掛表白名單=僅 tokens.css;其餘連帶掃描內容(A2 繞過面3)
-                    ext_hits = css_hardcodes(read_text(t))
-                    if ext_hits:
-                        sample = ", ".join(sorted(set(ext_hits))[:6])
-                        rep.fail(P, rel(project, pg), "外掛 stylesheet %s 含 hardcode %d 處(樣本: %s)" % (s, len(ext_hits), sample))
-                    else:
-                        rep.review(P, rel(project, pg), "外掛 stylesheet %s(白名單外)——內容本輪無 hardcode,是否合法組態屬 R 層" % s)
-            hardcode = css_hardcodes("\n".join(parsed.style_blocks + parsed.inline_styles))
+                    continue
+                if os.path.basename(t) == "tokens.css":
+                    continue          # 生成物=值的來源，不掃自己
+                ext_css = read_text(t)
+                ext_hits = css_hardcodes(ext_css, bps)
+                rem_hits += css_rem_literals(ext_css)
+                if ext_hits:
+                    sample = ", ".join(sorted(set(ext_hits))[:6])
+                    rep.fail(P, rel(project, pg), "外掛 stylesheet %s 含 hardcode %d 處(樣本: %s)" % (s, len(ext_hits), sample))
+                elif not is_foundation_css(project, t):
+                    rep.review(P, rel(project, pg), "外掛 stylesheet %s(非 UIFoundation 官方載體)——內容本輪無 hardcode，是否合法組態屬 R 層" % s)
+            page_css = "\n".join(parsed.style_blocks + parsed.inline_styles)
+            hardcode = css_hardcodes(page_css, bps)
+            rem_hits += css_rem_literals(page_css)
             if hardcode:
                 sample = ", ".join(sorted(set(hardcode))[:8])
                 rep.fail(P, rel(project, pg), "hardcode 值 %d 處(樣本: %s);一律改 var(--token),fallback 段同禁" % (len(hardcode), sample))
-    rep.ok(P, rel(project, project), "樣式 lint 完成(styled 頁 %d / proto 頁 %d;wire 頁不適用;fallback/命名色/外掛表納掃)" % (styled, proto))
+            if rem_hits:
+                sample = ", ".join(sorted(set(rem_hits))[:6])
+                rep.review(P, rel(project, pg), "相對長度單位字面(rem/em)%d 處(樣本: %s)——治理意義同 px 硬寫值，惟目前無對應 token 分類可替代(宣告區無欄寬類 token、條件式無 rem 斷點 token)，本輪交 R 層判讀;候選登記見 checks/README(補齊分類後轉 fail)" % (len(rem_hits), sample))
+    rep.ok(P, rel(project, project), "樣式 lint 完成(styled 頁 %d / proto 頁 %d;wire 頁不適用;fallback/命名色/外掛表納掃;@media 條件式認 --breakpoint-* 值 %d 個;rem/em 字面列 needs-review)" % (styled, proto, len(bps)))
 
 
 # ── UIV-06 生成物新鮮度 ───────────────────────────────────
@@ -365,7 +435,7 @@ def uiv06(rep, project, f_dirs):
     src = os.path.join(foundation, "tokens.json")
     if not os.path.isfile(src):
         rep.review(P, "DesignSpecs/UIFoundation/tokens.json",
-                   "tokens.json 缺席——G2 無 token 基準,整閘 ⚪(40_TokenPipeline);未採用 token 管線的專案屬正常組態(是否採用歸 R 層)")
+                   "tokens.json 缺席——G2 無 token 基準，整閘 ⚪(40_TokenPipeline);未採用 token 管線的專案屬正常組態(是否採用歸 R 層)")
         return
     import json as _json
     import gen_tokens
@@ -378,16 +448,16 @@ def uiv06(rep, project, f_dirs):
     for name, content in outputs.items():
         path = os.path.join(foundation, name)
         if not os.path.isfile(path):
-            rep.fail(P, rel(project, path), "生成物缺席,執行 gen_tokens.py")
+            rep.fail(P, rel(project, path), "生成物缺席，執行 gen_tokens.py")
         elif read_text(path) != content:
-            rep.fail(P, rel(project, path), "生成物過期(與 tokens.json 重生成結果不一致),禁手改、請重生成")
+            rep.fail(P, rel(project, path), "生成物過期(與 tokens.json 重生成結果不一致)，禁手改、請重生成")
     try:
         import gen_design_md
         design_content = gen_design_md.build_design_md(data, project)
         design_path = os.path.join(foundation, "Design.md")
         if os.path.isfile(design_path):
             if read_text(design_path) != design_content:
-                rep.fail(P, rel(project, design_path), "Design.md 資料段過期(與 tokens.json 重生成結果不一致),執行 gen_design_md.py")
+                rep.fail(P, rel(project, design_path), "Design.md 資料段過期(與 tokens.json 重生成結果不一致)，執行 gen_design_md.py")
         else:
             rep.review(P, rel(project, design_path), "Design.md 缺席——採用設計文件的專案請執行 gen_design_md.py;未採用則屬正常組態(是否採用歸 R 層)")
     except ImportError:
@@ -402,7 +472,7 @@ def uiv06(rep, project, f_dirs):
             if not os.path.isfile(path):
                 rep.review(P, rel(project, path), "生成物缺席——Vuetify 專案請執行 gen_vuetify_theme.py;非 Vuetify 專案屬正常組態(是否採用歸 R 層)")
             elif read_text(path) != content:
-                rep.fail(P, rel(project, path), "生成物過期,執行 gen_vuetify_theme.py")
+                rep.fail(P, rel(project, path), "生成物過期，執行 gen_vuetify_theme.py")
     except ImportError:
         pass
     except Exception as e:
@@ -431,7 +501,11 @@ def uiv07(rep, project, f_dirs):
                     ledger_srcs.append((cell(r, ui), cell(r, si)))
     report_names = set()
     found_sev = 0
-    review_dirs = [("ui/reviews", os.path.join(f, "ui", "reviews")) for f in f_dirs]
+    # 掃描面固定全 repo:議題帳本身是全 repo 一本，報告面若隨 --scope 收窄，
+    # 帳上屬於他模組的來源報告會被誤判為「不存在」(2026-08-20 案源:moa PR#84/#85,
+    # 任何模組一產出獨有報告名即全 repo 紅)。找不到時退回 f_dirs。
+    scan_dirs = find_all_f_dirs(project) or f_dirs
+    review_dirs = [("ui/reviews", os.path.join(f, "ui", "reviews")) for f in scan_dirs]
     # DS 層報告歸屬:token 管線類報告不屬任何 F 模組(eco-pay 回件分流 5)
     review_dirs.append(("UIFoundation/reviews",
                         os.path.join(project, "DesignSpecs", "UIFoundation", "reviews")))
@@ -455,13 +529,13 @@ def uiv07(rep, project, f_dirs):
                                 rep.fail(P, "%s/%s" % (label, x), "%s 不在議題帳(漏登)" % i)
     for uix, src in ledger_srcs:
         # 來源報告欄允許多報告名(跨輪沿革;、,;+/ 分隔;eco-pay 回件分流 5)
-        for name in re.split(r"[、,;+/]", src):
+        for name in re.split(r"[、,;+/]", PLACEHOLDER_SPAN_RE.sub("", src)):
             base = re.sub(r"\.md$", "", name.strip())
             if base and base not in report_names and PLACEHOLDER not in name:
                 rep.fail(P, rel(project, ledger_path), "%s 來源報告 %s 不存在" % (uix, base))
     if found_sev and not os.path.isfile(ledger_path):
         rep.fail(P, "DesignSpecs/UIFoundation/90_IssueLedger.md", "有 🔴/🟡 發現但議題帳不存在")
-    rep.ok(P, rel(project, project), "報告↔議題帳同步比對完成(嚴重發現 %d 筆 / 帳上 %d 號);掃描面=各 F 模組 ui/reviews/+UIFoundation/reviews/(DS 層歸屬),來源報告欄可列多名;誠實邊界:僅掃報告表格行,散文段 UIX 樣式歸 R 層(外稽 20260712 B4)" % (found_sev, len(ledger_ids)))
+    rep.ok(P, rel(project, project), "報告↔議題帳同步比對完成(嚴重發現 %d 筆 / 帳上 %d 號);掃描面=各 F 模組 ui/reviews/+UIFoundation/reviews/(DS 層歸屬)，來源報告欄可列多名;誠實邊界:僅掃報告表格行，散文段 UIX 樣式歸 R 層(外稽 20260712 B4)" % (found_sev, len(ledger_ids)))
 
 
 # ── UIV-08 主軸一致性 ─────────────────────────────────────
@@ -495,7 +569,7 @@ def uiv08(rep, project, f_dirs):
                 if n == 0:
                     rep.fail(P, rel(project, pg), "狀態 %s 缺主行動(data-action=primary)" % s)
                 elif n > 1:
-                    rep.fail(P, rel(project, pg), "狀態 %s 有 %d 個 primary(搶焦,主行動須唯一)" % (s, n))
+                    rep.fail(P, rel(project, pg), "狀態 %s 有 %d 個 primary(搶焦，主行動須唯一)" % (s, n))
         for pg in proto_pages_of(f):
             parsed = parse_page(pg)
             pa = parsed.metas.get("primary-action", "")
@@ -503,7 +577,7 @@ def uiv08(rep, project, f_dirs):
                 rep.fail(P, rel(project, pg), "proto 頁 meta primary-action 未填")
             n = parsed.primary_outside + sum(parsed.primary_by_state.values())
             if n != 1:
-                rep.fail(P, rel(project, pg), "proto 頁 primary 數=%d(產品視圖單態,全頁恰一主行動)" % n)
+                rep.fail(P, rel(project, pg), "proto 頁 primary 數=%d(產品視圖單態，全頁恰一主行動)" % n)
     rep.ok(P, rel(project, project), "主軸一致性掃描完成;「視覺強弱是否如宣告」屬 G1-R 判斷")
 
 
@@ -560,7 +634,7 @@ def uiv11(rep, project, f_dirs):
                 if act["text"] in gen_copy.BARE_ACTIONS:
                     rep.fail(P, tgt, "模糊/裸動詞行動文案「%s」(狀態 %s)——改為具體結果(30_UXWriting §三禁清單)" % (act["text"], act["state"]))
                 elif gen_copy.cta_core_len(act["text"]) > 12:
-                    rep.fail(P, tgt, "行動文案過長「%s」(>12 字,狀態 %s)——CTA 以 1~5 字為理想" % (act["text"], act["state"]))
+                    rep.fail(P, tgt, "行動文案過長「%s」(>12 字，狀態 %s)——CTA 以 1~5 字為理想" % (act["text"], act["state"]))
             for nv in d["nav_counts"]:
                 if nv["links"] > 7:
                     rep.fail(P, tgt, "導航項目 %d 個(狀態 %s)——主導航上限 7 項(#10 選項精簡)" % (nv["links"], nv["state"]))
@@ -576,10 +650,10 @@ def uiv11(rep, project, f_dirs):
                     if frag not in hits:
                         hits.append(frag)
                 if hits:
-                    rep.fail(P, tgt, "中英數間混入空格(盤古之白)%d 處(狀態 %s;樣本:%s)——不留空格(30_UXWriting §九,拍板者裁定)" % (len(hits), st, " / ".join(hits[:4])))
+                    rep.fail(P, tgt, "中英數間混入空格(盤古之白)%d 處(狀態 %s;樣本:%s)——不留空格(30_UXWriting §九，拍板者裁定)" % (len(hits), st, " / ".join(hits[:4])))
             sts = set(d["states"])
             if "loading" in sts and len(re.findall(r"[一-鿿]", d["state_text_joined"].get("loading", ""))) < 4:
-                rep.fail(P, tgt, "loading 態缺說明文字(骨架載入(Skeleton)需帶一行說明,不得只有灰塊)")
+                rep.fail(P, tgt, "loading 態缺說明文字(骨架載入(Skeleton)需帶一行說明，不得只有灰塊)")
             for stname, need in (("error", "「怎麼修」行動元素"), ("blank", "「下一步」行動元素")):
                 if stname in sts and not any(a["state"] == stname for a in d["actions"]):
                     rep.fail(P, tgt, "%s 態缺%s" % (stname, need))
@@ -587,13 +661,13 @@ def uiv11(rep, project, f_dirs):
             for st, txt in d["state_text_joined"].items():
                 words = [w for w in gen_copy.AF04_CORE_WORDS if w in txt]
                 if words:
-                    rep.fail(P, tgt, "空泛大詞「%s」(狀態 %s)——換具體機制描述或刪(§十一 AF-04 核心詞,全層)" % ("、".join(words), st))
+                    rep.fail(P, tgt, "空泛大詞「%s」(狀態 %s)——換具體機制描述或刪(§十一 AF-04 核心詞，全層)" % ("、".join(words), st))
             for pr in d["prose"]:
                 frag, st = pr["text"], pr["state"]
                 if gen_copy.AF05_ERA_RE.match(frag) or gen_copy.AF05_MID_RE.search(frag):
                     rep.fail(P, tgt, "大時代開場(狀態 %s):「%s」——改具體資料錨(§十一 AF-05)" % (st, frag[:40]))
                 if gen_copy.AF09_RHETORIC_RE.match(frag):
-                    rep.fail(P, tgt, "修辭設問開場(狀態 %s):「%s」——散文層改直述,問句歸標題(§十一 AF-09)" % (st, frag[:40]))
+                    rep.fail(P, tgt, "修辭設問開場(狀態 %s):「%s」——散文層改直述，問句歸標題(§十一 AF-09)" % (st, frag[:40]))
                 if gen_copy.AF11_FAKE_RE.search(frag):
                     rep.fail(P, tgt, "假互動句(狀態 %s):「%s」——刪或改直述(§十一 AF-11)" % (st, frag[:40]))
         sheet = os.path.join(f, "ui", "00_CopySheet.md")
@@ -601,8 +675,8 @@ def uiv11(rep, project, f_dirs):
         if not os.path.isfile(sheet):
             rep.review(P, rel(project, sheet), "00_CopySheet.md 未生成——G2-R 文案審以本表為入口;執行 gen_copy.py")
         elif read_text(sheet) != expected:
-            rep.fail(P, rel(project, sheet), "00_CopySheet.md 過期(與重生成結果不一致),禁手改、請重生成")
-        # 00_Digest 新鮮度(外稽 20260712 A3 轉正:拍板者吸收介面+回件 diff 基準,不得零防線)
+            rep.fail(P, rel(project, sheet), "00_CopySheet.md 過期(與重生成結果不一致)，禁手改、請重生成")
+        # 00_Digest 新鮮度(外稽 20260712 A3 轉正:拍板者吸收介面+回件 diff 基準，不得零防線)
         import gen_digest
         dig = os.path.join(f, "ui", "00_Digest.md")
         try:
@@ -614,8 +688,8 @@ def uiv11(rep, project, f_dirs):
             if not os.path.isfile(dig):
                 rep.review(P, rel(project, dig), "00_Digest.md 未生成——拍板者吸收介面+回件 diff 基準;執行 gen_digest.py")
             elif read_text(dig) != dig_expected:
-                rep.fail(P, rel(project, dig), "00_Digest.md 過期(與重生成結果不一致),禁手改、請重生成")
-    rep.ok(P, rel(project, project), "文案 lint 完成(%d 頁,含去 AI 感機檢);語氣/三段式/日期單位/AF 句式與擴充詞判讀歸 G2-R(佇列=00_CopySheet)" % total)
+                rep.fail(P, rel(project, dig), "00_Digest.md 過期(與重生成結果不一致)，禁手改、請重生成")
+    rep.ok(P, rel(project, project), "文案 lint 完成(%d 頁，含去 AI 感機檢);語氣/三段式/日期單位/AF 句式與擴充詞判讀歸 G2-R(佇列=00_CopySheet)" % total)
 
 
 # ── UIV-12 G0 IA 對照段存在斷言(G1 前置)──────────────────
@@ -624,7 +698,7 @@ IA_HEADING_RE = re.compile(r"^#{2,}\s*IA 原則對照", re.M)
 
 
 def _ia_section_filled(text):
-    """回 (狀態, 訊息):ok=含已填 IA 對照表;no-section/empty/placeholder=各失敗型。"""
+    """回 (狀態， 訊息):ok=含已填 IA 對照表;no-section/empty/placeholder=各失敗型。"""
     m = IA_HEADING_RE.search(text)
     if not m:
         return "no-section", "缺「IA 原則對照」段"
@@ -639,21 +713,27 @@ def _ia_section_filled(text):
     if not data_rows:
         return "empty", "「IA 原則對照」段無對照表列"
     if not filled:
-        return "placeholder", "「IA 原則對照」表全為範本佔位,未實際對照"
+        return "placeholder", "「IA 原則對照」表全為範本佔位，未實際對照"
     return "ok", "IA 原則對照段存在且已填(%d/%d 列)" % (len(filled), len(data_rows))
 
 
 def uiv12(rep, project, f_dirs):
     P = "UIV-12"
     if not f_dirs:
-        rep.ok(P, ".", "無 F 模組,不適用")
+        rep.ok(P, ".", "無 F 模組，不適用")
         return
+    checked = 0
     for f in f_dirs:
+        # 尚未開工(無 ui/)=未進 UI 產線，G1 前置不適用。
+        # 不跳過的話，pre-UI repo 從專案根跑會對每個已登記 F 模組報缺席(NP 14 筆誤報)。
+        if not os.path.isdir(os.path.join(f, "ui")):
+            continue
+        checked += 1
         rdir = os.path.join(f, "ui", "reviews")
         g0_reports = sorted(x for x in os.listdir(rdir)
                             if re.match(r"R\d+.*G0.*\.md$", x)) if os.path.isdir(rdir) else []
         if not g0_reports:
-            rep.fail(P, rel(project, f), "G0 報告(R##_G0)缺席,G1 不得啟動(先完成 G0 並產出 IA 原則對照段)")
+            rep.fail(P, rel(project, f), "G0 報告(R##_G0)缺席，G1 不得啟動(先完成 G0 並產出 IA 原則對照段)")
             continue
         verdicts = [(x,) + _ia_section_filled(read_text(os.path.join(rdir, x))) for x in g0_reports]
         hit = next((v for v in verdicts if v[1] == "ok"), None)
@@ -663,6 +743,8 @@ def uiv12(rep, project, f_dirs):
             last = verdicts[-1]
             rep.fail(P, rel(project, os.path.join(rdir, last[0])),
                      "%s,G1 不得啟動(G0 報告 %d 份均無已填 IA 段)" % (last[2], len(verdicts)))
+    if not checked:
+        rep.ok(P, ".", "無已開工 F 模組(皆無 ui/)，不適用")
 
 
 CHECKS = {

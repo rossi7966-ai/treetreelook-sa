@@ -5,13 +5,13 @@ feature: M00-F00
 status: TEMPLATE_EMPTY
 version: v0.2 (YYYY-MM-DD)
 last_updated: YYYY-MM-DD
-summary: UI→SA 回補帳(專案側)。設計期發現之規格修正建議/生效假設/資訊缺口/廢棄建議,批次遞交;SA 回件後回填回應對照(四分類)與回件處理紀錄;規則=UI_KIT/50_IssueFlow 批次通道+回件處理節。
+summary: UI→SA 回補帳(專案側)。設計期發現之規格修正建議/生效假設/資訊缺口/廢棄建議，批次遞交;SA 回件後回填回應對照(四分類)與回件處理紀錄;規則=UI_KIT/50_IssueFlow 批次通道+回件處理節。
 ---
 
 # 回補帳(UI→SA 批次通道)
 
 > 期中一律登帳不跨棒;設計里程碑一次遞交(例外閥見 50_IssueFlow)。
-> 本帳=遞交載體;議題現況仍看 90_IssueLedger,兩帳以 ID 互指不重複敘述。
+> 本帳=遞交載體;議題現況仍看 90_IssueLedger，兩帳以 ID 互指不重複敘述。
 
 ## 帳目
 

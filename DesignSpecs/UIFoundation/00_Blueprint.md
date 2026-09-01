@@ -7,7 +7,7 @@ version: v0.1.1 (2026-07-18)
 last_updated: 2026-07-18
 summary:
   role: DS 藍圖=結構分類單源(節點鍵×標記×權威載體×消費者/觸發)
-  scope: DS 內容分類軸。權屬單源=TRAINER/FolderOwnership;業務入口=TRAINER/UI_FuncIndex;排程屬路線載體,本檔不承載波次
+  scope: DS 內容分類軸。權屬單源=TRAINER/FolderOwnership;業務入口=TRAINER/UI_FuncIndex;排程屬路線載體，本檔不承載波次
   audience:
     - 專案成員
     - AI 管線
@@ -16,7 +16,7 @@ summary:
 # MetaUI Design System 藍圖
 
 > 本檔承載 DS 的結構分類:節點鍵、必要/可擴充標記、權威載體、消費者與觸發條件。
-> 規範本文一律住權威載體,本檔只登記結構。
+> 規範本文一律住權威載體，本檔只登記結構。
 > 外部 DS 研究僅作分類參照;必要性判斷以三閘門、政府 GIS 場景與現有工具鏈為準。
 
 ## 一、標記判準
@@ -24,15 +24,15 @@ summary:
 | 標記 | 名稱 | 判準 |
 |------|------|------|
 | ■ | 必要(依賴軌) | 三閘門或 DS 維護流程現行實際依賴;且缺失導致決策不可追溯、品質不可驗證或跨專案不一致。消費者欄列出依賴者 |
-| ◆ | 必要(差異化軌) | 拍板者裁定之差異化主體(政府 GIS 場景);必要性來源=裁決,建置依觸發欄 |
-| □ | 可擴充 | 依觸發條件啟動;觸發條件寫成可查驗徵兆,未觸發不建置 |
+| ◆ | 必要(差異化軌) | 拍板者裁定之差異化主體(政府 GIS 場景);必要性來源=裁決，建置依觸發欄 |
+| □ | 可擴充 | 依觸發條件啟動;觸發條件寫成可查驗徵兆，未觸發不建置 |
 
-標記變更屬大改,層級與判準變更屬結構級(分級見 00_Philosophy 治理節)。
+標記變更屬大改，層級與判準變更屬結構級(分級見 00_Philosophy 治理節)。
 
 ## 二、分類樹(導覽視圖)
 
 層帶:L0~L5=內容層(DS 說什麼)|L6~L8=營運層(DS 怎麼運轉)|L5=橫切面(子項載體在他層)。
-樹與 §三 表同檔維護;兩者不一致時以表為準。引用節點一律用節點鍵,L 序號僅供顯示。
+樹與 §三 表同檔維護;兩者不一致時以表為準。引用節點一律用節點鍵，L 序號僅供顯示。
 
 ```
 metaui-ds
@@ -114,10 +114,10 @@ metaui-ds
 | foundations.typography | 字階與排版 | ■ | UIF/tokens.json | UIV-05/06 |
 | foundations.space-shape | 間距/圓角/陰影/z-index | ■ | UIF/tokens.json | UIV-05/06 |
 | foundations.grid | 版面網格與斷點 | □ | 未建;敘事基準=UIF/Design.md responsive 段 | 觸發=斷點值 token 化需求(第二個 RWD 場景進 G1) |
-| foundations.gis-cartography | GIS 圖徵與分級設色 | ◆ | 未建;建置後歸 UIF 專章 | 建置觸發=首個含圖台頁面的專案進 G1 |
-| foundations.icons | 圖示規範 | □ | 未建;素材=Figma kit ICON 頁 | 觸發=kit ICON 頁項目變動,或補件元件需引用圖示 |
+| foundations.gis-cartography | GIS 圖徵與分級設色 | ◆ | UIF/50_GisCartography.md(v0.1;互動歸 patterns.gis-interaction) | 建置觸發=首個含圖台頁面的專案進 G1(2026-08-18 成立，UII-031) |
+| foundations.icons | 圖示規範 | □ | UIF/40_Iconography.md(v0.1)+對照契約 UIF/assets/;素材=Figma kit ICON 頁 | 觸發=kit ICON 頁項目變動，或補件元件需引用圖示(2026-08-18 成立，UII-031) |
 | foundations.motion | 動效 | □ | transition token 兩級(值存 tokens.json);規範未建 | 觸發=過場/載入互動元件進元件規範 |
-| foundations.imagery | 圖像與插畫 | □ | 未建 | 觸發=空狀態或導引插畫需求進 G0 |
+| foundations.imagery | 圖像與插畫 | □ | UIF/45_Imagery.md(v0.1)+佔位樣式 UIF/assets/ | 觸發=空狀態或導引插畫需求進 G0(2026-08-18 成立，UII-031) |
 | foundations.i18n | 國際化 | □ | 未建 | 觸發=政府案合約含雙語驗收條款 |
 
 ### L2 components 元件
@@ -127,7 +127,7 @@ metaui-ds
 | components.spec | 元件規範(六欄模板) | ■ | UIF/20_Components.md | G1 結構審;30_ReviewRun 選型判準 |
 | components.figma-library | Figma 統一元件庫(上游) | ■ | Figma kit(發佈權=設計師) | uiv10 讀回 diff;40_TokenPipeline 單向紀律 |
 | components.code | code 元件(下游採用) | ■ | 前端 repo;theme 接點=UIF/vuetify.theme.json | gen_vuetify_theme+UIV-06(採用型:缺席=needs-review) |
-| components.storybook | Storybook 故事同步 | □ | 前端 Storybook | 觸發=stories token 化補丁派發,或新元件補件開工 |
+| components.storybook | Storybook 故事同步 | □ | 前端 Storybook | 觸發=stories token 化補丁派發，或新元件補件開工 |
 | components.code-connect | 設計↔程式對映 | □ | 未建 | 觸發=kit library 發佈完成+首個元件對映需求 |
 
 ### L3 patterns 情境
@@ -149,7 +149,7 @@ metaui-ds
 | content.glossary-base | 術語(DS 基底層) | □ | 未建 | 觸發=兩個專案的 Glossary 出現交集術語 |
 | content.voice-tone | 語氣矩陣 | □ | 未建 | 觸發=UI_DEPLOY 進駐第二條產品線 repo |
 
-### L5 a11y 無障礙(橫切面:子項載體在他層,按面索引)
+### L5 a11y 無障礙(橫切面:子項載體在他層，按面索引)
 
 | 節點鍵 | 項目 | 標記 | 權威載體 | 消費者(■◆)/觸發(□) |
 |--------|------|------|---------|---------------------|
@@ -183,16 +183,16 @@ metaui-ds
 | tooling.figma | Figma 操作與維護鏈(變數/元件/MCP) | ■ | UI_KIT/40_TokenPipeline.md 維護鏈與沙盒紀律 | uiv10 輸入產製;單向 Figma→repo |
 | tooling.generators | 生成管線 gen_*(五支) | ■ | UI_KIT/checks/ | UIV-06 新鮮度;--check |
 | tooling.runner | 檢核執行器 | ■ | UI_KIT/checks/run_checks.py+uiv10_figma_diff.py | 閘門子集執行 |
-| tooling.deploy | 部署(整包進駐) | ■ | UI_DEPLOY 容器(整包複製,外殼消失) | FolderOwnership 部署單元定義 |
+| tooling.deploy | 部署(整包進駐) | ■ | UI_DEPLOY 容器(整包複製，外殼消失) | FolderOwnership 部署單元定義 |
 | tooling.deploy-script | 部署腳本化 | □ | 未建 | 觸發=第三次手動部署作業 |
 | tooling.ai-collab | AI 協作規範 | ■ | UI_KIT/AI_Rules.md+40_TokenPipeline 沙盒紀律 | 執行者每回合遵循 |
 
 ## 四、使用規則
 
-- 查找:功能→節點鍵→權威載體;規範本文只住載體,本檔不承載。
+- 查找:功能→節點鍵→權威載體;規範本文只住載體，本檔不承載。
 - 增刪節點或改分類=結構級變更;改標記=大改(分級判準見 00_Philosophy 治理節)。
-- □ 觸發成立時:登議題帳→提案→裁決後建置,同 commit 更新標記與載體欄。
-- 階段自陳由標記承載:■◆=現行依賴或裁定,□=未觸發;本檔不寫波次與日期。
+- □ 觸發成立時:登議題帳→提案→裁決後建置，同 commit 更新標記與載體欄。
+- 階段自陳由標記承載:■◆=現行依賴或裁定，□=未觸發;本檔不寫波次與日期。
 
 ## 五、業界分類對照(22 類→節點)
 
@@ -201,8 +201,8 @@ metaui-ds
 | # | 業界類別 | 節點 | 註 |
 |---|---------|------|-----|
 | 1 | 理念/原則/價值觀 | philosophy.* | |
-| 2 | 入門分軌(Get started) | 不入樹 | 部署外殼(00_START_UI)承擔,權屬歸 FolderOwnership |
-| 3 | Foundations 基礎 | foundations.* | IA 歸 SA 側(跨 repo 分工),不入本樹 |
+| 2 | 入門分軌(Get started) | 不入樹 | 部署外殼(00_START_UI)承擔，權屬歸 FolderOwnership |
+| 3 | Foundations 基礎 | foundations.* | IA 歸 SA 側(跨 repo 分工)，不入本樹 |
 | 4 | 視覺樣式(Styles) | foundations.color/typography/space-shape/icons/motion | 聲音規範=有意剔除(場景無) |
 | 5 | Design tokens | foundations.tokens | |
 | 6 | 元件+文件欄位 | components.spec | |
@@ -211,9 +211,9 @@ metaui-ds
 | 9 | Accessibility | a11y.* | |
 | 10 | 國際化/雙向文字 | foundations.i18n | 雙向文字=有意剔除(中文場景) |
 | 11 | 資料視覺化 | patterns.dataviz | |
-| 12 | 地圖/空間規範 | foundations.gis-cartography+patterns.gis-interaction | 差異化軌(◆):六家僅 Carbon 有圖表型地圖,互動 GIS 均無 |
+| 12 | 地圖/空間規範 | foundations.gis-cartography+patterns.gis-interaction | 差異化軌(◆):六家僅 Carbon 有圖表型地圖，互動 GIS 均無 |
 | 13 | Icons 資產庫 | foundations.icons | |
-| 14 | 多平台 | 不入樹 | 有意剔除:單平台 Web(Vuetify),邊界節明文 |
+| 14 | 多平台 | 不入樹 | 有意剔除:單平台 Web(Vuetify)，邊界節明文 |
 | 15 | 治理:貢獻流程 | governance.change | |
 | 16 | 治理:版本/棄用 | governance.versioning | |
 | 17 | 治理:採用度量 | governance.metrics | |
@@ -225,6 +225,6 @@ metaui-ds
 
 ## 六、視圖與外殼歸位
 
-- UIF/Design.md=跨節點生成敘事視圖,不作節點;其各段落以所屬節點的載體欄出現。
-- 00_START_UI(Status/Guide/Playbook)=部署操作外殼,不入分類樹;權屬歸 FolderOwnership。
-- SOP 附屬素材(UI_KIT/references/、templates/)隨其所屬 SOP 節點,不獨立設節點。
+- UIF/Design.md=跨節點生成敘事視圖，不作節點;其各段落以所屬節點的載體欄出現。
+- 00_START_UI(Status/Guide/Playbook)=部署操作外殼，不入分類樹;權屬歸 FolderOwnership。
+- SOP 附屬素材(UI_KIT/references/、templates/)隨其所屬 SOP 節點，不獨立設節點。
