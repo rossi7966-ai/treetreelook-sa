@@ -46,3 +46,5 @@ summary: SD駕駛艙——30秒掌握當前要做什麼。實際內容由SD Coac
 ## Coach 交接日誌
 
 > 歷代累積,最新在上。(初始為空)
+
+部署來源:metaos-v0.12.0/SD_DEPLOY@v1.2(來源fd7d63a)
