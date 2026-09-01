@@ -99,7 +99,7 @@ flowchart TB
 
 **已知地雷**
 
-- ⚠️ `21_AddModule.md` 的複製路徑寫 `_templates/F00_template/`(小寫 t),repo 實際為 `F00_Template/`(大寫 T)。Windows 下可過,Linux / CI 會 fail。**執行前先確認,不要就地改 repo 檔名** —— 改範本目錄名會波及 `20_Setup.md`;正解是走 AGENT_TASK 修 `21_AddModule.md` 字面值(`AI_Rules.md` §5 條 9)。
+- ✅ **範本目錄大小寫已於 2026-09-01 修正**(commit 見 git log)。原況:部署包鋪的目錄為 `F00_Template/` / `M00_Template/` / `SYS00_Template/`(大寫 T),而 KIT 全篇 18 處引用皆為小寫 `_template/`,Windows 靜默通過、Linux / CI 會 fail。處置:改 3 個目錄名為小寫,不動 KIT 字面值 —— 依據是 `20_Setup.md` 第 410~418 行的驗收檢查逐條寫小寫路徑,repo 現況跑不過套件自己的驗收。詳見 §5 R2。
 - ⚠️ **M03 已達 F 數警示邊緣**(現 5 F)。`AI_Rules.md` §5 條 5 的觸發條件是「單一 F 模組對應 Epic 數 > 3」而非 M 底下的 F 數;M03 五個 F 分屬 EP06 / EP07 / EP08,各 F 對應 Epic 數皆 ≤ 3,**未觸發拆分**。本階段仍須複查一次並在 `04_FuncMap.md` 留下自檢結論,避免階段 3 展開後才發現。
 
 **未解阻塞時的並行路徑**:無阻塞,直接跑。
@@ -306,7 +306,18 @@ D1.5 期間若 SA 增刪 `M##-F##-W##` 節點,**必須手動同步 `03_Structure
 
 ### R2 · 階段 2 的範本路徑大小寫(可能性:高,影響:低)
 
-`21_AddModule.md` 寫 `F00_template/`,repo 實為 `F00_Template/`。**Windows 下靜默通過,Linux / CI 會 fail** —— 這種錯最危險的是它在開發機不會報錯。**退路**:走 AGENT_TASK 修 `21_AddModule.md` 字面值,不動 repo 檔名。
+**已於 2026-09-01 修正,本節保留為回歸監測點。**
+
+**原況**:小寫 `_template/` 引用共 18 處散在 4 檔 —— `20_Setup.md`(12,含其自身第 410~418 行的驗收檢查)、`21_AddModule.md`(4,階段 2)、`30_DraftSync.md`(1,**階段 3 D1 強制讀黃金範例**)、`Playbook.md`(1,卡 B)。repo 實際目錄名為大寫。**Windows 下靜默通過,Linux / CI 會 fail** —— 這種錯最危險的是它在開發機不會報錯。
+
+**處置**:改 3 個目錄名為小寫,不動 18 處 KIT 字面值。判準是 `20_Setup.md` 自身的驗收檢查寫小寫 —— 錯的是目錄名,不是 KIT。
+
+**⚠️ 回歸風險**:三個大寫目錄與整套 KIT 由**同一個 commit `53b7d22`「初始基線: MetaOS 部署架」**進來,即**上游部署包內部不一致**(發的 KIT 說小寫、發的目錄是大寫)。**下次部署包再鋪一次會打回大寫。** 已草擬 AGENT_TASK 回報上游;在上游修好前,每次重新部署後須複跑本節的驗證:
+
+```bash
+ls DesignSpecs/_templates/                              # 應為三個全小寫目錄
+grep -rn "F00_Template\|M00_Template\|SYS00_Template" .metasa/ 00_START_SA/   # 應無輸出
+```
 
 ### R3 · D1.5 期間增刪節點未同步 `03_Structure.md`(可能性:高,影響:中)
 
