@@ -3,9 +3,9 @@ file: .metaui/UI_KIT/checks/README.md
 role: uiv_checks_manifest
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.13 (2026-08-20;UIV-05 開 @media 條件式 breakpoint 白名單+rem 字面轉 needs-review+UIFoundation 官方載體不報白名單外，案源=moa UIX-007/008;前版 v0.12=gen_digest 兩修、v0.11=UIV-07/12 scope 三修)
-last_updated: 2026-08-20
-summary: UIV 檢核清冊與使用說明。十一支檢核(01~09+11+12)×四要素;prototype 產品視圖(pages/proto/)納 01/02/04/05/08/09/11;UIV-07 掃描面含 UIFoundation/reviews/(DS 層報告歸屬)+來源報告欄多名容錯;UIV-11 含去 AI 感機檢與 00_CopySheet/00_Digest 新鮮度;報告依 VerifyReportSchema v1.0,exit code 與五態分類同 VP 體系;生成器六支(tokens/digest/design_md/vuetify_theme/copy/flowmap;digest 之 TBD 只認宣告位、閥值只數活躍面)+selftest 迴歸自測+scan_hardcoded 導入輔助掃描器(不入閘門);成長迴路含候選登記。
+version: v0.14 (2026-09-08;UIV-05 加註適用面限自產頁、前端 repo 不適用;proto 子集納 pages/demo/;候選登記增二列(產品視圖必備項機檢子集、var() 名存在性驗證);前版 v0.13 (2026-08-20;UIV-05 開 @media 條件式 breakpoint 白名單+rem 字面轉 needs-review+UIFoundation 官方載體不報白名單外，案源=moa UIX-007/008;前版 v0.12=gen_digest 兩修、v0.11=UIV-07/12 scope 三修))
+last_updated: 2026-09-08
+summary: UIV 檢核清冊與使用說明。十一支檢核(01~09+11+12)×四要素;prototype 產品視圖(pages/proto/ 與 pages/demo/，後者 2026-09-08 納入)納 01/02/04/05/08/09/11;UIV-07 掃描面含 UIFoundation/reviews/(DS 層報告歸屬)+來源報告欄多名容錯;UIV-11 含去 AI 感機檢與 00_CopySheet/00_Digest 新鮮度;報告依 VerifyReportSchema v1.0,exit code 與五態分類同 VP 體系;生成器六支(tokens/digest/design_md/vuetify_theme/copy/flowmap;digest 之 TBD 只認宣告位、閥值只數活躍面)+selftest 迴歸自測+scan_hardcoded 導入輔助掃描器(不入閘門);成長迴路含候選登記。
 ---
 
 # UIV 機器檢核清冊
@@ -81,5 +81,8 @@ R 層同型發現 ≥3 次(見 50_IssueFlow)→ 在此清冊登錄候選新 UIV�
 | on-X↔X 對比驗算 | eco-pay 併版回報 R1(40_TokenPipeline 回收節 on- 綁定條款) | color 群組同時存在 X 與 on-X(含 *-container 對)時，解析 alias 後驗 WCAG 對比 ≥4.5(light 必驗;宣告 dark 者 dark 亦驗);<4.5=fail。防專案覆蓋 base 色沿用母版 on- 基線(實證=on-warning 白字壓亮橘 1.97，現行機檢不報) |
 | 圖像槽佔位完備 | 45_Imagery §三/§七(UII-031,DS 推進 P0) | 頁面 hero/圖像槽=實資產或合規佔位(`class="ph-slot"`+`data-ph`)，二擇一零空槽;機檢可判 class 與 data 屬性存在性;「該不該有槽」歸 G1 結構審 |
 | 相對長度單位 token 化(rem/em 轉 fail) | moa UIX-007(R02_G2 首個 styled 頁)+eco-pay 既有頁 | 現況:`rem`/`em` 字面列 needs-review 不擋閘，因無對應 token 分類可替代(RAM 版面的最小欄寬只能寫長度值;`@media` 條件式也沒有 rem 斷點 token)。立案需求兩項=①補「欄位/容器最小寬度」類 token(`layout` 群既有 `content-width` 可為家)②決定 `--breakpoint-*` 要不要出 rem 對照鍵。實證用例已足:moa P01 用 14rem/22rem 撐 RAM 欄寬，eco-pay 7 頁用 48rem/64rem 當斷點。定分類後再把 rem/em 併入 fail 面——**不先立分類就轉 fail 會把版面路一起堵死，等於再造一次 UIX-007** |
+
+| 產品視圖必備項機檢子集 | 45_PrototypeView 規則 9(2026-09-08) | 可機判那幾款:proto／demo 頁內殘留 `ph-slot`、殘留 wire-meta／wire-foot、缺 header／footer、卡片無 `:hover` 規則。其餘四款(主次分區、可點性視覺、圖像是否為實件、品牌感)屬 R 層，不混入 |
+| `var()` 名存在性驗證 | 40_TokenPipeline 下發節(2026-09-08) | UIV-05 剥掉 `var()` 即丟，**不檢查該名是否存於 `tokens.css`**。失敗型態=專案引用了母版有、專案沒有的鍵——**V 全綠、畫面空白**。修法極輕:解析 `tokens.css` 之 `--名:` 集合，styled／proto 頁引用不在集合即 fail |
 
 已畢業候選:00_Digest 新鮮度→UIV-11 承載(過期=fail/缺席=needs-review)。

@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/40_TokenPipeline.md
 role: ui_sop_g2_token_pipeline
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.6 (2026-08-07)
-last_updated: 2026-08-07
+version: v0.7 (2026-09-08;前置改記=部署包自帶母版即預設基準/增步驟 1(c) 無 Figma 無手填基準路徑/增「下發(母版→專案)」節;前版 v0.6 (2026-08-07))
+last_updated: 2026-09-08
 summary: design token 管線 SOP(卡 U3)。tokens.json 單一 SSOT 取得→生成 css/TokenSheet→頁面 styled 升級→G2 檢核。銜接 design-system-html skill(選用);維護鏈紀律四原則(單向/必經 PR/diff 先行/Claude 寫入沙盒化);v0.3 增試點 DS 演進回收節(外稽 A1:通用資產回流母版，專案主題值不回收)。
 ---
 
@@ -16,7 +16,8 @@ summary: design token 管線 SOP(卡 U3)。tokens.json 單一 SSOT 取得→生�
 
 ## 前置
 
-G1 已 PASS(結構凍結)。無 Figma UI Kit 且無手填基準的專案:G2 整閘標 ⚪ 無法審查，流程止於 G1。
+G1 已 PASS(結構凍結)。**部署包自帶母版 `UIFoundation/tokens.json`=預設基準**，無 Figma 亦不缺基準；走步驟 1(c)。
+(原字面「無 Figma UI Kit 且無手填基準的專案:G2 整闘標 ⚪ 無法審查，流程止於 G1」與 45_PrototypeView 之「抄母版」預設路徑衝突，2026-09-08 改寫。)
 
 ## 步驟
 
@@ -34,6 +35,10 @@ G1 已 PASS(結構凍結)。無 Figma UI Kit 且無手填基準的專案:G2 整�
 填入 tokens.json(格式見 `templates/tokens.sample.json`)，每筆記 `source`(Figma 節點)。
 
 **(b) 無 Figma**:拍板者提供基準後手填 tokens.json,`source` 記 `manual:依據`。
+
+**(c) 無 Figma 且無手填基準**:沿用部署包母版 tokens.json 為基準，
+只改品牌鍵(展示層規則見 `45_PrototypeView` 展示層 token 節)，
+`source` 記 `master:UI_DEPLOY@v#`。拍板者另提供基準時才走 (b)。
 
 ### 2. 生成(禁手改生成物)
 
@@ -131,6 +136,19 @@ python .metaui/UI_KIT/checks/run_checks.py --gate G2 --scope <F 模組路徑>
   機檢缺口=on-X↔X 對比驗算，已登記 UIV 候選(checks/README 成長迴路)。
 - **觸發**:專案新增 token 經 G2 過閘後，於該輪報告標記「回收候選」;
   母版回收=獨立 commit(gen_* 重生成 FRESH+版號進位),TRAINER/Issues 留追蹤列。
+
+### 下發(母版 → 專案;2026-09-08 新增)
+
+上面是**專案 → 母版**一向。反向原本沒有程序，而它是必要的——
+**換包射程明文「`DesignSpecs/` 之非範本檔零觸」，所以母版新增的 token 不會經換包到達專案**；
+而各專案的 `tokens.json` 已分岔(各自改過品牌鍵、版號不一)。
+
+- **每次版更附「新增鍵清單」**(鍵名 + 群組 + 值 + 用途一句)，隨升版公告發出。
+- **專案側合併後重生成**:只取新增鍵，**不覆蓋專案已改之值**；合併後跑 `gen_*` 並驗 UIV-06。
+- **引用前先確認**:規則文件引用母版新鍵時，專案側若尚未合併，
+  **UIV-05 不驗 `var()` 名的存在性——V 會全綠而畫面空白**。
+  機檢缺口已登候選(checks/README 成長迴路:`var()` 名存在性驗證)。
+
 
 工具選型備註:Tokens Studio 屬近期務實選項;gen_*.py 已運作，
 **不為改用 Style Dictionary 而重寫**，痛點出現再遷;

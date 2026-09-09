@@ -176,3 +176,11 @@ summary: 生成物，禁手改;來源 UIFoundation/tokens.json，重生成用 UI
 | `--color-on-error` | `#212b2b` |
 | `--color-on-success` | `#212b2b` |
 | `--color-on-warning` | `#212b2b` |
+| `--color-text-heading` | `#ffffff` |
+| `--color-text-body` | `#ffffff` |
+| `--color-error` | `#f96063` |
+| `--color-success` | `#54c594` |
+| `--color-warning` | `#ffaf54` |
+| `--color-alert-warning` | `#ffaf54` |
+| `--color-alert-severe` | `#f96063` |
+| `--color-gis-station` | `#57cbcf` |

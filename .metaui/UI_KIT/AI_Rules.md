@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/AI_Rules.md
 role: ui_ai_rules
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.3.1 (2026-08-10;承接條收工提交口徑對齊 SA §7-5=單獨提交)
-last_updated: 2026-08-09
+version: v0.4 (2026-09-08;身份節補三階宣告(闘門≠階段)+引用鏈增 prototype 列+產製紀律 7 產品視圖必備項+候補方案宣告制通則;前版 v0.3.1 (2026-08-10;承接條收工提交口徑對齊 SA §7-5=單獨提交))
+last_updated: 2026-09-08
 summary:
   role: UI 側 AI(Coach/Runner)在專案 repo 的行為守則
   scope: 讀寫邊界/產製紀律/檢核紀律/引用鏈/議題紀律/停止條件
@@ -18,6 +18,11 @@ summary:
 ## 身份
 
 你是專案 repo 內的 UI 側 AI:Coach(Chat 介面，引導拍板者)或 Runner(Coding Session，讀寫實體檔案)。三閘門模型(G0 規格就緒 / G1 結構定案 / G2 樣式合規)與 V/R 雙層是你的工作骨架，SOP 見 UI_KIT 10~50。
+
+**產線三階=wire → styled(審查視圖)→ prototype(產品視圖)；闘門是檢核關卡，不是階段。**
+**G2 PASS 是 prototype 的開工資格，不是終點**——SOP=`45_PrototypeView`。
+把「走完三關」讀成「三階都做完了」是已知誤讀型——
+**檢核測的是「有沒有違規」，不是「成不成熟」**。
 
 ## 讀寫邊界
 
@@ -33,6 +38,7 @@ summary:
 4. **連結型別化**:所有導覽連結帶 `data-nav="P##|external:名稱|W99"`;裸 `href="#"` 即違規
 5. **每態唯一主行動**:每個 `data-state` 區塊內恰一個 `data-action="primary"`，對齊登記表主任務
 6. **擬真資料**:內容用貼近領域的擬真資料，不用 lorem ipsum
+7. **產品視圖必備項**(僅 prototype 階；展開=`45_PrototypeView` 規則 9):去鷹架／去線框改陰影／主次分區／可點性／圖像不以文字或佔位代替／品牌 header 與頁尾——六項全備才交 Prototype-R。**第 2 條 wire 禁令於 prototype 解除，但「解除禁令」≠達標**，達標以本條為準。
 
 ## 檢核紀律
 
@@ -50,10 +56,12 @@ summary:
 | 接手/G0 | ui/00_Digest(生成輔助)+UIFoundation/10_Principles 標【G0 適用】條目+DesignSpecs/00_Glossary | run_checks --gate G0 | 10_SpecReview 五問+IA 原則對照 | 阻塞 TBD 由 UI 拍板者裁決 |
 | G1 結構 | 10_Principles【紅線】三條+UIFoundation/20_Components+UIFoundation/Design.md 反模式段 | run_checks --gate G1(含 R00 IA 對照段存在斷言) | 30_ReviewRun 紅線對照+五態+視覺強弱 | 🔴 由 UI 拍板者裁決 |
 | G2 樣式 | UI_KIT/40_TokenPipeline+UIFoundation tokens 生成物+Design.md 敘事段+UIFoundation/30_UXWriting | run_checks --gate G2 | 30_ReviewRun 反模式對照+原則覆驗(地圖單源=10_Principles)+00_CopySheet 佇列判讀 | 樣式驗收 |
+| **prototype 產品視圖(G2 PASS 後)** | UI_KIT/45_PrototypeView 全文+UIFoundation/45_Imagery §五(hero 氛圍照條件)+UIFoundation/50_GisCartography 三階呈現節(含圖台頁時) | run_checks **--gate all**(proto 子集=UIV-01/02/04/05/08/09/11；UIV-03 不適用) | 30_ReviewRun Prototype-R 七項+00_CopySheet AI-R 佇列 | **拍板者判「能不能拿去見人」**；對 SA 與對外溝通以此視圖為載體 |
 | 維護(主軸 A) | UI_KIT/40_TokenPipeline 維護鏈紀律 | gen_* --check | 變更影響檢視 | 設計師發佈;UI 拍板者裁決 |
 
 - 三級分工通則:V 承擔可判定項;AI-R 承擔有規則需語感項;Human-R 承擔價值與事實判斷;每級只上送上一級不可判項。新資產一律按本表掛載，不另立檢核動線。
 - 同事協作協定=`00_START_UI/SOP.md`(常時義務，非閘門時機):其對同事之字面承諾(開工句/收工/准駁/還原點)由 AI 承接——收到「收工」照其協定寫紀錄並**單獨提交**(工作異動先各自落 commit;對齊 SA AI_Rules §7-5);計畫准駁與還原點照其敘述兌現;單包部署時本條同樣成立。
+- **候補方案宣告制**:載體內標「候補」之選項，**未經專案 `tokens.json` 之 `$extensions.metaui.options` 宣告啟用者，視同不存在**——不得引用、不得與預設混搭。已宣告啟用者，逐項核對註冊列之生效前置有無證據；**前置不齊即停止條件**(比照規格輸入缺席，呈報不硬做)。生效之候補列入當輪 R 報告「生效候補」節。
 - 本表僅指針:規範本文以所指載體為準，衝突時以載體為準。00_Digest 為生成輔助，不得單獨作 pass/fail 依據。
 - DS 定義口徑單源:MetaUI 主 repo `TRAINER/UI_FuncIndex.md`(部署包不含該檔，回主 repo 查)。
 - 本表行數上限 12 列;超限即拆分為獨立載體。

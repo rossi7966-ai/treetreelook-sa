@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/20_FlowPages.md
 role: ui_sop_g1_flow_pages
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.3.1 (2026-07-12)
-last_updated: 2026-07-12
+version: v0.4 (2026-09-08;阻塞 TBD 補 IA 二字並限射程(UII-044 缺陷一);前版 v0.3.1 (2026-07-12))
+last_updated: 2026-09-08
 summary: UI flow 與頁面 artifact 產製 SOP(卡 U1)。SA 產出消費規則(庫存視角+節點/邊二分)→旅程假說與旅程段→頁面登記表(含資訊配置欄)→配置快審→flow→wire 頁面實例化(連接點徽章)→G1 V 檢核+FlowMap(縮圖級 storyboard;宣告邊×實掃邊雙源對照)→截圖交審。
 ---
 
@@ -16,7 +16,7 @@ summary: UI flow 與頁面 artifact 產製 SOP(卡 U1)。SA 產出消費規則(�
 ## 前置
 
 G0 已 PASS(`ui/reviews/R00_G0.md` 的 gate_result 為準)，含對題審段已填(10_SpecReview)。
-阻塞 TBD 未裁決不得開畫。
+阻塞 **IA** TBD 未裁決不得開畫(射程限 `10_SpecReview` §4 三分類之「必須先決」；可佔位開畫、可延後二類不在射程)。
 
 ## SA 產出消費規則(UI 端)
 

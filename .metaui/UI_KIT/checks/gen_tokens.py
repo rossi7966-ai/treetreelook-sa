@@ -101,11 +101,38 @@ def build_dtcg(data):
     all_by_name = {name: format_css_value(val) for name, val, *_ in light_flat}
     light_resolved = resolve_aliases(light_flat, all_by_name)
 
+    # 深色區塊兩件事(2026-09-08 修;案源=NP 線前端回報「兩生成檔深色互相矛盾」):
+    #   (i) color-dark 內若寫 alias,解析後輸出——原本原樣吐出 "{color.x}" 字串
+    #   (ii) light 之 alias 若其 ref 於深色被覆寫、而 alias 自身未覆寫,補其深色值
+    #        ——原本整個漏掉,語意色在深色停在亮色值,牴觸 F-2「元件只准引 semantic」
     dark_flat = list(flatten_dtcg({"color-dark": dark_group}))
-    dark_tokens = []
-    for css_name, raw_value, *rest in dark_flat:
-        clean_name = css_name.replace("color-dark-", "color-")
-        dark_tokens.append((clean_name, format_css_value(raw_value)))
+    dark_raw = [(n.replace("color-dark-", "color-"), v) for n, v, *_ in dark_flat]
+    dark_raw_by_name = dict(dark_raw)
+    _alias_re = re.compile(r"^\{(.+)\}$")
+
+    def _resolve_dark(raw, seen):
+        """color-dark 內之 alias:先在深色群組內解,解不到退回亮色值。"""
+        if isinstance(raw, str):
+            m = _alias_re.match(raw)
+            if m:
+                ref = m.group(1).replace(".", "-")
+                if ref in seen:
+                    return format_css_value(raw)       # 迴圈自我保護
+                if ref in dark_raw_by_name:
+                    return _resolve_dark(dark_raw_by_name[ref], seen | {ref})
+                return all_by_name.get(ref, format_css_value(raw))
+        return format_css_value(raw)
+
+    dark_by_name = {n: _resolve_dark(v, {n}) for n, v in dark_raw}
+    dark_tokens = [(n, dark_by_name[n]) for n, _ in dark_raw]
+
+    dark_names = set(dark_by_name)
+    for css_name, _rv, _t, _d, _tier, _g, alias_ref in light_resolved:
+        if not alias_ref:
+            continue
+        ref = alias_ref.strip("{}").replace(".", "-")
+        if ref in dark_names and css_name not in dark_names:
+            dark_tokens.append((css_name, dark_by_name[ref]))
 
     css_lines = ["/* %s */" % HEADER, ":root {"]
     for css_name, raw_value, typ, desc, tier, group, alias_ref in light_resolved:
