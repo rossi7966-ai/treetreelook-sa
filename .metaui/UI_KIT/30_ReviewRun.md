@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/30_ReviewRun.md
 role: ui_sop_review_run
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.5.2 (2026-07-12)
-last_updated: 2026-07-12
+version: v0.6 (2026-09-08;Prototype-R 增第 7 項必備項對照;前版 v0.5.2 (2026-07-12))
+last_updated: 2026-09-08
 summary: R 層審查執行 SOP(卡 U2)。輸入=渲染截圖+FlowMap,V 段先行，G1-R 視覺層級+易用性原則結構六條(映射 10_Principles 單源),G2-R 殘餘判斷+原則覆驗+Nielsen 十大易用性原則全譜覆核(渲染後),Prototype-R 產品視圖審(吸引力/探索潛力/文案完稿判讀/同構抽查)，變更後覆驗義務，產出報告與議題同步。
 ---
 
@@ -111,6 +111,9 @@ Blank / Loading / Partial / Error / Ideal 逐態記 ✅ / ❌ / ⚠️ 未提供
    (結構漂移=回 G1，不得在 proto 層私改)
 6. **FlowMap 對照**:雙源差異表逐筆處置(宣告未實作→補頁或修 flow;實掃未宣告→
    補宣告或刪連結)，殘留差異須附理由
+7. **必備項對照**(45_PrototypeView 規則 9):六項逐項記 ✅／❌——
+   去鷹架／去線框改陰影／主次分區／可點性／圖像不以文字或佔位代替／品牌 chrome。
+   缺項=黃級起跳，圖像項缺項=紅級。**本項屬 R 層判讀，不作數值估算。**
 
 產出併當輪 R 報告(gate_result 含 prototype 判定);🔴🟡 入議題帳。
 

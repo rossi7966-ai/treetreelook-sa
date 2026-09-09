@@ -380,6 +380,34 @@ def main():
     expect("TG-5 未宣告+有 color-dark:推斷產 dark(向後相容)",
            "dark_mode" in gen_tokens.build(TG_infer)["tokens.css"])
 
+    # ── 深色 alias 解析(2026-09-08;案源=NP 線前端回報「兩生成檔深色互相矛盾」) ──
+    # 未修版之失效態:TG-6/7 缺鍵、TG-8 巢狀缺鍵、TG-9 吐出 "{color.red1}" 字串
+    TGA = {"$modes": ["light", "dark"],
+           "color": {"red1": {"$value": "#e03131"},
+                     "primary": {"$value": "#176466"},
+                     "error": {"$value": "{color.red1}"},
+                     "alert": {"severe": {"$value": "{color.red1}"}}},
+           "color-dark": {"red1": {"$value": "#f96063"},
+                          "primary": {"$value": "#57cbcf"},
+                          "surface": {"$value": "{color.primary}"}}}
+    a_css = gen_tokens.build(TGA)["tokens.css"]
+    a_dark = a_css.split("[data-theme=dark_mode] {", 1)[1]
+    a_theme = gen_vuetify_theme.build(TGA)["vuetify.theme.json"]
+    expect("TG-6 light alias 之 ref 有深色覆寫→深色補該 alias 之解析值",
+           "--color-error: #f96063;" in a_dark)
+    expect("TG-7 深色補值不動亮色(亮色仍為 light ref 值)",
+           "--color-error: #e03131;" in a_css.split("[data-theme")[0])
+    expect("TG-8 巢狀群組之 alias 同受(原僅走頂層鍵而漏)",
+           "--color-alert-severe: #f96063;" in a_dark)
+    expect("TG-9 color-dark 內寫 alias→解析後輸出,不吐 {} 字串(css 與 theme 兩軌)",
+           "--color-surface: #57cbcf;" in a_dark
+           and "{color." not in a_dark
+           and '"surface": "#57cbcf"' in a_theme)
+    TGA_cyc = json.loads(json.dumps(TGA))
+    TGA_cyc["color-dark"]["surface"] = {"$value": "{color.surface}"}
+    expect("TG-10 深色 alias 自我指涉不當機(迴圈保護)",
+           "dark_mode" in gen_tokens.build(TGA_cyc)["tokens.css"])
+
     # ── UIV-05:@media 條件式與官方載體(UIX-007/UIX-008) ──
     v5tmp = tempfile.mkdtemp(prefix="metaui_selftest_uiv05_")
     try:

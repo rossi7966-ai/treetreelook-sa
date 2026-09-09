@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/10_SpecReview.md
 role: ui_sop_g0_spec_review
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.3 (2026-07-11)
-last_updated: 2026-07-11
+version: v0.4 (2026-09-08;過闘條件之阻塞 TBD 補 IA 二字並限射程(UII-044 缺陷一);前版 v0.3 (2026-07-11))
+last_updated: 2026-09-08
 summary: G0 規格就緒檢核 SOP(卡 U0)。開畫前確認 SA 產出 UI-ready:V 檢核+完備性五問+對題五問(T0~T5，四分類輸出)+IA 原則對照+TBD 三分類，輸出 R00_G0 報告(含 IA 對照段=G1 啟動前置)與「開畫前決策清單」。
 ---
 
@@ -82,6 +82,6 @@ SA 檔一改重跑即同步。
 ### 5. 產出與過閘
 
 - 報告:`ui/reviews/R00_G0.md`(用 `templates/R00_Review_template.md`)
-- **過閘條件**:V 無 fail / parse-error + IA 原則對照段已填 + 對題審段已填(T0~T5 四分類齊) + 阻塞 TBD 全數經 UI 拍板者裁決 → `gate_result: PASS`
+- **過閘條件**:V 無 fail / parse-error + IA 原則對照段已填 + 對題審段已填(T0~T5 四分類齊) + 阻塞 **IA** TBD 全數經 UI 拍板者裁決(即 §4 三分類之「必須先決」；另兩類不在過闘條件內) → `gate_result: PASS`
 - **G1 前置**:R00 報告含已填「IA 原則對照」段;缺席則 G1 不得啟動(UIV 於 G1 子集斷言，fail 即 HOLD)
 - F 模組若踩 04_FuncMap 拆分觸發(Epic>3 / 節點>15 / 跨 RBAC 閉環):記入報告「範圍外轉介」,SA pass 管道轉出——不阻 UI 開畫，但必留痕

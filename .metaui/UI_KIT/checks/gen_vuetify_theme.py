@@ -79,11 +79,20 @@ def build_vuetify_theme(data):
 
     light_colors, alias_map = extract_colors(color_group)
 
+    # color-dark 內若寫 alias,解析後才收(2026-09-08 修;與 gen_tokens.py 同批)
+    # 原本 val["$value"] 原樣照收,寫 {color.x} 會把字串直接吐進 theme JSON
     dark_overrides = {}
+    dark_alias = {}
     for key, val in dark_group.items():
         if key.startswith("$") or not isinstance(val, dict) or "$value" not in val:
             continue
-        dark_overrides[key] = val["$value"]
+        raw = val["$value"]
+        if isinstance(raw, str) and raw.startswith("{") and raw.endswith("}"):
+            dark_alias[key] = raw.strip("{}").split(".")[-1]
+        else:
+            dark_overrides[key] = raw
+    for key, ref in dark_alias.items():
+        dark_overrides[key] = dark_overrides.get(ref, light_colors.get(ref, ""))
 
     dark_primitives = {k: v for k, v in light_colors.items() if k not in alias_map}
     dark_primitives.update(dark_overrides)

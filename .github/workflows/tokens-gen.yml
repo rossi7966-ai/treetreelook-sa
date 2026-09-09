@@ -1,5 +1,5 @@
 # 來源:UI_DEPLOY/.metaui/UI_KIT/templates/tokens-gen.workflow.yml
-# 安裝:2026-09-09(UI 包 v1.6 素材;換包時以母版範本比對)
+# 安裝:2026-09-09;path filter 與註解同日更新(範本屬 v1.7 素材,本檔先行)
 #
 # 用途:tokens.json 改動後,由 CI 產檔並寫回同一個 PR。
 # 案源:2026-09-07 週會裁「設計師更新樣式之後請 AI 產檔」,但未定產檔在哪跑;
@@ -8,18 +8,27 @@
 # 與 checks.yml 的分工:
 #   checks.yml  = 驗(run_checks --gate all,含 UIV-06 生成物新鮮度)
 #   本檔        = 產(三支生成器寫入模式)+ 產完自驗
-# 兩者不重疊。本檔產完自己跑一次 run_checks,是因為 GITHUB_TOKEN 推的 commit
-# 依 GitHub 設計不會再觸發 workflow,checks.yml 不會對「寫回後的樹」重跑。
+# 兩者不重疊。本檔產完自己跑一次 run_checks,是因為 checks.yml 不保證會對
+# 「寫回後的樹」重跑——實測(moa-weather PR#163,2026-09-09):bot 推的 commit
+# 上兩支 workflow 皆為 action_required(候批准),不會自動跑完。
+# 故本檔之自驗是該 PR 唯一對最終樹的機械驗證,不可省。
 #
-# 迴圈保護:生成器為決定性輸出,寫回後再跑必無差異,故不成環;
-# 加上 GITHUB_TOKEN 之推送不觸發 workflow,實際上連第二輪都不會發生。
+# 迴圈保護=生成器之決定性,不依賴觸發行為:寫回後再跑必無差異,故不成環。
+# (原註稱「GITHUB_TOKEN 之推送不觸發 workflow」,實測不成立——run 有被建立,
+#  只是停在候批准。迴圈保護不繫於該假設。)
 
 name: tokens-gen
 
 on:
   pull_request:
     paths:
+      # 值改了
       - 'DesignSpecs/UIFoundation/tokens.json'
+      # 生成器改了——同一份 tokens.json 也會產出不同結果,生成物一樣會過期。
+      # 2026-09-09 補:原僅列 tokens.json,換包帶進新版生成器時觸發不到,
+      # UIV-06 會紅而沒有任何東西去修它。實例=v1.6 之深色 alias 修法,
+      # moa-weather 同一份 tokens.json 深色區塊增 8 鍵。
+      - '.metaui/UI_KIT/checks/**'
 
 permissions:
   contents: write

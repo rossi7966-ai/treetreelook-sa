@@ -34,11 +34,18 @@ def pages_of(f_dir):
 
 
 def proto_pages_of(f_dir):
-    """產品視圖(45_PrototypeView):ui/pages/proto/*.html;納 01/02/04/05/08/09/11，五態 03 不適用。"""
-    d = os.path.join(f_dir, "ui", "pages", "proto")
-    if not os.path.isdir(d):
-        return []
-    return sorted(os.path.join(d, x) for x in os.listdir(d) if x.endswith(".html"))
+    """產品視圖(45_PrototypeView):ui/pages/proto/ 與 ui/pages/demo/ 之 *.html;
+    納 01/02/04/05/08/09/11，五態 03 不適用。
+
+    demo/ 於 2026-09-08 納入(拍板者裁):它是 prototype 之互動變體(外部函式庫、
+    真圖台、可操作),先前對所有檢核器隱形——UIV-01 連孤兒都判不出,而該類頁
+    正被拿去對外提案。同受 proto 子集,不另立閘門。"""
+    out = []
+    for sub in ("proto", "demo"):
+        d = os.path.join(f_dir, "ui", "pages", sub)
+        if os.path.isdir(d):
+            out.extend(os.path.join(d, x) for x in os.listdir(d) if x.endswith(".html"))
+    return sorted(out)
 
 
 def registry_rows(flow_text):
