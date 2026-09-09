@@ -1,7 +1,10 @@
 # 來源:UI_DEPLOY/.metaui/UI_KIT/templates/tokens-gen.workflow.yml
-# 安裝:2026-09-09;path filter 與註解同日更新(範本屬 v1.7 素材,本檔先行)
+# 安裝:2026-09-09(含模組層生成器;範本屬 v1.7 素材,本檔先行)
 #
-# 用途:tokens.json 改動後,由 CI 產檔並寫回同一個 PR。
+# 用途:生成物過期時由 CI 重產並寫回同一個 PR。
+# 射程=五支生成器:tokens/vuetify_theme/design_md(專案層)+ copy/digest(逐 F 模組)。
+# 不含 gen_flowmap(需 headless Edge,CI 無)。
+# 檔名沿用 tokens-gen 是為免四案再改名一輪,實際射程如上。
 # 案源:2026-09-07 週會裁「設計師更新樣式之後請 AI 產檔」,但未定產檔在哪跑;
 #       2026-09-09 拍板者裁「CI 產檔」——設計師與前端都不裝 Python。
 #
@@ -29,6 +32,8 @@ on:
       # UIV-06 會紅而沒有任何東西去修它。實例=v1.6 之深色 alias 修法,
       # moa-weather 同一份 tokens.json 深色區塊增 8 鍵。
       - '.metaui/UI_KIT/checks/**'
+      # 頁面改了——gen_copy 讀頁面,00_CopySheet.md 會過期。
+      - 'DesignSpecs/**/ui/pages/**'
 
 permissions:
   contents: write
@@ -67,6 +72,19 @@ jobs:
           python .metaui/UI_KIT/checks/gen_vuetify_theme.py --project .
           python .metaui/UI_KIT/checks/gen_design_md.py     --project .
 
+      - name: 產檔(模組層:文案清單與導讀)
+        if: steps.pre.outputs.skip == 'false'
+        run: |
+          # gen_copy / gen_digest 為逐 F 模組,CLI 是 --scope <模組目錄> 而非 --project。
+          # gen_flowmap 不納:它需要 headless Edge 產縮圖,CI 環境沒有。
+          # 個別模組失敗不中斷——缺 SA 輸入之模組本就產不出導讀;
+          # 真正的把關是最後那步自驗,過期就會紅,不會靜靜放過。
+          find DesignSpecs -type d -name ui -not -path '*/UIFoundation/*' | while read -r d; do
+            m="$(dirname "$d")"
+            python .metaui/UI_KIT/checks/gen_copy.py   --scope "$m" || echo "  gen_copy 略過: $m"
+            python .metaui/UI_KIT/checks/gen_digest.py --scope "$m" || echo "  gen_digest 略過: $m"
+          done
+
       - name: 有差異就寫回同一個 PR
         if: steps.pre.outputs.skip == 'false'
         run: |
@@ -77,6 +95,8 @@ jobs:
             DesignSpecs/UIFoundation/00_TokenSheet.md \
             DesignSpecs/UIFoundation/vuetify.theme.json \
             DesignSpecs/UIFoundation/Design.md
+          find DesignSpecs -type f \( -name 00_CopySheet.md -o -name 00_Digest.md \) \
+            -print0 | xargs -0 -r git add --
           if git diff --cached --quiet; then
             echo "生成物已是最新,無須寫回"
           else
