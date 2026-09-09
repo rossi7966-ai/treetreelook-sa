@@ -1,0 +1,81 @@
+# 來源:UI_DEPLOY/.metaui/UI_KIT/templates/tokens-gen.workflow.yml
+# 安裝:2026-09-09(UI 包 v1.6 素材;換包時以母版範本比對)
+#
+# 用途:tokens.json 改動後,由 CI 產檔並寫回同一個 PR。
+# 案源:2026-09-07 週會裁「設計師更新樣式之後請 AI 產檔」,但未定產檔在哪跑;
+#       2026-09-09 拍板者裁「CI 產檔」——設計師與前端都不裝 Python。
+#
+# 與 checks.yml 的分工:
+#   checks.yml  = 驗(run_checks --gate all,含 UIV-06 生成物新鮮度)
+#   本檔        = 產(三支生成器寫入模式)+ 產完自驗
+# 兩者不重疊。本檔產完自己跑一次 run_checks,是因為 GITHUB_TOKEN 推的 commit
+# 依 GitHub 設計不會再觸發 workflow,checks.yml 不會對「寫回後的樹」重跑。
+#
+# 迴圈保護:生成器為決定性輸出,寫回後再跑必無差異,故不成環;
+# 加上 GITHUB_TOKEN 之推送不觸發 workflow,實際上連第二輪都不會發生。
+
+name: tokens-gen
+
+on:
+  pull_request:
+    paths:
+      - 'DesignSpecs/UIFoundation/tokens.json'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    # fork 來的 PR 推不回去,略過;此類 PR 仍由 checks.yml 的 UIV-06 擋下,不會漏。
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 前置check(缺件即略過,不當失敗)
+        id: pre
+        run: |
+          if [ ! -f DesignSpecs/UIFoundation/tokens.json ]; then
+            echo "tokens.json 未就位——本案不消費 token 管線,略過"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif [ ! -d .metaui/UI_KIT/checks ]; then
+            echo ".metaui/UI_KIT/checks 未就位——UI 包未部署,略過"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 產檔(三支生成器,寫入模式)
+        if: steps.pre.outputs.skip == 'false'
+        run: |
+          python .metaui/UI_KIT/checks/gen_tokens.py        --project .
+          python .metaui/UI_KIT/checks/gen_vuetify_theme.py --project .
+          python .metaui/UI_KIT/checks/gen_design_md.py     --project .
+
+      - name: 有差異就寫回同一個 PR
+        if: steps.pre.outputs.skip == 'false'
+        run: |
+          git config user.name  "metaui-gen"
+          git config user.email "metaui-gen@users.noreply.github.com"
+          git add -- \
+            DesignSpecs/UIFoundation/tokens.css \
+            DesignSpecs/UIFoundation/00_TokenSheet.md \
+            DesignSpecs/UIFoundation/vuetify.theme.json \
+            DesignSpecs/UIFoundation/Design.md
+          if git diff --cached --quiet; then
+            echo "生成物已是最新,無須寫回"
+          else
+            git commit -m "chore(tokens): CI 重生成生成物(tokens.css/00_TokenSheet.md/vuetify.theme.json/Design.md)"
+            git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          fi
+
+      - name: 產完自驗(寫回後的樹)
+        if: steps.pre.outputs.skip == 'false'
+        run: |
+          python .metaui/UI_KIT/checks/run_checks.py --gate all --scope . --format text
