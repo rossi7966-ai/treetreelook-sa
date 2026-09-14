@@ -8,10 +8,10 @@ gate_result: HOLD  # PASS | HOLD;判定=V 全綠 + R 無未結 🔴
 ---
 # 審查報告 R00_G0(⟪範圍⟫)
 
-> 本報告為不可變事件存證,封存後不回改;議題現況一律看 UIFoundation/90_IssueLedger.md。
+> 本報告為不可變事件存證，封存後不回改;議題現況一律看 UIFoundation/90_IssueLedger.md。
 > 嚴重度:🔴 嚴重(阻閘)/🟡 建議/🟢 小優化(可不入帳)/⚪ 無法審查
 
-## V 段(機器檢核,貼真實 stdout 原文)
+## V 段(機器檢核，貼真實 stdout 原文)
 
 ```
 ⟪python .metaui/UI_KIT/checks/run_checks.py --gate G# --scope ⟪路徑⟫ 的完整 stdout⟫

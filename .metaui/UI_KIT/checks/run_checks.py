@@ -37,7 +37,7 @@ def main():
     scope = os.path.abspath(args.scope)
     project = find_project_root(scope)
     if project is None:
-        print("scope 上下層找不到 DesignSpecs/,無法定位專案根: %s" % scope)
+        print("scope 上下層找不到 DesignSpecs/，無法定位專案根: %s" % scope)
         return 2
     repo_id = os.path.basename(project)
     rep = Reporter(repo_id)

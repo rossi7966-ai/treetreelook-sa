@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 """brownfield 硬寫值掃描器(PREP-UI-2,info_level: Candidate;eco-pay 回件催生)
 
-掃描消費端原始碼(css/scss/vue/html)中的硬寫 px 與 hex 色值,輸出頻次表與
-token 映射建議(md)。定位=既有專案導入輔助工具,**不入 run_checks 閘門**;
+掃描消費端原始碼(css/scss/vue/html)中的硬寫 px 與 hex 色值，輸出頻次表與
+token 映射建議(md)。定位=既有專案導入輔助工具，**不入 run_checks 閘門**;
 建議欄僅供人工判定起點——同值一對多/同值異義=語意必須人工判定
 (eco-pay 試點教訓:值比對不能決定映射)。
 
 範圍與排除:
 - 副檔名預設 css/scss/vue/html(--ext 可改)
 - 排除目錄:node_modules/.git/dist/build/.nuxt/.output/coverage/vendor 等
-- 排除生成物:檔頭含「生成物,禁手改」標記者(tokens.css 等=管線產物非硬寫)
+- 排除生成物:檔頭含「生成物，禁手改」標記者(tokens.css 等=管線產物非硬寫)
 - 0px 不計(無 token 需求);1px 建議欄註記邊框慣例(UIV-05 白名單)
 
 Usage:
     python scan_hardcoded.py --root <消費端目錄> [--tokens <tokens.json>]
                              [--out <報告.md>] [--ext css,scss,vue,html]
 
-exit code:0=完成(有無發現皆 0,輔助工具無閘門語意);2=參數/路徑錯誤
+exit code:0=完成(有無發現皆 0，輔助工具無閘門語意);2=參數/路徑錯誤
 """
 import argparse
 import collections
@@ -28,7 +28,9 @@ import sys
 
 SKIP_DIRS = {"node_modules", ".git", "dist", "build", ".nuxt", ".output",
              "coverage", "vendor", ".venv", "__pycache__"}
-GENERATED_MARK = "生成物,禁手改"
+# 生成物檔頭標記。逗點寬度不敏感:母版 2026-08-19 轉全形，既有消費端生成物
+# 仍為半形檔頭，兩者皆須辨識為生成物(否則舊檔會被當手寫值誤掃)。
+GENERATED_MARK_RE = re.compile("生成物[,，]禁手改")
 
 PX_RE = re.compile(r"(?<![\w.\-])(\d+(?:\.\d+)?)px\b")
 HEX_RE = re.compile(r"#[0-9a-fA-F]{3,8}\b")
@@ -95,7 +97,7 @@ def scan(root, exts):
                     text = f.read()
             except OSError:
                 continue
-            if GENERATED_MARK in text[:400]:
+            if GENERATED_MARK_RE.search(text[:400]):
                 continue
             n_files += 1
             relp = os.path.relpath(path, root).replace(os.sep, "/")
@@ -122,12 +124,12 @@ def build_md(root, exts, n_files, px_hits, px_files, hex_hits, hex_files,
     lines = [
         "# 硬寫值掃描報告(scan_hardcoded 產出)",
         "",
-        "> 輔助工具產出,不入閘門;掃描時點快照,重跑即覆蓋。",
+        "> 輔助工具產出，不入閘門;掃描時點快照，重跑即覆蓋。",
         "> 建議欄=映射起點——**同值一對多/同值異義=語意必須人工判定**(值比對不能決定映射)。",
         "",
         "- 掃描根:`%s`(副檔名:%s)" % (root, "/".join(sorted(exts))),
         "- 掃描檔數:%d(已排除 %s 與生成物標記檔)" % (n_files, "/".join(sorted(SKIP_DIRS))),
-        "- px 硬寫:%d 種值,共 %d 處;hex 硬寫:%d 種色,共 %d 處"
+        "- px 硬寫:%d 種值，共 %d 處;hex 硬寫:%d 種色，共 %d 處"
         % (len(px_hits), sum(px_hits.values()), len(hex_hits), sum(hex_hits.values())),
         "",
         "## px 頻次表(0px 不計)",
@@ -138,17 +140,17 @@ def build_md(root, exts, n_files, px_hits, px_files, hex_hits, hex_files,
     for v, cnt in px_hits.most_common():
         ex = "、".join("`%s`" % p for p in sorted(px_files[v])[:3])
         if not has_tokens:
-            sug = "(未提供 tokens.json,僅頻次)"
+            sug = "(未提供 tokens.json，僅頻次)"
         elif v in px_map:
             sug = "、".join("`--%s`" % t for t in px_map[v])
         elif v == 1:
-            sug = "1px 邊框慣例(UIV-05 白名單,多半不需 token)"
+            sug = "1px 邊框慣例(UIV-05 白名單，多半不需 token)"
         else:
             sug = "scale 外——候討論(就近改階或提回收)"
         lines.append("| %s | %d | %s | %s |" % (fmt_px(v), cnt, ex, sug))
     lines += [
         "",
-        "## hex 頻次表(三/四/八碼已正規化為六碼,alpha 不比對)",
+        "## hex 頻次表(三/四/八碼已正規化為六碼，alpha 不比對)",
         "",
         "| 色值 | 次數 | 檔案例(≤3) | 候選 token | 備註 |",
         "|------|------|-----------|-----------|------|",
@@ -156,7 +158,7 @@ def build_md(root, exts, n_files, px_hits, px_files, hex_hits, hex_files,
     for n, cnt in hex_hits.most_common():
         ex = "、".join("`%s`" % p for p in sorted(hex_files[n])[:3])
         if not has_tokens:
-            cand, note = "(未提供 tokens.json,僅頻次)", "—"
+            cand, note = "(未提供 tokens.json，僅頻次)", "—"
         else:
             names = hex_map.get(n, [])
             if not names:

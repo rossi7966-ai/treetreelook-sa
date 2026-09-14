@@ -5,16 +5,16 @@ info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
 version: v0.1 (2026-07-05)
 last_updated: 2026-07-05
-summary: UI 情境卡操作手冊(對位 SA_DEPLOY 同名檔,檔名對稱=UI 2026-07-05 Q1 拍板)。五張卡對應 UI_KIT 五支 SOP,附指令句。
+summary: UI 情境卡操作手冊(對位 SA_DEPLOY 同名檔，檔名對稱=UI 2026-07-05 Q1 拍板)。五張卡對應 UI_KIT 五支 SOP，附指令句。
 ---
 
 # UI 情境卡
 
-> 用法:複製指令句給 AI(Coach / Runner),替換焦點模組。SOP 細節在 `.metaui/UI_KIT/`。
+> 用法:複製指令句給 AI(Coach / Runner)，替換焦點模組。SOP 細節在 `.metaui/UI_KIT/`。
 
 | 卡 | 情境 | 指令句 | SOP |
 |----|------|--------|-----|
-| U0 | 開畫前,確認 SA 規格畫得下去 | 『執行規格就緒檢核 焦點模組:M0X/F0X』 | 10_SpecReview.md |
+| U0 | 開畫前，確認 SA 規格畫得下去 | 『執行規格就緒檢核 焦點模組:M0X/F0X』 | 10_SpecReview.md |
 | U1 | 畫 UI flow 與 wire 線框 | 『執行線框產製 焦點模組:M0X/F0X』 | 20_FlowPages.md |
 | U2 | 審查(G1 結構 / G2 樣式) | 『執行 G1 審查 焦點模組:M0X/F0X』 | 30_ReviewRun.md |
 | U3 | 取 token、上樣式 | 『執行 token 套用 焦點模組:M0X/F0X』 | 40_TokenPipeline.md |
@@ -28,4 +28,4 @@ summary: UI 情境卡操作手冊(對位 SA_DEPLOY 同名檔,檔名對稱=UI 202
 
 ## 順序鐵律
 
-U0 過閘才 U1;G1 過閘才 U3。跳關 = 檢核會擋(閘門 HOLD),不是 AI 不配合。
+U0 過閘才 U1;G1 過閘才 U3。跳關 = 檢核會擋(閘門 HOLD)，不是 AI 不配合。

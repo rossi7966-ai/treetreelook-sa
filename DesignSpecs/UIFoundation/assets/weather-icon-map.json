@@ -1,0 +1,30 @@
+{
+  "$contract": "氣象碼↔icon 兩段式契約 v0.1(規範=40_Iconography §五;UII-031;前端與 prototype 皆消費本檔，單一事實源)",
+  "$source": "中央氣象署「預報XML產品預報因子欄位中文說明表」(107.12.20 製表，F-C0032 系列適用);代碼 40=官方表無(38→39→41 跳號)，照實登記",
+  "$rule": "分類規則(機械可判):描述含「雷」→thunder;否則含「雪」→(雨雪混合→sleet，下雪/暴風雪/積冰→snow);否則含「雨」→rain;否則含「霧」→fog;否則依天空階(晴→clear/晴時多雲·多雲時晴→fair/多雲·多雲時陰·陰時多雲→cloudy/陰天→overcast)",
+  "$fallback": { "canonical": "cloudy", "note": "未對照代碼一律落 cloudy 並記 needs-review;部分覆蓋在構造上安全" },
+  "$night": "clear/fair 於夜間時段換 night 鍵(日夜由時段推導，代碼不承載)",
+
+  "canonical": {
+    "clear":    { "label": "晴",     "mdi": "mdi-weather-sunny",           "yr": "clearsky_day",  "night": { "mdi": "mdi-weather-night",               "yr": "clearsky_night" } },
+    "fair":     { "label": "晴多雲", "mdi": "mdi-weather-partly-cloudy",   "yr": "fair_day",      "night": { "mdi": "mdi-weather-night-partly-cloudy", "yr": "fair_night" } },
+    "cloudy":   { "label": "多雲",   "mdi": "mdi-weather-cloudy",          "yr": "cloudy" },
+    "overcast": { "label": "陰",     "mdi": "mdi-weather-cloudy",          "yr": "cloudy",        "note": "與 cloudy 暫共 icon;語意分開登記，自繪輪可分化" },
+    "rain":     { "label": "雨",     "mdi": "mdi-weather-rainy",           "yr": "rain",          "heavy": { "mdi": "mdi-weather-pouring", "note": "大雨強度變體，展示層可選" } },
+    "thunder":  { "label": "雷陣雨", "mdi": "mdi-weather-lightning-rainy", "yr": "rainandthunder" },
+    "sleet":    { "label": "雨或雪", "mdi": "mdi-weather-snowy-rainy",     "yr": "sleet" },
+    "snow":     { "label": "雪",     "mdi": "mdi-weather-snowy",           "yr": "snow" },
+    "fog":      { "label": "霧",     "mdi": "mdi-weather-fog",             "yr": "fog" }
+  },
+
+  "wx": {
+    "1": "clear", "2": "fair", "3": "fair", "4": "cloudy", "5": "cloudy", "6": "cloudy", "7": "overcast",
+    "8": "rain", "9": "rain", "10": "rain", "11": "rain", "12": "rain", "13": "rain", "14": "rain",
+    "15": "thunder", "16": "thunder", "17": "thunder", "18": "thunder",
+    "19": "rain", "20": "rain", "21": "thunder", "22": "thunder",
+    "23": "sleet", "24": "fog", "25": "fog", "26": "fog", "27": "fog", "28": "fog",
+    "29": "rain", "30": "rain", "31": "rain", "32": "rain",
+    "33": "thunder", "34": "thunder", "35": "thunder", "36": "thunder",
+    "37": "sleet", "38": "rain", "39": "rain", "41": "thunder", "42": "snow"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "$generated": "生成物,禁手改;來源 UIFoundation/tokens.json,重生成用 UI_KIT/checks/gen_vuetify_theme.py",
-  "$version": "0.3.1",
+  "$generated": "生成物，禁手改;來源 UIFoundation/tokens.json，重生成用 UI_KIT/checks/gen_vuetify_theme.py",
+  "$version": "0.4.0",
   "defaultTheme": "light",
   "themes": {
     "light": {
@@ -518,9 +518,9 @@
     }
   ],
   "$notes": {
-    "dual_track": "tokens.css(--color-*) 與 Vuetify(--v-theme-*) 雙軌共存,同值同源。DS 規範以 --color-* 為正規引用名",
+    "dual_track": "tokens.css(--color-*) 與 Vuetify(--v-theme-*) 雙軌共存，同值同源。DS 規範以 --color-* 為正規引用名",
     "emphasis_not_darken": "使用 color=\"primary-emphasis\" 而非 Vuetify 自動生成的 primary-darken-1(F-5 裁決:darken/lighten→emphasis/soft)",
-    "semantic_only": "元件應引用 semantic tier(error/success/info),不直接引用 primitive(red1/green1/blue1)(F-2 裁決)",
+    "semantic_only": "元件應引用 semantic tier(error/success/info)，不直接引用 primitive(red1/green1/blue1)(F-2 裁決)",
     "usage": "import theme from './vuetify.theme.json';\ncreateVuetify({ theme: { defaultTheme: theme.defaultTheme, themes: theme.themes } })"
   }
 }

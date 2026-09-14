@@ -4,7 +4,7 @@
 tokens.json + 20_Components.md → Design.md
 - YAML front matter:色彩/字型/圓角/間距 hard token
 - 數據段:自動生成(色彩表/字型表/元件摘要)
-- 敘事段:以 <!-- NARRATIVE:key --> 標記,若既有 Design.md 已填內容則保留不覆寫
+- 敘事段:以 <!-- NARRATIVE:key --> 標記，若既有 Design.md 已填內容則保留不覆寫
 
 Usage:
     python gen_design_md.py --project <專案根>
@@ -16,7 +16,7 @@ import os
 import re
 import sys
 
-HEADER = "資料段為生成物(來源:tokens.json);敘事段(NARRATIVE 標記區)=人工審定內容,生成器保留不覆寫"
+HEADER = "資料段為生成物(來源:tokens.json);敘事段(NARRATIVE 標記區)=人工審定內容，生成器保留不覆寫"
 
 
 def load_json(path):
@@ -311,7 +311,7 @@ def build_design_md(data, project_root):
     parts.append("")
     parts.append("- **Never** hardcode hex/rgb 色值——一律引用 token（UIV-05 機器檢核）")
     parts.append("- **Never** 在元件/頁面層直接引用 primitive tier token（如 `{colors.red1}`）——改引 semantic（如 `{colors.error}`）")
-    parts.append("- **Never** 手改 tokens.css / 00_TokenSheet.md / Design.md 資料段——這些是生成物,改 tokens.json 後重生成")
+    parts.append("- **Never** 手改 tokens.css / 00_TokenSheet.md / Design.md 資料段——這些是生成物，改 tokens.json 後重生成")
     parts.append("- **Never** 在 dark mode 判斷中使用 `prefers-color-scheme`——使用 `[data-theme=dark_mode]` 選擇器")
     parts.append("")
     parts.append(narrative_slot("anti_patterns", existing))
@@ -331,13 +331,13 @@ def build_design_md(data, project_root):
 
     parts.append("## Known Gaps")
     parts.append("")
-    parts.append("- 動畫/Transition 細節:僅有 fast(0.2s) / slow(0.5s) 兩級,缺 easing curve 分類")
+    parts.append("- 動畫/Transition 細節:僅有 fast(0.2s) / slow(0.5s) 兩級，缺 easing curve 分類")
     parts.append("- A11y:色彩對比度未全表機械驗證(WCAG 2.1 AA)")
     parts.append("- 0.75rem(12px)字級:出現於 BaseSelect 但不在 typography scale 內——待確認是否納入或標為例外")
     parts.append("- GIS 元件:僅 MapPane 存在;圖例/圖層控制/坐標顯示=擴充候選(觸發依 00_Blueprint)")
-    parts.append("- Figma 變數同步:人工、單向 Figma→repo;漂移偵測=checks/uiv10_figma_diff.py(具名依賴 MCP 讀回,不入閘門子集)")
-    parts.append("- Brand 多品牌:MVP 假設單品牌,overrides 擴充槽保留名字不實作")
-    parts.append("- Dark mode subtitle 層級消失:subtitle 和 text 的 dark mode 覆寫值皆為 `#ffffff`,副標題在深色模式下與正文無區分——弱化值=設計師決定項;建議帶青灰調呼應品牌,錨點 `#a9b6b4`(於 `#2f2e31` 上對比約 7:1),範圍 `#9fb0ad`~`#c0cac8`;text 純白眩光疑慮可一併評估(業界慣例 87~90% 白,如 `#e6ecea`)")
+    parts.append("- Figma 變數同步:人工、單向 Figma→repo;漂移偵測=checks/uiv10_figma_diff.py(具名依賴 MCP 讀回，不入閘門子集)")
+    parts.append("- Brand 多品牌:MVP 假設單品牌，overrides 擴充槽保留名字不實作")
+    parts.append("- Dark mode subtitle 層級消失:subtitle 和 text 的 dark mode 覆寫值皆為 `#ffffff`，副標題在深色模式下與正文無區分——弱化值=設計師決定項;建議帶青灰調呼應品牌，錨點 `#a9b6b4`(於 `#2f2e31` 上對比約 7:1)，範圍 `#9fb0ad`~`#c0cac8`;text 純白眩光疑慮可一併評估(業界慣例 87~90% 白，如 `#e6ecea`)")
     parts.append("")
 
     return "\n".join(parts) + "\n"

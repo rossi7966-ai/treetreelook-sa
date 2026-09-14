@@ -4,8 +4,8 @@ role: component_spec_skeleton
 task: PREP-UI-2
 origin: PREP-UI 前置準備產出
 info_level: Candidate
-version: 0.3 (2026-08-06)
-last_updated: 2026-08-06
+version: 0.3.1 (2026-08-20)
+last_updated: 2026-08-20
 summary: 元件規範骨架+標準六欄模板(anatomy/states/usage 含 when-not/code 對應/a11y/tokens 消耗表)+互動態視覺語彙共用基準(hover/focus/disabled/error/selected 之視覺與 token)。9 大類;既有條目逐步補齊至六欄。元件/頁面只准引 semantic tier token(F-2)。
 ---
 
@@ -30,23 +30,30 @@ summary: 元件規範骨架+標準六欄模板(anatomy/states/usage 含 when-not
 | a11y 無障礙 | 鍵盤/焦點/ARIA 要求 | 藍圖節點 a11y.builtin 必填欄 |
 | tokens 消耗表 | 引用之 token 清單(semantic tier) | UIV-05;uiv10 對齊 |
 
-元件文字內容以指針連 30_UXWriting,不複製字面。
+元件文字內容以指針連 30_UXWriting，不複製字面。
 
 ---
 
 ## 互動態視覺語彙(states 欄共用基準)
 
-> 各元件 states 欄宣告「有哪些態」;本節定義「每種態長什麼樣」的共用基準,
+> 各元件 states 欄宣告「有哪些態」;本節定義「每種態長什麼樣」的共用基準，
 > 元件條目只寫與基準不同的差異。值一律引 semantic token(F-2)。
 
 | 態 | 共用視覺基準 | token |
 |----|-------------|-------|
 | hover | 面型元件=底色轉容器層/卡片面轉次要面;線型與文字型=加主色邊框或淡底 | `--color-primary-container`(淡底)/`--color-primary`(邊框)/`--color-surface-variant`(卡片面) |
-| focus | 外環(focus ring),不以底色變化替代;表單欄位=邊框轉主色+加粗 | `--color-primary-soft`(外環)/`--color-primary`(欄位邊框) |
-| disabled | 降飽和+禁用游標,保留輪廓 | `--color-disabled` |
+| focus | 外環(focus ring)，不以底色變化替代;表單欄位=邊框轉主色+加粗 | `--color-primary-soft`(外環)/`--color-primary`(欄位邊框) |
+| disabled | 降飽和+禁用游標，保留輪廓 | `--color-disabled` |
 | error | 邊框與提示轉錯誤語意色 | `--color-error` |
-| selected/checked | 主色實底,或主色底線(Tab=2px 底線+Medium 字重;未選=1px divider 底線) | `--color-primary`/`--color-primary-container`/`--color-divider` |
-| 控制項尺寸 | 表單控制高 43px(Button/Select/DatePicker 對齊)、Switch 軌 44×24 鈕 20、IconButton 40×40 | 尺寸未 token 化;43 不在間距表=候 token 化裁決(43 vs 44 網格),現值住本節 |
+| selected/checked | 主色實底，或主色底線(Tab=2px 底線+Medium 字重;未選=1px divider 底線) | `--color-primary`/`--color-primary-container`/`--color-divider` |
+| 控制項尺寸 | 表單控制高 43px(Button/Select/DatePicker 對齊)、Switch 軌 44×24 鈕 20、IconButton 40×40 | 尺寸未 token 化;43 不在間距表=候 token 化裁決(43 vs 44 網格)，現值住本節 |
+
+> **本表範圍=元件互動態，不涵蓋頁面五態**(2026-08-20 補註，案源=moa R02_G2)。
+> 上表 `error` 指元件層的錯誤回饋(欄位驗證失敗、上傳失敗、必填未勾)，故轉 `--color-error`。
+> UIV-03 五態裡的 `error` 是**頁面資料取不到**，語意由 30_UXWriting §四 錯誤三段式
+> (哪裡錯→為什麼→怎麼修)承載，**不塗警示色**——整面轉紅會被讀成警示元件，
+> 且與警特報三級(50_GisCartography §三)的警戒語言互相稀釋。
+> 頁面層要不要用色由 G2-R 個案判斷，本表不預設。
 
 ---
 
@@ -369,4 +376,4 @@ summary: 元件規範骨架+標準六欄模板(anatomy/states/usage 含 when-not
 | GIS | 1 | Legend, LayerControl, CoordinateDisplay, ScaleBar |
 | **合計** | **46** | — |
 
-> 51 個掃描元件中 5 個為內部/全域掛載(TooltipBubble, ValidationList, GlobalComponents, TogglePanelButton, ToggleRwdPanelButton),不獨立列入規範。
+> 51 個掃描元件中 5 個為內部/全域掛載(TooltipBubble, ValidationList, GlobalComponents, TogglePanelButton, ToggleRwdPanelButton)，不獨立列入規範。

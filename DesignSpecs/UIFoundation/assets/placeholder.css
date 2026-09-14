@@ -1,0 +1,33 @@
+/* 佔位樣式(45_Imagery §三 佔位契約;UII-031)
+   消費 tokens.css 變數，禁 hardcode(UIV-05 同紀律);
+   用法:<div class="ph-slot" data-ph="槽名" data-ratio="21/9"></div>
+   佔位=結構完整性的宣告，非缺件;實資產到位後移除 ph-slot 換實件。 */
+
+.ph-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  background: var(--color-band-soft);
+  border: 1px dashed var(--color-divider);
+  border-radius: var(--radius-m);
+  min-height: var(--imagery-ph-min-h);
+  color: var(--color-placeholder);
+  font-size: var(--typography-font-size-body2);
+  text-align: center;
+}
+
+.ph-slot::before {
+  content: attr(data-ph);
+  font-weight: var(--typography-font-weight-medium);
+}
+
+.ph-slot::after {
+  content: attr(data-ratio);
+}
+
+.ph-slot[data-ratio="21/9"] { aspect-ratio: var(--imagery-ratio-hero); }
+.ph-slot[data-ratio="16/9"] { aspect-ratio: var(--imagery-ratio-card); }
+.ph-slot[data-ratio="4/3"]  { aspect-ratio: var(--imagery-ratio-media); }
+.ph-slot[data-ratio="1/1"]  { aspect-ratio: var(--imagery-ratio-square); }

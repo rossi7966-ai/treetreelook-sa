@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 
 SCHEMA_VERSION = "1.0"
-SCHEMA_REF = "VerifyReportSchema v1.0 @ MetaCore 10_SHARED (PREP 期字面對齊,frozen-pin 待 Trainer 補登)"
+SCHEMA_REF = "VerifyReportSchema v1.0 @ MetaCore 10_SHARED (PREP 期字面對齊，frozen-pin 待 Trainer 補登)"
 IMPLEMENTATION_ID = "UI_KIT/checks v0.7 (PREP-UI-2)"
 EXCLUDE_DIRS = {"refs", "temp-refs", "_templates", "templates", "node_modules", ".git", "_prep", ".metaui", ".metasa", ".claude"}
 VOID_TAGS = {"br", "img", "input", "meta", "link", "hr", "area", "base", "col", "embed", "source", "track", "wbr"}
@@ -82,7 +82,7 @@ class Reporter:
         for c in CLASS_ORDER:
             group = [f for f in self.findings if f["classification"] == c]
             counts[c] = len(group)
-            show = group if c != "pass" else group  # pass 也列出(每檢核一筆彙總,不逐項)
+            show = group if c != "pass" else group  # pass 也列出(每檢核一筆彙總，不逐項)
             for f in show:
                 lines.append("[%s] %s %s | %s" % (f["classification"], f["result_id"], f["target"], f["detail"]))
         lines.append("-" * 60)
@@ -138,7 +138,7 @@ def find_f_modules(scope, project_root):
 
 
 def find_all_f_dirs(project_root):
-    """DesignSpecs 下所有 F## 目錄(不要求已有 ui/),供 G0 掃描。"""
+    """DesignSpecs 下所有 F## 目錄(不要求已有 ui/)，供 G0 掃描。"""
     ds = os.path.join(project_root, "DesignSpecs")
     found = []
     for root, dirs, _files in os.walk(ds):
@@ -152,7 +152,7 @@ def find_all_f_dirs(project_root):
 # ── Markdown 解析 ─────────────────────────────────────────
 
 def parse_md_tables(text):
-    """回傳所有 markdown 表格,各為 {headers:[...], rows:[[...],...]}。分段容錯。"""
+    """回傳所有 markdown 表格，各為 {headers:[...], rows:[[...],...]}。分段容錯。"""
     tables = []
     lines = text.splitlines()
     i = 0
@@ -174,7 +174,7 @@ def parse_md_tables(text):
 
 
 def col_index(headers, *keywords):
-    """依關鍵字尋欄位索引;關鍵字依序優先(先精確詞後寬鬆詞,避免「首訪路徑」搶「檔案路徑」);找不到回 -1。"""
+    """依關鍵字尋欄位索引;關鍵字依序優先(先精確詞後寬鬆詞，避免「首訪路徑」搶「檔案路徑」);找不到回 -1。"""
     for kw in keywords:
         for idx, h in enumerate(headers):
             if kw in h:

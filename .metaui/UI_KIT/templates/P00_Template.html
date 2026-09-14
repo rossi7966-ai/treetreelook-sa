@@ -6,7 +6,7 @@
 <!-- ══ 機器可讀旗標(UIV 檢核依據)══ -->
 <meta name="pageid" content="P00">
 <meta name="stage" content="wire">
-<meta name="primary-action" content="⟪此頁主行動字面,對齊 10_UIFlow 登記表⟫">
+<meta name="primary-action" content="⟪此頁主行動字面，對齊 10_UIFlow 登記表⟫">
 <title>P00_⟪頁面名⟫(wire)</title>
 <style>
 /* ── wire 階段結構樣式:灰階/框線/系統字。禁品牌色、圓角、陰影、動畫、web font。 ──
@@ -21,7 +21,7 @@ body{font-family:system-ui,sans-serif;background:var(--w-bg);color:var(--w-ink);
 .wire-img{border:1px solid var(--w-mid);background:repeating-linear-gradient(135deg,#eee,#eee 10px,#fff 10px,#fff 20px);min-height:120px;display:flex;align-items:center;justify-content:center;color:var(--w-mid);font-size:12px}
 nav.wire-nav{display:flex;gap:10px;flex-wrap:wrap;border:1px solid var(--w-mid);padding:10px;margin:10px 0}
 nav.wire-nav a{border:1px solid var(--w-mid);padding:6px 12px;color:var(--w-ink);text-decoration:none;font-size:14px}
-/* 連接點徽章:審查視圖顯示頁間連接點(→P##/↗外部),供審查肉眼對讀頁面串接;prototype 不帶此規則(45_PrototypeView) */
+/* 連接點徽章:審查視圖顯示頁間連接點(→P##/↗外部)，供審查肉眼對讀頁面串接;prototype 不帶此規則(45_PrototypeView) */
 a[data-nav^="P"]:not([aria-current])::after{content:" →" attr(data-nav);font-size:11px;color:var(--w-mid);font-weight:700}
 a[data-nav^="external"]::after{content:" ↗外部";font-size:11px;color:var(--w-mid);font-weight:700}
 button,a.btn{font:inherit;border:1px solid var(--w-ink);background:var(--w-bg);padding:8px 18px;cursor:pointer;color:var(--w-ink);text-decoration:none;display:inline-block}
@@ -39,33 +39,33 @@ footer.wire-foot{margin-top:32px;border-top:1px solid var(--w-mid);padding-top:1
 </head>
 <body>
 
-<!-- 頁首資訊條:此頁的規格身分證(不是頁面內容,截圖時保留供對讀) -->
+<!-- 頁首資訊條:此頁的規格身分證(不是頁面內容，截圖時保留供對讀) -->
 <div class="wire-meta">
   <b>P00｜⟪頁面名⟫</b> stage: wire｜
   承載節點:<span data-w="M00-F00-W00">M00-F00-W00</span>｜
-  主任務:⟪對齊登記表,來源 EP00⟫
+  主任務:⟪對齊登記表，來源 EP00⟫
 </div>
 
 <!-- ══════════ 理想狀態 ══════════ -->
 <section data-state="ideal">
   <nav class="wire-nav" aria-label="頁內導覽示例">
-    <!-- 連結型別化:data-nav 必填(P## / external:名稱 / W99),裸 href="#" 會被 UIV-02 擋下 -->
+    <!-- 連結型別化:data-nav 必填(P## / external:名稱 / W99)，裸 href="#" 會被 UIV-02 擋下 -->
     <a href="./P00_另一頁.html" data-nav="P00">⟪導覽項⟫</a>
     <a href="https://example.gov.tw" data-nav="external:既有系統名">⟪外部導流⟫</a>
     <a href="#" data-nav="W99">⟪暫緩入口(W99 承接)⟫</a>
   </nav>
 
   <div class="wire-box">
-    <h1>⟪頁面主標——用擬真文案,不用 lorem⟫</h1>
+    <h1>⟪頁面主標——用擬真文案，不用 lorem⟫</h1>
     <p>⟪支撐主任務的關鍵內容。與 00_Glossary 對齊的術語加 data-term:⟫
        <span data-term="⟪術語⟫">⟪術語⟫</span></p>
     <!-- 每個狀態區塊內恰一個 primary(UIV-08) -->
-    <button data-action="primary">⟪主行動,對齊 meta primary-action⟫</button>
+    <button data-action="primary">⟪主行動，對齊 meta primary-action⟫</button>
     <a class="btn" href="./P00_次要.html" data-nav="P00">⟪次要行動⟫</a>
   </div>
 
-  <!-- 未決內容:佔位+data-tbd,嚴禁虛構具體內容(UIV-09) -->
-  <div data-tbd="TBD-W00-01">⟪此區內容依賴未決事項,佔位呈現;TBD 編號對齊節點 🟥 區⟫</div>
+  <!-- 未決內容:佔位+data-tbd，嚴禁虛構具體內容(UIV-09) -->
+  <div data-tbd="TBD-W00-01">⟪此區內容依賴未決事項，佔位呈現;TBD 編號對齊節點 🟥 區⟫</div>
 
   <div class="wire-img" data-w="M00-F00-W00">⟪圖示/圖表佔位⟫</div>
 </section>
@@ -99,14 +99,14 @@ footer.wire-foot{margin-top:32px;border-top:1px solid var(--w-mid);padding-top:1
 <!-- ══════════ 錯誤狀態 ══════════ -->
 <section data-state="error">
   <div class="wire-zone">
-    <p><b>⟪錯誤訊息:說人話,講明發生什麼⟫</b></p>
+    <p><b>⟪錯誤訊息:說人話，講明發生什麼⟫</b></p>
     <p>⟪復原引導:使用者現在能做什麼⟫</p>
     <button data-action="primary">⟪復原行動(重試/返回)⟫</button>
   </div>
 </section>
 
-<!-- 不適用的狀態改用 data-state-na 並附理由(擇一,勿與同名 data-state 並存):
-<section data-state-na="loading" data-reason="靜態說明頁,無非同步載入"></section>
+<!-- 不適用的狀態改用 data-state-na 並附理由(擇一，勿與同名 data-state 並存):
+<section data-state-na="loading" data-reason="靜態說明頁，無非同步載入"></section>
 -->
 
 <footer class="wire-foot">

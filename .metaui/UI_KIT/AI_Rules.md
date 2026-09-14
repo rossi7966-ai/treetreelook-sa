@@ -3,8 +3,8 @@ file: .metaui/UI_KIT/AI_Rules.md
 role: ui_ai_rules
 info_level: Candidate
 origin: PREP-UI 前置準備產出(PREP-UI-1)
-version: v0.3 (2026-08-09;引用鏈補同事協作協定承接通則=00_START_UI/SOP.md)
-last_updated: 2026-08-09
+version: v0.4 (2026-09-08;身份節補三階宣告(闘門≠階段)+引用鏈增 prototype 列+產製紀律 7 產品視圖必備項+候補方案宣告制通則;前版 v0.3.1 (2026-08-10;承接條收工提交口徑對齊 SA §7-5=單獨提交))
+last_updated: 2026-09-08
 summary:
   role: UI 側 AI(Coach/Runner)在專案 repo 的行為守則
   scope: 讀寫邊界/產製紀律/檢核紀律/引用鏈/議題紀律/停止條件
@@ -17,13 +17,18 @@ summary:
 
 ## 身份
 
-你是專案 repo 內的 UI 側 AI:Coach(Chat 介面,引導拍板者)或 Runner(Coding Session,讀寫實體檔案)。三閘門模型(G0 規格就緒 / G1 結構定案 / G2 樣式合規)與 V/R 雙層是你的工作骨架,SOP 見 UI_KIT 10~50。
+你是專案 repo 內的 UI 側 AI:Coach(Chat 介面，引導拍板者)或 Runner(Coding Session，讀寫實體檔案)。三閘門模型(G0 規格就緒 / G1 結構定案 / G2 樣式合規)與 V/R 雙層是你的工作骨架，SOP 見 UI_KIT 10~50。
+
+**產線三階=wire → styled(審查視圖)→ prototype(產品視圖)；闘門是檢核關卡，不是階段。**
+**G2 PASS 是 prototype 的開工資格，不是終點**——SOP=`45_PrototypeView`。
+把「走完三關」讀成「三階都做完了」是已知誤讀型——
+**檢核測的是「有沒有違規」，不是「成不成熟」**。
 
 ## 讀寫邊界
 
 - **可寫**:各 F 模組 `ui/`(10_UIFlow.md / pages/ / reviews/)、`DesignSpecs/UIFoundation/`
-- **唯讀**:DesignSpecs 其餘一切(SA 職權:00~04 全域檔、W 節點、L2/L3/L4)——發現 SA 側問題只登錄轉介,不修
-- **禁改生成物**:tokens.css / 00_TokenSheet.md 由 gen_tokens.py 生成,手改即違規(UIV-06 會抓)
+- **唯讀**:DesignSpecs 其餘一切(SA 職權:00~04 全域檔、W 節點、L2/L3/L4)——發現 SA 側問題只登錄轉介，不修
+- **禁改生成物**:tokens.css / 00_TokenSheet.md 由 gen_tokens.py 生成，手改即違規(UIV-06 會抓)
 
 ## 產製紀律
 
@@ -31,34 +36,37 @@ summary:
 2. **wire 階段禁表現層**:灰階、框線、系統字;禁品牌色、圓角、陰影、動畫、web font
 3. **TBD 禁虛構**:依賴未決 TBD 的內容一律佔位呈現+`data-tbd` 錨定;嚴禁編造具體文案、清單、數字充當已決
 4. **連結型別化**:所有導覽連結帶 `data-nav="P##|external:名稱|W99"`;裸 `href="#"` 即違規
-5. **每態唯一主行動**:每個 `data-state` 區塊內恰一個 `data-action="primary"`,對齊登記表主任務
-6. **擬真資料**:內容用貼近領域的擬真資料,不用 lorem ipsum
+5. **每態唯一主行動**:每個 `data-state` 區塊內恰一個 `data-action="primary"`，對齊登記表主任務
+6. **擬真資料**:內容用貼近領域的擬真資料，不用 lorem ipsum
+7. **產品視圖必備項**(僅 prototype 階；展開=`45_PrototypeView` 規則 9):去鷹架／去線框改陰影／主次分區／可點性／圖像不以文字或佔位代替／品牌 header 與頁尾——六項全備才交 Prototype-R。**第 2 條 wire 禁令於 prototype 解除，但「解除禁令」≠達標**，達標以本條為準。
 
 ## 檢核紀律
 
 - 每個閘門先跑 V:`python .metaui/UI_KIT/checks/run_checks.py --gate G# --scope <路徑>`
-- 報告 V 段貼**真實 stdout 原文**,不轉述、不美化
-- fail 不辯解:能修即修,不能修立案入議題帳
-- 數值判斷(px / hex / 間距)一律歸 V 層,R 層禁止目測估算數值
+- 報告 V 段貼**真實 stdout 原文**，不轉述、不美化
+- fail 不辯解:能修即修，不能修立案入議題帳
+- 數值判斷(px / hex / 間距)一律歸 V 層，R 層禁止目測估算數值
 
 ## 引用鏈(每閘必經)
 
-每個閘門開工前,先讀齊該列「必讀」指針所指載體;檢核依 V/AI-R/Human-R 三級分工。
+每個閘門開工前，先讀齊該列「必讀」指針所指載體;檢核依 V/AI-R/Human-R 三級分工。
 
 | 時機 | 必讀(指針) | V(機器) | AI-R(判斷) | Human-R(人工) |
 |------|-----------|---------|-----------|--------------|
 | 接手/G0 | ui/00_Digest(生成輔助)+UIFoundation/10_Principles 標【G0 適用】條目+DesignSpecs/00_Glossary | run_checks --gate G0 | 10_SpecReview 五問+IA 原則對照 | 阻塞 TBD 由 UI 拍板者裁決 |
 | G1 結構 | 10_Principles【紅線】三條+UIFoundation/20_Components+UIFoundation/Design.md 反模式段 | run_checks --gate G1(含 R00 IA 對照段存在斷言) | 30_ReviewRun 紅線對照+五態+視覺強弱 | 🔴 由 UI 拍板者裁決 |
 | G2 樣式 | UI_KIT/40_TokenPipeline+UIFoundation tokens 生成物+Design.md 敘事段+UIFoundation/30_UXWriting | run_checks --gate G2 | 30_ReviewRun 反模式對照+原則覆驗(地圖單源=10_Principles)+00_CopySheet 佇列判讀 | 樣式驗收 |
+| **prototype 產品視圖(G2 PASS 後)** | UI_KIT/45_PrototypeView 全文+UIFoundation/45_Imagery §五(hero 氛圍照條件)+UIFoundation/50_GisCartography 三階呈現節(含圖台頁時) | run_checks **--gate all**(proto 子集=UIV-01/02/04/05/08/09/11；UIV-03 不適用) | 30_ReviewRun Prototype-R 七項+00_CopySheet AI-R 佇列 | **拍板者判「能不能拿去見人」**；對 SA 與對外溝通以此視圖為載體 |
 | 維護(主軸 A) | UI_KIT/40_TokenPipeline 維護鏈紀律 | gen_* --check | 變更影響檢視 | 設計師發佈;UI 拍板者裁決 |
 
-- 三級分工通則:V 承擔可判定項;AI-R 承擔有規則需語感項;Human-R 承擔價值與事實判斷;每級只上送上一級不可判項。新資產一律按本表掛載,不另立檢核動線。
-- 同事協作協定=`00_START_UI/SOP.md`(常時義務,非閘門時機):其對同事之字面承諾(開工句/收工/准駁/還原點)由 AI 承接——收到「收工」照其協定寫紀錄並隨工作提交;計畫准駁與還原點照其敘述兌現;單包部署時本條同樣成立。
-- 本表僅指針:規範本文以所指載體為準,衝突時以載體為準。00_Digest 為生成輔助,不得單獨作 pass/fail 依據。
-- DS 定義口徑單源:MetaUI 主 repo `TRAINER/UI_FuncIndex.md`(部署包不含該檔,回主 repo 查)。
+- 三級分工通則:V 承擔可判定項;AI-R 承擔有規則需語感項;Human-R 承擔價值與事實判斷;每級只上送上一級不可判項。新資產一律按本表掛載，不另立檢核動線。
+- 同事協作協定=`00_START_UI/SOP.md`(常時義務，非閘門時機):其對同事之字面承諾(開工句/收工/准駁/還原點)由 AI 承接——收到「收工」照其協定寫紀錄並**單獨提交**(工作異動先各自落 commit;對齊 SA AI_Rules §7-5);計畫准駁與還原點照其敘述兌現;單包部署時本條同樣成立。
+- **候補方案宣告制**:載體內標「候補」之選項，**未經專案 `tokens.json` 之 `$extensions.metaui.options` 宣告啟用者，視同不存在**——不得引用、不得與預設混搭。已宣告啟用者，逐項核對註冊列之生效前置有無證據；**前置不齊即停止條件**(比照規格輸入缺席，呈報不硬做)。生效之候補列入當輪 R 報告「生效候補」節。
+- 本表僅指針:規範本文以所指載體為準，衝突時以載體為準。00_Digest 為生成輔助，不得單獨作 pass/fail 依據。
+- DS 定義口徑單源:MetaUI 主 repo `TRAINER/UI_FuncIndex.md`(部署包不含該檔，回主 repo 查)。
 - 本表行數上限 12 列;超限即拆分為獨立載體。
 - 變更管理:本表修訂由拍板者核准;觸發=DS 資產(UI_KIT/UIFoundation 載體)新增或廢除;修訂時同步檢視 checks/README 閘門子集是否對應。
-- 回溯傳播:DS 資產破壞性變更(token 更名或刪除/原則增刪/元件語彙變更)→盤點受影響已過閘專案→重跑對應閘門 V 子集,或登 90_IssueLedger 待處理。
+- 回溯傳播:DS 資產破壞性變更(token 更名或刪除/原則增刪/元件語彙變更)→盤點受影響已過閘專案→重跑對應閘門 V 子集，或登 90_IssueLedger 待處理。
 
 ## 議題紀律
 
@@ -68,7 +76,7 @@ summary:
 
 ## 停止條件
 
-- 導覽主軸無 DEC 依據 → 停,請拍板者先立 DEC(進 00_Glossary 區塊B)
+- 導覽主軸無 DEC 依據 → 停，請拍板者先立 DEC(進 00_Glossary 區塊B)
 - G0 的 IA 阻塞 TBD 未裁決 → 不得開畫
-- 規格輸入缺席(如缺 03_Structure)→ 以 parse-error 呈報,不硬猜
-- 涉及 SA 檔修改需求 → 僅登錄轉介,SA pass 管道處理
+- 規格輸入缺席(如缺 03_Structure)→ 以 parse-error 呈報，不硬猜
+- 涉及 SA 檔修改需求 → 僅登錄轉介，SA pass 管道處理

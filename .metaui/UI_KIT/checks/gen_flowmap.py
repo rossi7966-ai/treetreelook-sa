@@ -2,20 +2,20 @@
 # -*- coding: utf-8 -*-
 """MetaUI FlowMap 生成器(PREP-UI-2,info_level: Candidate)
 
-把 10_UIFlow.md 的頁面登記表+mermaid 頁面流,連同頁面實掃結果,
+把 10_UIFlow.md 的頁面登記表+mermaid 頁面流，連同頁面實掃結果，
 煮成一張可點的「縮圖級 storyboard」:ui/00_FlowMap.html。
 
-- 節點=登記表頁面卡(P## 編號+頁名+主任務+階段+縮圖;點卡開實頁,proto 優先)
+- 節點=登記表頁面卡(P## 編號+頁名+主任務+階段+縮圖;點卡開實頁，proto 優先)
 - 邊=雙源對照:
     宣告邊 = mermaid 頁面流(設計意圖)
     實掃邊 = 頁面 <a data-nav> 連結(實作事實)
   分類規則:
-    骨架邊 = nav/header/footer 祖先內的連結(全站導覽列/麵包屑/頁尾)——供宣告邊求證,不入差異
-    逃生邊 = 僅出現於非 ideal 態(blank/loading/partial/error)的內容區連結——狀態設計,單獨列表
-    雙源一致 / 骨架承載 / 宣告未實作 / 實掃未宣告(ideal 級)=對照結果,後二者為審查發現候選
-- 縮圖:--capture 以 headless Edge 截取頁面初始畫面,嵌入 base64;無縮圖時灰佔位
+    骨架邊 = nav/header/footer 祖先內的連結(全站導覽列/麵包屑/頁尾)——供宣告邊求證，不入差異
+    逃生邊 = 僅出現於非 ideal 態(blank/loading/partial/error)的內容區連結——狀態設計，單獨列表
+    雙源一致 / 骨架承載 / 宣告未實作 / 實掃未宣告(ideal 級)=對照結果，後二者為審查發現候選
+- 縮圖:--capture 以 headless Edge 截取頁面初始畫面，嵌入 base64;無縮圖時灰佔位
 
-R 層視覺輔件:每輪重生(縮圖非確定性),不入 UIV-06 新鮮度;不得單獨作 pass/fail 依據。
+R 層視覺輔件:每輪重生(縮圖非確定性)，不入 UIV-06 新鮮度;不得單獨作 pass/fail 依據。
 
 Usage:
     python gen_flowmap.py --scope <F 模組目錄> [--capture] [--thumbs <目錄>] [--out <檔>]
@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from uiv_common import read_text, find_project_root, VOID_TAGS
 from uiv_checks import registry_rows, flow_path, pages_of
 
-HEADER = "生成物(R 層視覺輔件),禁手改;重生成:python .metaui/UI_KIT/checks/gen_flowmap.py --scope <F 模組> --capture"
+HEADER = "生成物(R 層視覺輔件)，禁手改;重生成:python .metaui/UI_KIT/checks/gen_flowmap.py --scope <F 模組> --capture"
 
 NODE_DEF_RE = re.compile(r'^\s*(\w+)\["([^"]+)"\]')
 EDGE_RE = re.compile(r'^\s*(\w+)\s*(-->|-\.->)\s*(?:\|"([^"]*)"\|\s*)?(\w+)\s*$')
@@ -41,7 +41,7 @@ P_ID_RE = re.compile(r"^P\d+$")
 SKELETON_TAGS = {"nav", "header", "footer"}
 NON_IDEAL = {"blank", "loading", "partial", "error"}
 
-# 卡片幾何(px;輸出 HTML 專屬,非頁面樣式,UIV-05 不轄)
+# 卡片幾何(px;輸出 HTML 專屬，非頁面樣式，UIV-05 不轄)
 CARD_W, CARD_H = 248, 236
 EXT_W, EXT_H = 220, 72
 GAP_X, GAP_Y, MARGIN = 128, 44, 40
@@ -115,7 +115,7 @@ class EdgeScanner(HTMLParser):
 
 
 def scan_pages(pages):
-    """回 (content{}, skeleton{}):{(src,key):{text,states}};key=('P',pid)/('EXT',名)/('W99',)。"""
+    """回 (content{}, skeleton{}):{(src,key):{text,states}};key=('P',pid)/('EXT'，名)/('W99',)。"""
     content, skeleton = {}, {}
     for pg in pages:
         m = re.match(r"(P\d+)", os.path.basename(pg))
@@ -150,7 +150,7 @@ def _ext_name_match(name, label):
 
 
 def _find_hit(src, dst, node_labels, bucket, used):
-    """在 bucket 中為宣告邊找對應實掃邊;命中回 key,否則 None。"""
+    """在 bucket 中為宣告邊找對應實掃邊;命中回 key，否則 None。"""
     if P_ID_RE.match(dst):
         k = (src, ("P", dst))
         return k if k in bucket and k not in used else None
@@ -168,7 +168,7 @@ def _find_hit(src, dst, node_labels, bucket, used):
 def match_edges(declared, content, skeleton, node_labels):
     """回 (rows, missing, undeclared, escapes)。
     rows[{src,dst,label,dashed,status}];status=both/skeleton/declared-only。
-    外部邊名稱不中時,同 src 單一未匹配宣告×單一未匹配實掃=回退配對。"""
+    外部邊名稱不中時，同 src 單一未匹配宣告×單一未匹配實掃=回退配對。"""
     used_c, used_s = set(), set()
     rows = []
     for e in declared:
@@ -246,7 +246,7 @@ def find_edge_exe():
 def capture_thumbs(targets, thumbs_dir):
     exe = find_edge_exe()
     if not exe:
-        print("⚠️ 找不到 Edge,略過截圖(可設 EDGE_PATH)")
+        print("⚠️ 找不到 Edge，略過截圖(可設 EDGE_PATH)")
         return
     os.makedirs(thumbs_dir, exist_ok=True)
     for pid, path in targets.items():
@@ -399,7 +399,7 @@ th{background:var(--color-surface-variant)}
 </head>
 <body>
 <h1>FlowMap 頁面串接綜覽(%(fbase)s)</h1>
-<p class="hint">縮圖級 storyboard:點卡開實頁(proto 優先)。邊=宣告(mermaid)×實掃(data-nav)雙源對照;骨架邊(全站導覽/麵包屑/頁尾,%(skel)d 處)供宣告求證不入差異;僅非 ideal 態的內容連結=逃生邊(狀態設計),單獨列表。R 層視覺輔件,不得單獨作 pass/fail 依據。</p>
+<p class="hint">縮圖級 storyboard:點卡開實頁(proto 優先)。邊=宣告(mermaid)×實掃(data-nav)雙源對照;骨架邊(全站導覽/麵包屑/頁尾，%(skel)d 處)供宣告求證不入差異;僅非 ideal 態的內容連結=逃生邊(狀態設計)，單獨列表。R 層視覺輔件，不得單獨作 pass/fail 依據。</p>
 <div class="legend">
 <span><span class="sw" style="border-color:var(--color-primary)"></span>雙源一致 %(nboth)d</span>
 <span><span class="sw" style="border-color:var(--color-divider)"></span>骨架承載 %(nskel)d</span>
@@ -427,7 +427,7 @@ th{background:var(--color-surface-variant)}
 <tr><th colspan="3">實掃未宣告(頁面 ideal 級內容連結有、mermaid 無)</th></tr>
 <tr><th>邊</th><th>連結字面</th><th>所在狀態</th></tr>
 %(extra_rows)s
-<tr><th colspan="3">逃生邊(僅非 ideal 態;狀態設計,非旅程主張——覈對用)</th></tr>
+<tr><th colspan="3">逃生邊(僅非 ideal 態;狀態設計，非旅程主張——覈對用)</th></tr>
 <tr><th>邊</th><th>連結字面</th><th>所在狀態</th></tr>
 %(esc_rows)s
 </table>
