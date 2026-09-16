@@ -2,7 +2,7 @@
 file: 00_START_SA/00_Status.md
 role: project_status_dashboard
 status: ACTIVE
-version: v0.15 (2026-09-16)
+version: v0.16 (2026-09-16)
 last_updated: 2026-09-16
 changed_by: Runner
 summary: (2026-09-16:SprintReview Backlog 對帳落檔,DEC-012 補回 + DEC-016~021,SS 4→5 / M 10→11 / F 35→39,EngRegister 新增 E15~E19)SA 駕駛艙——30 秒掌握當前要做什麼。2026-08-22 開案並完成 R1 / R2 Part 1;2026-08-31 完成建置階段 0,裁示 DEC-009(角色命名空間)/ DEC-010(SYS02 下切 SS03 / SS04),建立 EngRegister.md 取回登記表,並依 E1/E4/E5/E7/E8/E9 回填落 DEC-011 與全域優先級。 2026-09-01 建立 Roadmap.md,「下一步動作」段由五階段複寫收斂為指向路線圖。
@@ -21,7 +21,9 @@ summary: (2026-09-16:SprintReview Backlog 對帳落檔,DEC-012 補回 + DEC-016~
 
 > 📍 **完整路線圖見 `00_START_SA/Roadmap.md`** —— 五階段 × 三並行軌、逐階段入場/出場條件、39 F 分批展開順序表、阻塞依賴矩陣。本節只寫「現在做什麼」,不複寫路線(避免雙重維護)。
 
-**四件事,彼此獨立、不必排隊:**
+> 🌊 **排程(誰先誰後、哪些可並行)見 `Roadmap.md` §7 工作波次與並行關係** —— 波 0~波 5 以**觸發條件**排定,不排日期。實際週次待 SA 與工程團隊討論後議定。
+
+**四件事,彼此獨立、不必排隊(對應 §7 波 0~波 3):**
 
 1. **`M07-F01` 稽核紀錄進 D1.5 審閱** —— D1 草稿已產出(`F01_REVIEW.md`),節點 W01~W06 待 SA 逐一審。完成後下「繼續同步」進 D2。
 2. **補完階段 2 的未竟事項** —— SYS02(6 F)實體結構未建;`03_Structure.md` 只登記了 M07-F01 的節點,`04_FuncMap.md` 功能樹未生成。另 2026-09-16 增補的 `M04-F05` / `M08-F01` / `M08-F02` 三個 F 亦待建(`M05-F04` 為 `PLANNED` 不建)。
