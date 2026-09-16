@@ -2,10 +2,10 @@
 file: DesignSpecs/02_Scope.md
 role: ux_l4_scope
 status: ACTIVE
-version: v0.3 (2026-08-31)
-last_updated: 2026-08-31
+version: v0.4 (2026-09-16)
+last_updated: 2026-09-16
 changed_by: Runner
-summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out-of-Scope、限制與假設(14)。內容源自 06_HandoffPackage.md §1 §2 §5(R2 Part 1),階段 0 分派落位。(v0.3:E1 / E5 回填落檔——角色值域實值核對完成解除 [!TBD-ROLE-01],新增 DEC-011 權限雙層機制並改寫 [!TBD-ROLE-02])(v0.2:DEC-009 / DEC-010 落檔,SYS02 下切 SS03 / SS04,[!TBD-ROLE-04] 改寫為邀請預設角色待取回)
+summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out-of-Scope、限制與假設(16)。內容源自 06_HandoffPackage.md §1 §2 §5(R2 Part 1),階段 0 分派落位。(v0.4:Backlog 對帳落檔——In-Scope 增 SS05 公開版(DEC-017)、Out-of-Scope 增綠蔭小工具(DEC-018)、硬限制增 L15 文案不得硬編 / L16 底圖可抽換(DEC-019))(v0.3:E1 / E5 回填落檔——角色值域實值核對完成解除 [!TBD-ROLE-01],新增 DEC-011 權限雙層機制並改寫 [!TBD-ROLE-02])(v0.2:DEC-009 / DEC-010 落檔,SYS02 下切 SS03 / SS04,[!TBD-ROLE-04] 改寫為邀請預設角色待取回)
 ---
 # 範疇層(L4)
 
@@ -79,13 +79,16 @@ summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out
 |---|---|---|---|
 | SYS01 樹碳集 | SS01 完整版(Web 管理端,根路由) | xmind 1~8 主模組 | 功能架構0816.xmind |
 | SYS01 樹碳集 | SS02 調查版(外業行動端,`/mobile/`) | xmind 調查版分支 | DEC-006 |
+| SYS01 樹碳集 | **SS05 公開版**(對外門面:掃樹牌 QR 看植栽 / 企業人員上傳照片) | SprintReview Backlog 第 10 / 11 條 | DEC-017 |
 | SYS02 訂閱管理平台 | SS03 崧旭業務後台(`M_AdminList` 帳密) | xmind 崧旭業務管理後台 | DEC-010 |
 | SYS02 訂閱管理平台 | SS04 組織管理者後台(`UserKey` Token / 自 SYS01 跳轉) | 訂閱平台v1 + xmind 組織管理者後台 | DEC-010 |
 | SYS03 官網 Landing Page | — | Landing Page調整.pptx | SA 拍板納入 |
 
-**合計**:3 SYS、**4 SS**、10 M、35 F、15 EP。SS 編號全域唯一(DEC-010);SS 不進節點 ID,節點恆為 `M##-F##-W##`。
+**合計**:3 SYS、**5 SS**、10 M、35 F(+ Backlog 增補待編號)、15 EP。SS 編號全域唯一(DEC-010);SS 不進節點 ID,節點恆為 `M##-F##-W##`。
 
 > ⚠️ **「不上架」不是 Out-of-Scope**。依 DEC-008,xmind 標「不上架」者(碳匯儀錶板、角色自訂)語意為「尚未開發完成」,列 In-Scope,節點狀態 `PLANNED`。
+
+> 📌 **SprintReview Product Backlog(14 條)已納為正式需求來源**(DEC-016)。逐條落點見 `06_HandoffPackage.md` §3 / §4。其中 `PLANNED` 者(廠商首頁 DEC-020、海外可用 DEC-019)**列 In-Scope 但本期不動工,不建立實體檔**。
 
 ## Out-of-Scope
 
@@ -93,10 +96,13 @@ summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out
 |---|---|
 | 2025Tpark 初驗缺失修正(學名斜體、通知信帶系統名) | **已修正完畢**,DEC-007 |
 | 遠東版 / FM 系統登入 API 整合 | 素材出現但屬既有落地版整合,未經 SA 納入宣告 |
+| 衛星影像轉換綠蔭面積小工具 | **維持獨立模組,不進 35 F 架構**(DEC-018)。依 `SprintReview資料_0617.pptx` p38:推估值不需如碳匯精細,不應進樹碳集原有架構規劃。僅保留「結果如何掛回案場 / 分區」之資料契約,就地標記於 `M02_overview.md` |
 
 ## 限制與假設
 
-以下 14 條為素材白紙黑字載明的硬限制,構成本層範疇的邊界約束,下游 AC / AT 不得違反。
+以下 16 條構成本層範疇的邊界約束,下游 AC / AT 不得違反。
+
+L1~L14 為素材白紙黑字載明;**L15 / L16 為 SA 裁示(DEC-019)**——海外可用本期不做,但以此兩條確保架構不被阻斷,使日後「要做」由重寫降為補上。
 
 | # | 限制 | 出處 |
 |---|---|---|
@@ -114,6 +120,8 @@ summary: UX L4 範疇層——Epic 清單(15)、全域 RBAC 角色(9)、In / Out
 | L12 | 試用期限 90 天;試用申請不設人員限制,依申請資訊豐富度人工給額度 | 訂閱相關頁 |
 | L13 | 試用申請通過後直接建立 Group,GroupName 取註冊資料,未填則預設「試用群組」 | 系統管理設計v6 |
 | L14 | 訂閱平台路徑 B(業務系統跳轉)僅 `Role=1` 可見入口;`Role≠1` 不顯示按鈕 | 訂閱平台v1 p4 |
+| **L15** | **UI 文案不得硬編**,一律走文案鍵 | DEC-019;對應 `UIFoundation/30_UXWriting.md` |
+| **L16** | **底圖來源必須可抽換**,不得假設僅有國土測繪通用電子地圖 | DEC-019 |
 
 ## 決策索引
 
