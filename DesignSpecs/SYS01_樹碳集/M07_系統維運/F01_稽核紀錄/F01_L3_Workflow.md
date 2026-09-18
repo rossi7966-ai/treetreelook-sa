@@ -3,7 +3,7 @@ feature_id: M07-F01
 parent_system: SYS01
 parent_subsystem: SS01
 status: S2_ITERATING
-version: v1.2 (2026-09-17)
+version: v1.3 (2026-09-18)
 ---
 # F01業務流程拓樸
 
@@ -11,7 +11,7 @@ version: v1.2 (2026-09-17)
 > 唯一授權來源:`06_HandoffPackage.md` §9.1;2026-09-16 起依 `00_Glossary.md` DEC-022 修訂(查閱 / 匯出不記)
 
 **Epic:EP12-系統維運與稽核(M07-F01 稽核紀錄段)**
-- 旅程起點:任一使用者在某 OID 內進入 / 離開組織,或於任一模組執行新增、修改、刪除
+- 旅程起點:任一使用者進入某 OID,或於 OID 間切換,或於任一模組執行新增、修改、刪除
 - 旅程終點:該 OID 的 `Role=2` 系統管理員能在本組織範圍內追查「誰、哪天、對什麼、做了什麼」,並可帶出紀錄佐證
 - 主線:`[M07-F01-W02] -> [M07-F01-W04] -> [M07-F01-W05]`
 - 分支:
@@ -30,7 +30,7 @@ version: v1.2 (2026-09-17)
 stateDiagram-v2
   M07_F01_W01: W01 記錄進出組織事件
   M07_F01_W02: W02 記錄模組操作事件
-  M07_F01_W03: W03 查詢登入登出紀錄
+  M07_F01_W03: W03 查詢登入紀錄
   M07_F01_W04: W04 查詢操作紀錄
   M07_F01_W05: W05 檢視紀錄詳情
   M07_F01_W06: W06 匯出稽核紀錄
@@ -52,7 +52,7 @@ stateDiagram-v2
 
   click M07_F01_W01 "./nodes/M07-F01-W01_記錄進出組織事件.md"
   click M07_F01_W02 "./nodes/M07-F01-W02_記錄模組操作事件.md"
-  click M07_F01_W03 "./nodes/M07-F01-W03_查詢登入登出紀錄.md"
+  click M07_F01_W03 "./nodes/M07-F01-W03_查詢登入紀錄.md"
   click M07_F01_W04 "./nodes/M07-F01-W04_查詢操作紀錄.md"
   click M07_F01_W05 "./nodes/M07-F01-W05_檢視紀錄詳情.md"
   click M07_F01_W06 "./nodes/M07-F01-W06_匯出稽核紀錄.md"
