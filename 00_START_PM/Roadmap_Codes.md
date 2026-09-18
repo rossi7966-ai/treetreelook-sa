@@ -1,7 +1,7 @@
 ---
 file: 00_START_PM/Roadmap_Codes.md
 role: roadmap_code_crosswalk
-version: v0.1(2026-09-18)
+version: v0.1.2(2026-09-18;9/18 PM 對話中 DEC 候選改 023 起;v0.1.2 三個數、39 條、SS05、第四節未排入里程碑的 SA 項目)
 last_updated: 2026-09-18
 owner: AI 維護;PM 不用看
 summary: Roadmap 六個里程碑對應 SA 產出的代號:階段、Epic、功能編號、缺口與矛盾、工程端待回、決策紀錄、SA 工作性質(處置欄的來源);Rossi 草案十一項對里程碑。PM 或 Ben 問代號時,AI 讀本檔與所指的 SA 檔,用白話答。
@@ -14,16 +14,17 @@ summary: Roadmap 六個里程碑對應 SA 產出的代號:階段、Epic、功能
 | 代號 | 意思 | 定義處 |
 |---|---|---|
 | EP## | Epic,一組使用者結果 | `DesignSpecs/02_Scope.md` §Epic 清單(EP01 到 EP15) |
-| SYS##-M##-F## | 功能編號,35 條 | `DesignSpecs/06_HandoffPackage.md` §3 全域實作狀態與優先級對照 |
+| SYS##-M##-F## | 功能編號,39 條(2026-09-16 起;原 35 條加 Backlog 對帳增 4:M04-F05、M05-F04、M08-F01、M08-F02) | `DesignSpecs/06_HandoffPackage.md` §3 全域實作狀態與優先級對照 |
 | G## | 資料庫缺口(架構圖有功能、資料庫無對應表) | `DesignSpecs/05_SourceAudit.md` §二 |
 | C## | 三方矛盾 | `DesignSpecs/05_SourceAudit.md` §五 |
 | O## | 孤兒項目(僅單一來源) | `DesignSpecs/05_SourceAudit.md` §四 |
 | E## | 工程端待回 | `00_START_SA/EngRegister.md` 總表 |
 | DEC-### | 決策紀錄 | `DesignSpecs/00_Glossary.md` 區塊 B |
 | P1 到 P3、✅❌⚠️、新建/歸位/補規格/改善 | SA 的優先級、實作狀態、工作性質 | `DesignSpecs/06_HandoffPackage.md` §3 判定原則 |
-| SS01 到 SS04 | 子系統 | `DesignSpecs/01_Strategy.md` §系統清單 |
+| SS01 到 SS05 | 子系統(SS05 公開版,DEC-017,2026-09-15 起) | `DesignSpecs/01_Strategy.md` §系統清單;SS05 見 `DesignSpecs/02_Scope.md` |
 | D1 到 D8 | 業務驅動因素 | `DesignSpecs/01_Strategy.md` §業務驅動因素 |
 | 處置四值 ↔ SA 工作性質 | 補規格→沿用;改善→沿用(備註待改善);歸位→歸位;新建→新建;**重建**=PM 或 Ben 自判,SA 無此值 | `Roadmap.md` §四;`DesignSpecs/06_HandoffPackage.md` §3 |
+| 三個數(2026-09-18 對照) | 區塊 B 最後一筆 DEC-022;F 總數 39;EngRegister 最後一筆 E19 | 重產總覽頁前先對這三個數;變了先更新本檔,再在總覽頁第三段寫一句 |
 
 第二節功能編號省略 `SYS01-` 者皆屬 SYS01;SYS02、SYS03 一律寫全。
 
@@ -34,7 +35,7 @@ summary: Roadmap 六個里程碑對應 SA 產出的代號:階段、Epic、功能
 | A 紀錄工具站穩 | 1 | EP07、EP03+EP12、EP09 | M03-F04 植栽資料匯出(擴充)、M01-F03 廠商群組管理、M07-F01 稽核紀錄、M03-F03 植栽批次匯入、巡察(屬 M04,無獨立 F)、自訂欄位(M04 三載體) | G07 稽核無表、G10 匯入不可追溯、G03 巡察無表、G01 維養無表 | E8(已回:落點確認) | DEC-004;DEC-013、014、015、022(稽核紀錄);候 DEC-025 Roadmap v1 | M03-F04 補規格 P3(擴充);M01-F03 新建 P1;M07-F01 新建 P1;M03-F03 補規格 P3(加批次表=歸位);巡察新建 |
 | B 長期養護歷程 | 1 到 2 | EP09 | M04-F01 維養紀錄、M04-F02 測量紀錄、M04-F04 歷程資料管理 | G01 | E7(已回) | DEC-004 | M04-F01 新建 P1;M04-F02 歸位 P2;M04-F04 新建 P3 |
 | C 航照圖管理 | 1 | EP05 | M02-F03 航照圖管理 | G05 | E8(已回) | 候 | M02-F03 新建 P2 |
-| D 樹木管理建議 | 2 | 需新 Epic(候 EP16);EP09 | M04-F03 健康調查與病蟲害 | G02 健康資料無表 | 無 | 候 DEC-026 範圍變更 | M04-F03 新建 P2;建議規則無 F(現行範圍外) |
+| D 樹木管理建議 | 2 | 需新 Epic(候 EP16);EP09 | M04-F03 健康調查與病蟲害 | G02 健康資料無表 | 無 | 候 DEC-026 範圍變更 | M04-F03 新建 P2;建議規則無 F(現行範圍外);M04-F05 汰換與物種適生分析(9/16 新增,候歸 D,阻塞 E15) |
 | E 一站式輸出與 ESG 資料 | 3 | EP07、EP11 | M03-F04、M06-F02 碳匯儀錶板、M06-F03 碳匯資料管理 | 無 | E3(未回,固碳量計算式) | DEC-008、DEC-003 | M06-F02 新建 P2;M06-F03 新建 P3 |
 | F 訂閱平台 | 怎麼賺 | EP01、EP13、EP14 | SYS02-M01-F01、SYS02-M01-F02、SYS02-M02-F01 到 F04 | E9「三個沒有」 | E4 第二輪(SYS02 六條實作狀態)、E9、E12 | 候 | 推定未實作,全部新建 |
 
@@ -56,3 +57,15 @@ summary: Roadmap 六個里程碑對應 SA 產出的代號:階段、Epic、功能
 | 9 ESG、環境部自願減量專案資料獲取 | E |
 | 10 棲地中其他物種紀錄 | D |
 | 11 移動式光達資料比對 | C 之後(依賴 C) |
+
+## 四 未排入里程碑的 SA 項目(2026-09-18 對照;候 PM 排,本檔不替他排)
+
+| SA 項目 | 來源 | 候哪個里程碑 | 備註 |
+|---|---|---|---|
+| M08-F01 公開植栽檢視、M08-F02 外部照片上傳與審核(SS05 公開版) | DEC-017;Backlog 第 10、11 條 | 無;候 PM | 不在 9/4 草案十一項裡;M08-F02 阻塞 E17 |
+| M05-F04 廠商任務首頁 | DEC-020;Backlog 第 8 條 | 無;SA 標 PLANNED,本期不動工 | |
+| M04-F05 汰換與物種適生分析 | Backlog 第 5 條;阻塞 E15 | D(與草案第 7 項栽種物種建議相近) | 已寫進第二節 D 列 |
+| 綠蔭面積小工具 | DEC-018:獨立模組、吃衛星影像、不進 39 F | Roadmap C 現寫「草案第 8 項要踩在航照圖管理上」,與 DEC-018 不一致 | 候 PM 改 C 那一格或另記一筆 DEC;AI 不改人表 |
+
+SprintReview 的 Product Backlog 14 條已被 SA 納為正式需求來源(DEC-016,2026-09-15);與 Rossi 9/4 草案十一項尚未逐條對上,候 10/3 與 Ben 一起對。
+`Roadmap.md` 第五節寫「工程端還沒回的六件」,現在是 11 件(E15 到 E19 新增);那是 PM 的表,PM 要改再改。

@@ -1,7 +1,7 @@
 ---
 file: 00_START_PM/Guide.md
 role: pm_human_guide
-version: v0.1(2026-09-18,試辦投放)
+version: v0.1.2(2026-09-18,試辦投放;v0.1.2 名詞表補「Roadmap 兩個檔」、功能編號改 39 條)
 last_updated: 2026-09-18
 owner: Rossi(PM);AI 依 AI_Guide.md 維護第七節
 summary: 給人看的入口:你在這裡是誰、這套怎麼運作、資料夾裡有什麼、行動準則、名詞與代號表、卡住怎麼辦、第一次任務(跟 AI 走一圈,驗證配合得起來)。
@@ -69,6 +69,7 @@ summary: 給人看的入口:你在這裡是誰、這套怎麼運作、資料夾�
 | 階段 2 樹木管理建議 | 把資料變成決策:病蟲害、物種、棲地 | 同上 |
 | 階段 3 查驗證證據鏈供應 | 把決策變成可對外舉證的東西 | 同上 |
 | 里程碑 A 到 F | Roadmap 裡的六個一組;一個里程碑=幾件事一起做完 | `Roadmap.md` |
+| Roadmap(兩個檔) | 這個資料夾的 `Roadmap.md` 是產品 Roadmap,六個里程碑;`00_START_SA/Roadmap.md` 是 SA 的作業路線圖,講規格照什麼順序寫,不是同一件事 | 兩處 |
 | 完成的定義 | 「看到什麼就算到了」;只准寫看得到的事實 | `Roadmap.md` 第三節 |
 | 對現行系統的處置 | 每件事對現有系統是沿用、歸位、重建還是新建 | `Roadmap.md` 第四節 |
 | 決策紀錄 DEC | 一個決定一筆:脈絡、決定、後果;只增不刪 | `DesignSpecs/00_Glossary.md` 區塊 B |
@@ -77,7 +78,7 @@ summary: 給人看的入口:你在這裡是誰、這套怎麼運作、資料夾�
 | Sprint | 兩週,就是兩次雙週會之間 | 雙週會 |
 | 里程碑檢視 | 每三個 Sprint 一次,看「說要做的 vs 做成的」 | `Review_日期.md`(AI 產) |
 | Epic | SA 用的字:一組使用者結果,例如「植栽歷程累積」;現有十五個 | `DesignSpecs/02_Scope.md` |
-| 功能編號 | SA 給 35 條功能的編號,長得像 SYS01-M04-F01(維養紀錄) | `DesignSpecs/06_HandoffPackage.md` 第 3 節 |
+| 功能編號 | SA 給功能的編號,現在 39 條(9/16 起;原 35 條加 4),長得像 SYS01-M04-F01(維養紀錄) | `DesignSpecs/06_HandoffPackage.md` 第 3 節 |
 | 缺口 | SA 盤點時發現「架構圖有、資料庫沒有」的東西,編號 G 開頭 | `DesignSpecs/05_SourceAudit.md` 第二節 |
 | 工程端待回 | SA 問工程端、還沒回的事,編號 E 開頭 | `00_START_SA/EngRegister.md` |
 | P1、P2、P3 | SA 給功能的優先級 | `DesignSpecs/06_HandoffPackage.md` 第 3 節 |
