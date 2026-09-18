@@ -6,3 +6,4 @@
 | 系統分析(SA) | `.metasa/SA_KIT/AI_Rules.md` |
 | 介面設計(UI) | `.metaui/UI_KIT/AI_Rules.md` |
 | 系統設計(SD) | `.metasd/SD_KIT/AI_Rules.md` |
+| 產品與專案管理(PM) | `00_START_PM/AI_Guide.md` |
